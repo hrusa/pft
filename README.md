@@ -1,4 +1,4 @@
-pft
+Pearsonal Fitness Trainer
 ===
 
-Personal Fitness Trainer
+Pearsonal Fitness Trainer is an Android application that helps users with Workout.
