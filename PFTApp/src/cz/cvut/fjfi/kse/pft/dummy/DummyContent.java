@@ -1,4 +1,4 @@
-package cz.cvut.fjfi.pft.dummy;
+package cz.cvut.fjfi.kse.pft.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

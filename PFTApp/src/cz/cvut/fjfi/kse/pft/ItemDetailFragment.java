@@ -1,4 +1,4 @@
-package cz.cvut.fjfi.pft;
+package cz.cvut.fjfi.kse.pft;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import cz.cvut.fjfi.pft.dummy.DummyContent;
+import cz.cvut.fjfi.kse.pft.dummy.DummyContent;
+import cz.cvut.fjfi.pft.R;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either

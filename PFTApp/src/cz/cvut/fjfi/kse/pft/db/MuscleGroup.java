@@ -1,0 +1,47 @@
+/**
+ * 
+ */
+package cz.cvut.fjfi.kse.pft.db;
+
+import android.content.Context;
+
+import com.orm.SugarRecord;
+
+/**
+ * @author Petr Hruška
+ *
+ */
+public class MuscleGroup extends SugarRecord<MuscleGroup>{
+	String name;
+
+	/**
+	 * Constructors of entity MuscleGroup
+	 */
+	public MuscleGroup(Context ctx) {
+		super(ctx);
+	}
+
+	/**
+	 * @param ctx
+	 * @param name
+	 */
+	public MuscleGroup(Context ctx, String name) {
+		super(ctx);
+		this.name = name;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}

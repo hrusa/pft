@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         android:name="com.orm.SugarApp" >
         <activity
-            android:name="cz.cvut.fjfi.pft.ItemListActivity"
+            android:name="cz.cvut.fjfi.kse.pft.ItemListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +24,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cz.cvut.fjfi.pft.ItemDetailActivity"
+            android:name="cz.cvut.fjfi.kse.pft.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ItemListActivity" >
+            android:parentActivityName="cz.cvut.fjfi.kse.pft.ItemListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ItemListActivity" />
