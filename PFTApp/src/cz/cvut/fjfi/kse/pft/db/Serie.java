@@ -16,8 +16,8 @@ public class Serie extends SugarRecord<Serie> {
 	private int weight;
 	private int repetition;
 	private int pause;
-	private String from;
-	private String to;
+	private String start;
+	private String finish;
 
 	/**
 	 * @param arg0
@@ -43,8 +43,8 @@ public class Serie extends SugarRecord<Serie> {
 		this.weight = weight;
 		this.repetition = repetition;
 		this.pause = pause;
-		this.from = from;
-		this.to = to;
+		this.start = from;
+		this.finish = to;
 	}
 
 	/**
@@ -106,29 +106,29 @@ public class Serie extends SugarRecord<Serie> {
 	/**
 	 * @return the from
 	 */
-	public String getFrom() {
-		return from;
+	public String getStart() {
+		return start;
 	}
 
 	/**
 	 * @param from the from to set
 	 */
-	public void setFrom(String from) {
-		this.from = from;
+	public void setStart(String start) {
+		this.start = start;
 	}
 
 	/**
 	 * @return the to
 	 */
-	public String getTo() {
-		return to;
+	public String getFinish() {
+		return finish;
 	}
 
 	/**
 	 * @param to the to to set
 	 */
-	public void setTo(String to) {
-		this.to = to;
+	public void setFinish(String finish) {
+		this.finish = finish;
 	}
 
 }

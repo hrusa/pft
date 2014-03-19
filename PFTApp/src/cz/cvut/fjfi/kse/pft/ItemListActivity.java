@@ -1,9 +1,14 @@
 package cz.cvut.fjfi.kse.pft;
 
+import cz.cvut.fjfi.kse.pft.db.Attribute;
+import cz.cvut.fjfi.kse.pft.db.Difficulty;
+import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
+import cz.cvut.fjfi.kse.pft.db.Trainee;
 import cz.cvut.fjfi.pft.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -48,6 +53,22 @@ public class ItemListActivity extends FragmentActivity implements
 		}
 
 		// TODO: If exposing deep links into your app, handle intents here.
+
+		
+		//test vkládání hodnot do DB
+		Difficulty diff = new Difficulty(getApplicationContext(), "Beginner");
+		diff.save();
+		Log.i("DB insert: ", "Difficulty ID " + diff.getId() + " inserted as " + diff.getName());
+		MuscleGroup muscleG = new MuscleGroup(getApplicationContext(), "Chest");
+		muscleG.save();
+		Log.i("DB insert: ", "MuscleGroup ID " + muscleG.getId() + " inserted as " + muscleG.getName());
+		Trainee trainee = new Trainee(getApplicationContext(), "1989-07-06");
+		trainee.save();
+		Log.i("DB insert: ", "Trainee ID " + trainee.getId() + " inserted as " + trainee.getBirth());
+		Attribute attribute = new Attribute(getApplicationContext(), "Weight");
+		attribute.save();
+		Log.i("DB insert: ", "Attribute ID " + attribute.getId() + " inserted as " + attribute.getName());
+		
 	}
 
 	/**
