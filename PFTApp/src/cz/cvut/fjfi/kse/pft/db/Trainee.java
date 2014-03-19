@@ -12,8 +12,7 @@ import com.orm.SugarRecord;
  *
  */
 public class Trainee extends SugarRecord<Trainee> {
-	//YYYY-MM-DD
-	String birth;
+	private String birth;	//YYYY-MM-DD
 	
 	/**
 	 * @param arg0

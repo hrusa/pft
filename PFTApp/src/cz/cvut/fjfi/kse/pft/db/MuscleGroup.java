@@ -12,7 +12,7 @@ import com.orm.SugarRecord;
  *
  */
 public class MuscleGroup extends SugarRecord<MuscleGroup>{
-	String name;
+	private String name;
 
 	/**
 	 * Constructors of entity MuscleGroup

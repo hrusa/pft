@@ -12,10 +12,10 @@ import com.orm.SugarRecord;
  *
  */
 public class Measure extends SugarRecord<Measure> {
-	Trainee trainee;
-	Attribute attribute;
-	String date;	//YYYY-MM-DD
-	int value;
+	private Trainee trainee;
+	private Attribute attribute;
+	private String date;	//YYYY-MM-DD
+	private int value;
 	
 	/**
 	 * @param arg0

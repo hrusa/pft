@@ -11,41 +11,41 @@ import com.orm.SugarRecord;
  * @author Petr Hruška
  *
  */
-public class Training extends SugarRecord<Training> {
-	private Trainee trainee;
+public class MusclePart extends SugarRecord<MusclePart> {
+	private MuscleGroup muscleGroup;
 	private String name;
 
 	/**
 	 * @param arg0
 	 */
-	public Training(Context arg0) {
+	public MusclePart(Context arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param arg0
-	 * @param trainee
+	 * @param muscleGroup
 	 * @param name
 	 */
-	public Training(Context arg0, Trainee trainee, String name) {
+	public MusclePart(Context arg0, MuscleGroup muscleGroup, String name) {
 		super(arg0);
-		this.trainee = trainee;
+		this.muscleGroup = muscleGroup;
 		this.name = name;
 	}
 
 	/**
-	 * @return the trainee
+	 * @return the muscleGroup
 	 */
-	public Trainee getTrainee() {
-		return trainee;
+	public MuscleGroup getMuscleGroup() {
+		return muscleGroup;
 	}
 
 	/**
-	 * @param trainee the trainee to set
+	 * @param muscleGroup the muscleGroup to set
 	 */
-	public void setTrainee(Trainee trainee) {
-		this.trainee = trainee;
+	public void setMuscleGroup(MuscleGroup muscleGroup) {
+		this.muscleGroup = muscleGroup;
 	}
 
 	/**

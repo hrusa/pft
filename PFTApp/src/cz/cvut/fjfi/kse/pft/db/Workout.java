@@ -12,9 +12,9 @@ import com.orm.SugarRecord;
  *
  */
 public class Workout extends SugarRecord<Workout> {
-	Training training;
-	String name;
-	String date;	//YYYY-MM-DD
+	private Training training;
+	private String name;
+	private String date;	//YYYY-MM-DD
 
 	/**
 	 * @param arg0

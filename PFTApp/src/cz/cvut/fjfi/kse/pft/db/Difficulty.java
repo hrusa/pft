@@ -12,7 +12,7 @@ import android.content.Context;
  *
  */
 public class Difficulty extends SugarRecord<Difficulty>{
-	String name;
+	private String name;
 	
 	/**
 	 * Constructors of entity Difficulty

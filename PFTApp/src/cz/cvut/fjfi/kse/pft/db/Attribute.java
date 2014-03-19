@@ -12,7 +12,7 @@ import com.orm.SugarRecord;
  *
  */
 public class Attribute extends SugarRecord<Attribute>{
-	String name;
+	private String name;
 
 	/**
 	 * Constructors of entity Attribute
