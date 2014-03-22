@@ -2,8 +2,16 @@ package cz.cvut.fjfi.kse.pft;
 
 import cz.cvut.fjfi.kse.pft.db.Attribute;
 import cz.cvut.fjfi.kse.pft.db.Difficulty;
+import cz.cvut.fjfi.kse.pft.db.Exercise;
+import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Measure;
+import cz.cvut.fjfi.kse.pft.db.MuscleBlock;
 import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
+import cz.cvut.fjfi.kse.pft.db.MusclePart;
+import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Trainee;
+import cz.cvut.fjfi.kse.pft.db.Training;
+import cz.cvut.fjfi.kse.pft.db.Workout;
 import cz.cvut.fjfi.pft.R;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,6 +77,30 @@ public class ItemListActivity extends FragmentActivity implements
 		attribute.save();
 		Log.i("DB insert: ", "Attribute ID " + attribute.getId() + " inserted as " + attribute.getName());
 		
+		Measure measure = new Measure(getApplicationContext(), trainee, attribute, "2014-03-20", 73);
+		measure.save();
+		Log.i("DB insert: ", "Trainee "+measure.getTrainee().getId()+" with "+measure.getAttribute().getName()+measure.getValue());
+		Training training = new Training(getApplicationContext(), trainee, "Total body training");
+		training.save();
+		Log.i("DB insert: ", "Trainee "+training.getTrainee().getId()+" choosed "+training.getName());
+		Workout workout = new Workout(getApplicationContext(), training, "Chest workout", "2014-03-20");
+		workout.save();
+		Log.i("DB insert: ", workout.getTraining().getName()+" has on "+workout.getDate()+workout.getName());
+		Exercise exercise = new Exercise(getApplicationContext(), "Bench press", diff, "Work hard on bench press.", "https://www.youtube.com/watch?v=rT7DgCr-3pg");
+		exercise.save();
+		Log.i("DB insert: ", exercise.getName()+" with "+exercise.getDifficulty().getName()+" difficulty, so "+exercise.getDescription()+" or "+exercise.getVideo());
+		ExerciseUnit exerciseU = new ExerciseUnit(getApplicationContext(), exercise, workout);
+		exerciseU.save();
+		Log.i("DB insert: ", exerciseU.getWorkout().getName()+" contains "+exerciseU.getExercise().getName());
+		Serie serie = new Serie(getApplicationContext(), exerciseU, 60, 10, 90, "2014-03-20-19:00:00","2014-03-20-19:01:00");
+		serie.save();
+		Log.i("DB insert: ", "Serie of "+serie.getExerciseUnit().getExercise().getName()+" with weight "+serie.getWeight()+" and "+serie.getRepetition()+" repetition ended at "+serie.getFinish());
+		MusclePart muscleP = new MusclePart(getApplicationContext(), muscleG, "Pectoralis major");
+		muscleP.save();
+		Log.i("DB insert: ", muscleP.getMuscleGroup().getName()+" muscle group contains "+muscleP.getName());
+		MuscleBlock muscleB = new MuscleBlock(getApplicationContext(), exercise, muscleP, "Primary");
+		muscleB.save();
+		Log.i("DB insert: ", muscleB.getExercise().getName()+" is "+muscleB.getBlock()+" focused on "+muscleB.getMusclePart().getName());
 	}
 
 	/**

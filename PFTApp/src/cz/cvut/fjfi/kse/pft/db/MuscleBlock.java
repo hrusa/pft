@@ -30,8 +30,7 @@ public class MuscleBlock extends SugarRecord<MuscleBlock> {
 	 * @param musclePart
 	 * @param block
 	 */
-	public MuscleBlock(Context arg0, Exercise exercise, MusclePart musclePart,
-			String block) {
+	public MuscleBlock(Context arg0, Exercise exercise, MusclePart musclePart, String block) {
 		super(arg0);
 		this.exercise = exercise;
 		this.musclePart = musclePart;
