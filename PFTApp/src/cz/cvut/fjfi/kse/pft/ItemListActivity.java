@@ -62,7 +62,7 @@ public class ItemListActivity extends FragmentActivity implements
 
 		// TODO: If exposing deep links into your app, handle intents here.
 
-		
+
 		//test vkládání hodnot do DB
 		Difficulty diff = new Difficulty(getApplicationContext(), "Beginner");
 		diff.save();
@@ -76,7 +76,7 @@ public class ItemListActivity extends FragmentActivity implements
 		Attribute attribute = new Attribute(getApplicationContext(), "Weight");
 		attribute.save();
 		Log.i("DB insert: ", "Attribute ID " + attribute.getId() + " inserted as " + attribute.getName());
-		
+
 		Measure measure = new Measure(getApplicationContext(), trainee, attribute, "2014-03-20", 73);
 		measure.save();
 		Log.i("DB insert: ", "Trainee "+measure.getTrainee().getId()+" with "+measure.getAttribute().getName()+measure.getValue());
@@ -101,7 +101,7 @@ public class ItemListActivity extends FragmentActivity implements
 		MuscleBlock muscleB = new MuscleBlock(getApplicationContext(), exercise, muscleP, "Primary");
 		muscleB.save();
 		Log.i("DB insert: ", muscleB.getExercise().getName()+" is "+muscleB.getBlock()+" focused on "+muscleB.getMusclePart().getName());
-	}
+    }
 
 	/**
 	 * Callback method from {@link ItemListFragment.Callbacks} indicating that
