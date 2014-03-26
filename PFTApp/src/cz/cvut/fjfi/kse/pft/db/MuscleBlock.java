@@ -25,7 +25,11 @@ public class MuscleBlock extends SugarRecord<MuscleBlock> {
 	}
 
 	/**
-     */
+	 * @param arg0
+	 * @param exercise
+	 * @param musclePart
+	 * @param block
+	 */
 	public MuscleBlock(Context arg0, Exercise exercise, MusclePart musclePart, String block) {
 		super(arg0);
 		this.exercise = exercise;
