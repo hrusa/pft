@@ -3,9 +3,9 @@
  */
 package cz.cvut.fjfi.kse.pft.db;
 
-import android.content.Context;
-
 import com.orm.SugarRecord;
+
+import android.content.Context;
 
 /**
  * @author Petr Hruška
