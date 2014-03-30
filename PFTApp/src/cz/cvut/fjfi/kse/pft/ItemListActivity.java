@@ -12,7 +12,7 @@ import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Trainee;
 import cz.cvut.fjfi.kse.pft.db.Training;
 import cz.cvut.fjfi.kse.pft.db.Workout;
-import cz.cvut.fjfi.pft.R;
+import cz.cvut.fjfi.kse.pft.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
