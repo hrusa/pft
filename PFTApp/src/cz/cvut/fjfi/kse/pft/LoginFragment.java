@@ -3,28 +3,31 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.People.LoadPeopleResult;
-import com.google.android.gms.plus.model.people.Person;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.People.LoadPeopleResult;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 /**
  * @author Petr Hruška
@@ -199,12 +202,26 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	@Override
 	public void onClick(View view) {
 		Log.i("onClick: ", "started");
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Internet connection error")
+		.setMessage("You have no internet connection, please establish one.")
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			 public void onClick(DialogInterface dialog, int which) {
+				 Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+				 startActivity(intent);
+				 }
+				});
+		AlertDialog alertDialog = builder.create();
+		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
 		  if (view.getId() == R.id.sign_in_button
 		    && !mGoogleApiClient.isConnecting()) {
 		    mSignInClicked = true;
 		    resolveSignInError();
 		    Log.i("onClick: ", "sign in clicked");
 		  }
+		} else {
+			alertDialog.show();
+		}
 		  
 		  /*if (view.getId() == R.id.sign_out_button) {
 			    if (mGoogleApiClient.isConnected()) {

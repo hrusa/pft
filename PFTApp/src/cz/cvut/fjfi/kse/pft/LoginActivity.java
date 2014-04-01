@@ -1,8 +1,11 @@
 package cz.cvut.fjfi.kse.pft;
 
-import android.support.v4.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +16,6 @@ public class LoginActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new LoginFragment()).commit();
@@ -46,4 +48,41 @@ public class LoginActivity extends FragmentActivity {
 		if (fragment instanceof LoginFragment)
 		    ((LoginFragment) fragment).connect(requestCode, responseCode, intent);
 	}
+	
+	public boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	         = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null;
+	}
+	
+	/*public boolean hasActiveInternetConnection() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Internet connection error")
+		.setMessage("You have no internet connection, please establish one.")
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			 public void onClick(DialogInterface dialog, int which) {
+				 Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+				 startActivity(intent);
+				 }
+				});
+		AlertDialog alertDialog = builder.create();
+	    if (isNetworkAvailable()) {
+	        try {
+	            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+	            urlc.setRequestProperty("User-Agent", "Test");
+	            urlc.setRequestProperty("Connection", "close");
+	            urlc.setConnectTimeout(6000); 
+	            urlc.connect();
+	            return (urlc.getResponseCode() == 200);
+	        } catch (IOException e) {
+	            Log.e("Internet test", "Error checking internet connection");
+	            alertDialog.show();
+	        }
+	    } else {
+	        Log.d("Internet test", "No network available!");
+	        alertDialog.show();
+	    }
+	    return false;
+	}*/
 }
