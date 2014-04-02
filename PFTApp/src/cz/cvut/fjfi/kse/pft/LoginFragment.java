@@ -5,6 +5,7 @@ package cz.cvut.fjfi.kse.pft;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -50,8 +52,9 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	 * resolve them when the user clicks sign-in.
 	 */
 	private ConnectionResult mConnectionResult;
-	
+	private PendingIntent mSignInIntent;
 	private TextView mUser;
+	//private SignInButton mSignInButton;
 	
 	/**
 	 * 
@@ -69,13 +72,17 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		super.onCreate(savedInstanceState);
 		Log.i("onCreate: ", "started");
 		
-		mGoogleApiClient = new GoogleApiClient.Builder(getActivity())	//možná změníme parametr na getActivity().getBaseContext()
+		mGoogleApiClient = buildGoogleApiClient();
+		Log.i("onCreate: ", "init");
+	}
+	
+	private GoogleApiClient buildGoogleApiClient() {
+		return new GoogleApiClient.Builder(getActivity())	//možná změníme parametr na getActivity().getBaseContext()
         .addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
         .addApi(Plus.API, null)
         .addScope(Plus.SCOPE_PLUS_LOGIN)
         .build();
-		Log.i("onCreate: ", "init");
 	}
 
 	/* (non-Javadoc)
@@ -110,6 +117,16 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	    }
 	    Log.i("onStop: ", "ended");
 	}
+	
+	//nemůžu to dát na ondestroy
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+        Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);	//smaže povolení k přístupu na google účet
+        mGoogleApiClient = buildGoogleApiClient();
+        mGoogleApiClient.connect();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener#onConnectionFailed(com.google.android.gms.common.ConnectionResult)
@@ -123,6 +140,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		    // 'sign-in'.
 			Log.i("onCF: ", "1 if");
 		    mConnectionResult = result;
+		    mSignInIntent = result.getResolution();
 
 		    if (mSignInClicked) {
 		      // The user has already clicked 'sign-in' so we attempt to resolve all
@@ -143,13 +161,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		mSignInClicked = false;
 		Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG).show();
 		Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-	    
+	    currentUser.getBirthday();
 	    mUser.setText(String.format(
 	        getResources().getString(R.string.status_sign_in),
 	        currentUser.getDisplayName()));	   
 
-	    Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
-	        .setResultCallback(this);
+	    /*Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
+	        .setResultCallback(this);*/
 	}
 
 	/* (non-Javadoc)
@@ -186,8 +204,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		  Log.i("resolveSignInError: ", "if");  
 	    try {
 	      mIntentInProgress = true;
-	      mConnectionResult.startResolutionForResult(getActivity(), // your activity
-                  RC_SIGN_IN);
+	      getActivity().startIntentSenderForResult(mSignInIntent.getIntentSender(),
+	              RC_SIGN_IN, null, 0, 0, 0);
 	      Log.i("resolveSignInError: ", "try");
 	    } catch (SendIntentException e) {
 	      // The intent was canceled before it was sent.  Return to the default
@@ -202,16 +220,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	@Override
 	public void onClick(View view) {
 		Log.i("onClick: ", "started");
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Internet connection error")
-		.setMessage("You have no internet connection, please establish one.")
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			 public void onClick(DialogInterface dialog, int which) {
-				 Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-				 startActivity(intent);
-				 }
-				});
-		AlertDialog alertDialog = builder.create();
+		
 		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
 		  if (view.getId() == R.id.sign_in_button
 		    && !mGoogleApiClient.isConnecting()) {
@@ -220,6 +229,16 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		    Log.i("onClick: ", "sign in clicked");
 		  }
 		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle("Internet connection error")
+			.setMessage("You have no internet connection, please establish one.")
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				 public void onClick(DialogInterface dialog, int which) {
+					 Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+					 startActivity(intent);
+					 }
+					});
+			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
 		  
