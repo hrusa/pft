@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +55,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	private ConnectionResult mConnectionResult;
 	private PendingIntent mSignInIntent;
 	private TextView mUser;
-	//private SignInButton mSignInButton;
+	private SignInButton mSignInButton;
+	private Button mSignOutButton;
 	
 	/**
 	 * 
@@ -71,7 +73,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		Log.i("onCreate: ", "started");
-		
+		 
 		mGoogleApiClient = buildGoogleApiClient();
 		Log.i("onCreate: ", "init");
 	}
@@ -95,7 +97,10 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		View rootView = inflater.inflate(R.layout.fragment_login,
 				container, false);
 		mUser = (TextView) rootView.findViewById(R.id.sign_in_status);
+		mSignInButton = (SignInButton) rootView.findViewById(R.id.sign_in_button);
+		mSignOutButton = (Button) rootView.findViewById(R.id.sign_out_button);
 		rootView.findViewById(R.id.sign_in_button).setOnClickListener(this);
+		rootView.findViewById(R.id.sign_out_button).setOnClickListener(this);
 		Log.i("onCreateView: ", "layout init");
 		return rootView;
 	}
@@ -122,10 +127,10 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+		/*Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
         Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);	//smaže povolení k přístupu na google účet
         mGoogleApiClient = buildGoogleApiClient();
-        mGoogleApiClient.connect();
+        mGoogleApiClient.connect();*/
 	}
 
 	/* (non-Javadoc)
@@ -149,6 +154,9 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		      Log.i("onCF: ", "2 if");
 		    }
 		}
+		mUser.setText(R.string.status_sign_out);
+		mSignInButton.setEnabled(true);
+		mSignOutButton.setEnabled(false);
 	}
 
 	/* (non-Javadoc)
@@ -161,13 +169,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		mSignInClicked = false;
 		Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG).show();
 		Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-	    currentUser.getBirthday();
 	    mUser.setText(String.format(
 	        getResources().getString(R.string.status_sign_in),
 	        currentUser.getDisplayName()));	   
-
-	    /*Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
-	        .setResultCallback(this);*/
+	    mSignInButton.setEnabled(false);
+	    mSignOutButton.setEnabled(true);
+	    Log.i("Narozeniny: ", ""+currentUser.getBirthday());
+	    Log.i("Pozice: ", ""+currentUser.getCurrentLocation());
 	}
 
 	/* (non-Javadoc)
@@ -222,12 +230,21 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		Log.i("onClick: ", "started");
 		
 		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
-		  if (view.getId() == R.id.sign_in_button
-		    && !mGoogleApiClient.isConnecting()) {
-		    mSignInClicked = true;
-		    resolveSignInError();
-		    Log.i("onClick: ", "sign in clicked");
+		  if (!mGoogleApiClient.isConnecting()) {
+			switch (view.getId()) {
+				case R.id.sign_in_button:
+					mSignInClicked = true;
+				    resolveSignInError();
+				    Log.i("onClick: ", "sign in clicked");
+				    break;
+				case R.id.sign_out_button:
+					Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+				    mGoogleApiClient.disconnect();
+				    mGoogleApiClient.connect();
+				    break;
+			}
 		  }
+		    
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder.setTitle("Internet connection error")
@@ -241,14 +258,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 			AlertDialog alertDialog = builder.create();
 			alertDialog.show();
 		}
-		  
-		  /*if (view.getId() == R.id.sign_out_button) {
-			    if (mGoogleApiClient.isConnected()) {
-			      Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-			      mGoogleApiClient.disconnect();
-			      mGoogleApiClient.connect();
-			    }
-		  }*/
+		
 	}
 
 	/* (non-Javadoc)
