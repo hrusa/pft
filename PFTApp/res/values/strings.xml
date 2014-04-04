@@ -10,5 +10,14 @@
     <string name="desc_logo">App logo</string>
     <string name="status_sign_in">Logged in as %s</string>
     <string name="status_sign_out">Unknown user</string>
+    <string name="text_height">Height</string>
+    <string name="text_weight">Weight</string>
+    <string name="title_fragmentd_birthdate">Set your birthdate</string>
+    <string name="title_fragmentd_basicinfo">Set your</string>
+    <string name="title_fragmentd_workout">Set your workout info</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="next">NEXT</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,8 +25,11 @@ public class LoginActivity extends FragmentActivity {
 		
 		if (savedInstanceState == null) {
 			checkGooglePlayServicesAvailable();
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new LoginFragment()).commit();
+			/*getSupportFragmentManager().beginTransaction()
+					.add(R.id.container, new BirthdateDFragment()).commit();*/
+			FragmentManager manager = getSupportFragmentManager();
+			BasicInfoDFragment dialog = new BasicInfoDFragment();
+			dialog.show(manager, "BasicInfo");
 		}
 	}
 	

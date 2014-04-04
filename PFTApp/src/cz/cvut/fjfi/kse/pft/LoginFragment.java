@@ -174,7 +174,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	        currentUser.getDisplayName()));	   
 	    mSignInButton.setEnabled(false);
 	    mSignOutButton.setEnabled(true);
-	    Log.i("Narozeniny: ", ""+currentUser.getBirthday());
+	    Log.i("Narozeniny: ", ""+currentUser.getBirthday());	//tyto informace musejí být veřejně přístupné, jinak je zde uložena hodnota null
 	    Log.i("Pozice: ", ""+currentUser.getCurrentLocation());
 	}
 
