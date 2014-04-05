@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,10 +26,10 @@ public class LoginActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			checkGooglePlayServicesAvailable();
 			/*getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new BirthdateDFragment()).commit();*/
-			FragmentManager manager = getSupportFragmentManager();
+					.add(R.id.container, new BirthdateDFragment()).commit();
 			BasicInfoDFragment dialog = new BasicInfoDFragment();
-			dialog.show(manager, "BasicInfo");
+			dialog.show(getSupportFragmentManager(), "BasicInfo");*/
+			showBirthdateDialog();
 		}
 	}
 	
@@ -115,5 +115,21 @@ public class LoginActivity extends FragmentActivity {
 	            finish();
 	        }
 	    }
+	}
+	
+	public void showBirthdateDialog() {
+		getSupportFragmentManager().beginTransaction()
+		.replace(R.id.container, new BirthdateDFragment()).commit();
+	}
+	
+	public void showBasicInfoDialog() {
+		Log.i("Start showBasicInfoDialog", "jede");
+		BasicInfoDFragment dialog = new BasicInfoDFragment();
+		dialog.show(getSupportFragmentManager(), "BasicInfoD");
+	}
+	
+	public void showWorkoutDialog() {
+		WorkoutDFragment dialog = new WorkoutDFragment();
+		dialog.show(getSupportFragmentManager(), "WorkoutD");
 	}
 }

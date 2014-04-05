@@ -17,7 +17,22 @@
     <string name="title_fragmentd_workout">Set your workout info</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="previous">PREVIOUS</string>
-    <string name="next">NEXT</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="experience">Set your experience with exercise</string>
+    <string name="goal">Set your goal</string>
+    
+    <string-array name="experience_array">
+        <item>Beginner</item>
+        <item>Advanced</item>
+        <item>Experienced</item>
+    </string-array>
+    
+    <string-array name="goal_array">
+        <item>Lose fat</item>
+        <item>Gain strength</item>
+        <item>Bulking</item>
+        <item>Cutting</item>
+    </string-array>
 
 </resources>

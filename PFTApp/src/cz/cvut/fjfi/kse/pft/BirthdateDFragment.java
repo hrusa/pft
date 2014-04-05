@@ -6,25 +6,24 @@ package cz.cvut.fjfi.kse.pft;
 import java.util.Calendar;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
 /**
  * @author Petr Hruška
  *
  */
 public class BirthdateDFragment extends DialogFragment {
-	Context mContext;
 	int mYear, mMonth, mDay;
+	//nechápu proč se onDataSet spouští 2x, pomocí této proměnné je ošetřeno dvojité provedení kódus
+	boolean wantToStartDialog = true;	
 	/**
 	 * 
 	 */
 	public BirthdateDFragment() {
 		// TODO Auto-generated constructor stub
-		mContext = getActivity();
 	}
 	
 	/* (non-Javadoc)
@@ -34,6 +33,7 @@ public class BirthdateDFragment extends DialogFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		Log.i("onCreate BD", "spuštěno");
 		final Calendar c = Calendar.getInstance();
 		mYear = c.get(Calendar.YEAR);
 		mMonth = c.get(Calendar.MONTH);
@@ -44,12 +44,15 @@ public class BirthdateDFragment extends DialogFragment {
 		            @Override
 		            public void onDateSet(DatePicker view, int year,
 		                    int monthOfYear, int dayOfMonth) {
-		                Toast.makeText(getActivity(), dayOfMonth + "-"
-		                        + (monthOfYear + 1) + "-" + year, Toast.LENGTH_LONG).show();
-		 
+		            	//ošetřující podmínka dvojitého spuštění onDataSet
+		            	if(wantToStartDialog) {	
+		            		((LoginActivity) getActivity()).showBasicInfoDialog();
+		            		wantToStartDialog = false;
+		            	}
 		            }
 		        }, mYear, mMonth, mDay);
 		dpd.setTitle(R.string.title_fragmentd_birthdate);
+		dpd.setCancelable(false);
 		dpd.show();
 	}
 
