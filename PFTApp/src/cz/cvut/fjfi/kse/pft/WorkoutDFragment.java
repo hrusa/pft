@@ -20,6 +20,7 @@ import android.widget.Toast;
  */
 public class WorkoutDFragment extends DialogFragment{
 	View view;
+	Spinner experience, goal;
 	/**
 	 * 
 	 */
@@ -37,12 +38,12 @@ public class WorkoutDFragment extends DialogFragment{
 		view = inflater.inflate(R.layout.fragmentd_workout, null);
 		Button previous = (Button) view.findViewById(R.id.previous_button);
 		Button next = (Button) view.findViewById(R.id.next_button);
-		Spinner experience = (Spinner) view.findViewById(R.id.experience_spinner);
-		ArrayAdapter<String> Eadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, R.array.experience_array);
+		experience = (Spinner) view.findViewById(R.id.experience_spinner);
+		ArrayAdapter<CharSequence> Eadapter = ArrayAdapter.createFromResource(getActivity(), R.array.experience_array, android.R.layout.simple_spinner_item);
 		Eadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		experience.setAdapter(Eadapter);
-		Spinner goal = (Spinner) view.findViewById(R.id.goal_spinner);
-		ArrayAdapter<String> Gadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, R.array.goal_array);
+		goal = (Spinner) view.findViewById(R.id.goal_spinner);
+		ArrayAdapter<CharSequence> Gadapter = ArrayAdapter.createFromResource(getActivity(), R.array.goal_array, android.R.layout.simple_spinner_item);
 		Gadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		goal.setAdapter(Gadapter);
 		setCancelable(false);
@@ -52,6 +53,7 @@ public class WorkoutDFragment extends DialogFragment{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				((LoginActivity) getActivity()).showBasicInfoDialog();
+				dismiss();
 			}
 		});
 		next.setOnClickListener(new OnClickListener() {
@@ -59,8 +61,8 @@ public class WorkoutDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                Toast.makeText(getActivity(), "Frčíme", Toast.LENGTH_SHORT).show();
-                
+                Toast.makeText(getActivity(), ""+experience.getSelectedItem().toString()+" and "+goal.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                dismiss();
 			}
 		});
 		return view;

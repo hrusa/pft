@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.People.LoadPeopleResult;
 import com.google.android.gms.plus.Plus;
@@ -176,6 +177,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	    mSignOutButton.setEnabled(true);
 	    Log.i("Narozeniny: ", ""+currentUser.getBirthday());	//tyto informace musejí být veřejně přístupné, jinak je zde uložena hodnota null
 	    Log.i("Pozice: ", ""+currentUser.getCurrentLocation());
+	    //((LoginActivity) getActivity()).showBirthdateDialog();
 	}
 
 	/* (non-Javadoc)
@@ -239,8 +241,17 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 				    break;
 				case R.id.sign_out_button:
 					Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-				    mGoogleApiClient.disconnect();
+					Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+
+						  public void onResult(Status status) {
+						    // mGoogleApiClient is now disconnected and access has been revoked.
+						    // Trigger app logic to comply with the developer policies
+						  }
+					});
 				    mGoogleApiClient.connect();
+				    mUser.setText(R.string.status_sign_out);
+				    mSignInButton.setEnabled(true);
+					mSignOutButton.setEnabled(false);
 				    break;
 			}
 		  }
@@ -267,6 +278,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	@Override
 	public void onResult(LoadPeopleResult arg0) {
 		// TODO Auto-generated method stub
-		Log.i("onResult: ", "started");
+		
 	}
 }

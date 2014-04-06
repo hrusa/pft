@@ -17,7 +17,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class LoginActivity extends FragmentActivity {
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,11 +25,8 @@ public class LoginActivity extends FragmentActivity {
 		
 		if (savedInstanceState == null) {
 			checkGooglePlayServicesAvailable();
-			/*getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new BirthdateDFragment()).commit();
-			BasicInfoDFragment dialog = new BasicInfoDFragment();
-			dialog.show(getSupportFragmentManager(), "BasicInfo");*/
-			showBirthdateDialog();
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.container, new LoginFragment()).commit();
 		}
 	}
 	

@@ -19,7 +19,7 @@
     <string name="female">Female</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
-    <string name="experience">Set your experience with exercise</string>
+    <string name="experience">Set your experience</string>
     <string name="goal">Set your goal</string>
     
     <string-array name="experience_array">

@@ -49,6 +49,7 @@ public class BasicInfoDFragment extends DialogFragment{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				((LoginActivity) getActivity()).showBirthdateDialog();
+				dismiss();
 			}
 		});
 		next.setOnClickListener(new OnClickListener() {
@@ -65,6 +66,7 @@ public class BasicInfoDFragment extends DialogFragment{
                 	Toast.makeText(getActivity(), "Female biatch", Toast.LENGTH_SHORT).show();
                 }
                 ((LoginActivity) getActivity()).showWorkoutDialog();
+                dismiss();
 			}
 		});
 		
