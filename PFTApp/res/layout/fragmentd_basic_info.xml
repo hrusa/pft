@@ -5,36 +5,44 @@
     android:orientation="vertical" >
     
     <LinearLayout 
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1.0" >
 	    <TextView 
 	        android:id="@+id/height_text"
-	        android:layout_width="fill_parent"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:text="@string/text_height"/>
+	        android:layout_weight="0.5"
+	        android:gravity="center"
+	        android:text="@string/text_height" />
 	    <EditText 
 	        android:id="@+id/height_etext"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:inputType="number"/>
+	        android:layout_weight="0.5"
+	        android:inputType="number" />
 
     </LinearLayout>
     
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1.0" >
         <TextView
             android:id="@+id/weight_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/text_weight"/>
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="@string/text_weight" />
         <EditText 
 	        android:id="@+id/weight_etext"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:inputType="number"/>
+	        android:layout_weight="0.5"
+	        android:inputType="number" />
     </LinearLayout>
     
     <RadioGroup 
@@ -42,18 +50,18 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center" >
         <RadioButton 
             android:id="@+id/male_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/male"/>
+            android:text="@string/male" />
         <RadioButton 
             android:id="@+id/female_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/female"
-            android:checked="true"/>
+            android:checked="true" />
     </RadioGroup>
     
     <LinearLayout 
@@ -61,21 +69,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1.0"
-        style="?android:attr/buttonBarStyle">
+        style="?android:attr/buttonBarStyle" >
         <Button 
             android:id="@+id/previous_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/previous"
             android:layout_weight="0.5"
-            style="?android:attr/buttonBarButtonStyle"/>
+            style="?android:attr/buttonBarButtonStyle" />
         <Button 
             android:id="@+id/next_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/next"
             android:layout_weight="0.5"
-            style="?android:attr/buttonBarButtonStyle"/>
+            style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
 </LinearLayout>

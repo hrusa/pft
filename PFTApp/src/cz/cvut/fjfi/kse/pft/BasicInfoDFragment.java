@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import android.widget.Toast;
 public class BasicInfoDFragment extends DialogFragment{
 	View view;
 	RadioGroup rg;
+	RadioButton rb;
+	Bundle args;
 	int test = 0;
 	/**
 	 * 
@@ -37,6 +40,7 @@ public class BasicInfoDFragment extends DialogFragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		Log.i("Start onCrateView", ""+test++);
+		args = this.getArguments();
 		view = inflater.inflate(R.layout.fragmentd_basic_info, null);
 		Button previous = (Button) view.findViewById(R.id.previous_button);
 		Button next = (Button) view.findViewById(R.id.next_button);

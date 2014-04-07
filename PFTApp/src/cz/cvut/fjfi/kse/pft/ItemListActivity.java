@@ -70,7 +70,7 @@ public class ItemListActivity extends FragmentActivity implements
 		MuscleGroup muscleG = new MuscleGroup(getApplicationContext(), "Chest");
 		muscleG.save();
 		Log.i("DB insert: ", "MuscleGroup ID " + muscleG.getId() + " inserted as " + muscleG.getName());
-		Trainee trainee = new Trainee(getApplicationContext(), "1989-07-06");
+		Trainee trainee = new Trainee(getApplicationContext(), "Borec Největší", "nejvetsi@borec.cz", "1988-01-28", 1);
 		trainee.save();
 		Log.i("DB insert: ", "Trainee ID " + trainee.getId() + " inserted as " + trainee.getBirth());
 		Attribute attribute = new Attribute(getApplicationContext(), "Weight");

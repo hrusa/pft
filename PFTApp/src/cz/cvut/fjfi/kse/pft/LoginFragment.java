@@ -3,6 +3,8 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,6 +61,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	private TextView mUser;
 	private SignInButton mSignInButton;
 	private Button mSignOutButton;
+	
+	private AccountManager mAccountManager;
 	
 	/**
 	 * 
@@ -178,6 +183,23 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	    Log.i("Narozeniny: ", ""+currentUser.getBirthday());	//tyto informace musejí být veřejně přístupné, jinak je zde uložena hodnota null
 	    Log.i("Pozice: ", ""+currentUser.getCurrentLocation());
 	    //((LoginActivity) getActivity()).showBirthdateDialog();
+	    Bundle args = new Bundle();
+	    args.putString("name", currentUser.getDisplayName());
+	    args.putString("mail", getAccountNames());
+	    Log.i("Has Gender", ""+currentUser.hasGender());	//píše true i když je null
+	    args.putInt("gender", currentUser.getGender());
+	    Log.i("Penis: ", ""+args.getString("gender"));
+	    BirthdateDFragment dialog = new BirthdateDFragment();
+	    dialog.setArguments(args);
+	    getFragmentManager().beginTransaction().replace(R.id.container, dialog).commit();
+	}
+	
+	private String getAccountNames() {
+	    mAccountManager = AccountManager.get(getActivity());
+	    Account[] accounts = mAccountManager
+	            .getAccountsByType(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+	    //Log.i("Mailik: ", accounts[1].name);
+	    return accounts[0].name;
 	}
 
 	/* (non-Javadoc)
