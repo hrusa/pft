@@ -3,6 +3,7 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import cz.cvut.fjfi.kse.pft.db.Trainee;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 public class WorkoutDFragment extends DialogFragment{
 	View view;
 	Spinner experience, goal;
+	Bundle args;
+	Trainee trainee;
 	/**
 	 * 
 	 */
@@ -35,7 +38,9 @@ public class WorkoutDFragment extends DialogFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		args = this.getArguments();
 		view = inflater.inflate(R.layout.fragmentd_workout, null);
+		trainee = Trainee.findById(Trainee.class, args.getLong("id"));
 		Button previous = (Button) view.findViewById(R.id.previous_button);
 		Button next = (Button) view.findViewById(R.id.next_button);
 		experience = (Spinner) view.findViewById(R.id.experience_spinner);
@@ -61,7 +66,9 @@ public class WorkoutDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                Toast.makeText(getActivity(), ""+experience.getSelectedItem().toString()+" and "+goal.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), ""+experience.getSelectedItemId()+" and "+goal.getSelectedItemId(), Toast.LENGTH_SHORT).show();
+                trainee.setExperience(experience.getSelectedItemId());
+                trainee.setGoal(goal.getSelectedItemId());
                 dismiss();
 			}
 		});

@@ -3,6 +3,9 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.util.Calendar;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -11,9 +14,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import cz.cvut.fjfi.kse.pft.db.Attribute;
+import cz.cvut.fjfi.kse.pft.db.Measure;
+import cz.cvut.fjfi.kse.pft.db.Trainee;
 
 /**
  * @author Petr Hruška
@@ -21,9 +28,14 @@ import android.widget.Toast;
  */
 public class BasicInfoDFragment extends DialogFragment{
 	View view;
+	EditText heightText, weightText;
 	RadioGroup rg;
 	RadioButton rb;
 	Bundle args;
+	Trainee trainee;
+	Attribute height, weight;
+	Measure mHeight, mWeight;
+	List<Attribute> attrs;
 	int test = 0;
 	/**
 	 * 
@@ -42,6 +54,8 @@ public class BasicInfoDFragment extends DialogFragment{
 		Log.i("Start onCrateView", ""+test++);
 		args = this.getArguments();
 		view = inflater.inflate(R.layout.fragmentd_basic_info, null);
+		heightText = (EditText) view.findViewById(R.id.height_etext);
+		weightText = (EditText) view.findViewById(R.id.weight_etext);
 		Button previous = (Button) view.findViewById(R.id.previous_button);
 		Button next = (Button) view.findViewById(R.id.next_button);
 		rg = (RadioGroup) view.findViewById(R.id.gender_radio_group);
@@ -52,7 +66,9 @@ public class BasicInfoDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				((LoginActivity) getActivity()).showBirthdateDialog();
+				BirthdateDFragment dialog = new BirthdateDFragment();
+			    dialog.setArguments(args);
+			    getFragmentManager().beginTransaction().replace(R.id.container, dialog).commit();
 				dismiss();
 			}
 		});
@@ -66,84 +82,50 @@ public class BasicInfoDFragment extends DialogFragment{
                 Log.i("RB", ""+rg.getCheckedRadioButtonId());
                 if(R.id.male_radio == rg.getCheckedRadioButtonId()) {
                 	Toast.makeText(getActivity(), "Male madafaka", Toast.LENGTH_SHORT).show();
+                	trainee = new Trainee(getActivity(), args.getString("name"), args.getString("email"), args.getString("birth"), 0);
+                	
                 } else {
                 	Toast.makeText(getActivity(), "Female biatch", Toast.LENGTH_SHORT).show();
+                	trainee = new Trainee(getActivity(), args.getString("name"), args.getString("email"), args.getString("birth"), 0);
                 }
-                ((LoginActivity) getActivity()).showWorkoutDialog();
+                trainee.save();
+                Log.i("DB insert: ", "Trainee ID " + trainee.getId() + " inserted as " + trainee.getName()+" "+ trainee.getEmail() +" "+trainee.getBirth()+trainee.getExperience()+trainee.getGoal()+trainee.getGender());
+                attrs = Attribute.listAll(Attribute.class);
+                if(attrs.isEmpty()) {
+					height = new Attribute(getActivity(), "Height");
+					height.save();
+					weight = new Attribute(getActivity(), "Weight");
+					weight.save();
+                }
+                attrs = Attribute.find(Attribute.class, "name = ?", "Height");
+                //přidat kontrolu zadání hodnot!
+                mHeight = new Measure(getActivity(), trainee, attrs.get(0), getTodayDate(), Integer.parseInt(heightText.getText().toString()));
+                mHeight.save();
+                Log.i("DB insert: ", "Trainee "+mHeight.getTrainee().getId()+" with "+mHeight.getAttribute().getName()+mHeight.getValue());
+                attrs.clear();
+                attrs = Attribute.find(Attribute.class, "name = ?", "Weight");
+                Log.i("Test attributu s názvem Weight", ""+attrs.isEmpty());
+                mWeight = new Measure(getActivity(), trainee, attrs.get(0), getTodayDate(), Integer.parseInt(weightText.getText().toString()));
+                mWeight.save();
+                Log.i("DB insert: ", "Trainee "+mWeight.getTrainee().getId()+" with "+mWeight.getAttribute().getName()+mWeight.getValue());
+                args.clear();
+            	args.putLong("id", trainee.getId());
+                WorkoutDFragment dialog = new WorkoutDFragment();
+        	    dialog.setArguments(args);
+        		dialog.show(getFragmentManager(), "WorkoutD");
                 dismiss();
 			}
 		});
 		
 		return view;
 	}
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.DialogFragment#onCreateDialog(android.os.Bundle)
-	 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		Dialog dialog = super.onCreateDialog(savedInstanceState);
-		dialog.setTitle(R.string.title_fragmentd_basicinfo);
-		
-		
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View view = inflater.inflate(R.layout.fragmentd_basic_info, null);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.title_fragmentd_basicinfo)
-		.setView(view)
-		.setCancelable(false)
-		.setNegativeButton(R.string.previous, new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				((LoginActivity) getActivity()).showBirthdateDialog();
-			}
-		})
-		.setPositiveButton(R.string.next, new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		setCancelable(false);
-		Dialog dialog = builder.create();
-		return dialog;
-	}*/
 	
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.DialogFragment#onCreate(android.os.Bundle)
-	 
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		AlertDialog dialog = (AlertDialog)getDialog();
-	    if(dialog != null)
-	    {
-	        Button positiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
-	        positiveButton.setOnClickListener(new View.OnClickListener()
-	                {
-	                    @Override
-	                    public void onClick(View v)
-	                    {
-	                        LayoutInflater inflater = getActivity().getLayoutInflater();
-	                		View view = inflater.inflate(R.layout.fragmentd_basic_info, null);
-	                        RadioGroup rg = (RadioGroup) view.findViewById(R.id.gender_radio_group);
-	                        //Do stuff, possibly set wantToCloseDialog to true then...
-	                        Log.i("RB", ""+rg.getCheckedRadioButtonId());
-	                        if(R.id.male_radio == rg.getCheckedRadioButtonId()) {
-	                        	Toast.makeText(getActivity(), "Male madafaka", Toast.LENGTH_SHORT).show();
-	                        	dismiss();
-	                        } else {
-	                        	Toast.makeText(getActivity(), "Female biatch", Toast.LENGTH_SHORT).show();
-	                        }
-	                            
-	                        //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
-	                    }
-	                });
-	    }
-	}*/
+	private String getTodayDate() {
+		Calendar c = Calendar.getInstance();
+		int mYear = c.get(Calendar.YEAR);
+		int mMonth = c.get(Calendar.MONTH);
+		int mDay = c.get(Calendar.DAY_OF_MONTH);
+		
+		return mYear+"-"+mMonth+"-"+mDay;
+	}
 }

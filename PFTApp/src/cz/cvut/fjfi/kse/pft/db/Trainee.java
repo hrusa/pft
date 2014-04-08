@@ -15,7 +15,9 @@ public class Trainee extends SugarRecord<Trainee> {
 	private String name;
 	private String email;
 	private String birth;	//YYYY-MM-DD
-	private int gender;
+	private int gender;		//0 = male, 1 = female
+	private long experience = -1;	//0 = beginner, 1 = advanced, 2 = experienced
+	private long goal = -1;		//0 = lose fat, 2 = gain strength, 3 = bulking, 4 = cutting
 	
 	/**
 	 * @param arg0
@@ -37,6 +39,34 @@ public class Trainee extends SugarRecord<Trainee> {
 		this.gender = gender;
 	}
 	
+	/**
+	 * @return the experience
+	 */
+	public long getExperience() {
+		return experience;
+	}
+
+	/**
+	 * @param experience the experience to set
+	 */
+	public void setExperience(long experience) {
+		this.experience = experience;
+	}
+
+	/**
+	 * @return the goal
+	 */
+	public long getGoal() {
+		return goal;
+	}
+
+	/**
+	 * @param goal the goal to set
+	 */
+	public void setGoal(long goal) {
+		this.goal = goal;
+	}
+
 	/**
 	 * @return the gender
 	 */
