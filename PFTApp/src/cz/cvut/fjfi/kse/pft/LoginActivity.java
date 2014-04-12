@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ public class LoginActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			checkGooglePlayServicesAvailable();
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.container, new LoginFragment()).commit();
+					.replace(R.id.container, new TrainingFragment(), "Training").commit();
 		}
 	}
 	
@@ -40,8 +41,9 @@ public class LoginActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.actionbar_training, menu);
+	    return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -49,11 +51,13 @@ public class LoginActivity extends FragmentActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+        case R.id.add_button:
+            showAddWorkoutDialog();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+    }
 	}
 	
 	@Override
@@ -128,5 +132,11 @@ public class LoginActivity extends FragmentActivity {
 	public void showWorkoutDialog() {
 		WorkoutDFragment dialog = new WorkoutDFragment();
 		dialog.show(getSupportFragmentManager(), "WorkoutD");
+	}
+	
+	public void showAddWorkoutDialog() {
+		Toast.makeText(this, "Pøidej workout", Toast.LENGTH_SHORT).show();
+		AddWorkoutDFragment dialog = new AddWorkoutDFragment();
+		dialog.show(getSupportFragmentManager(), "AddWorkoutD");
 	}
 }
