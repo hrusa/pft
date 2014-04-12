@@ -69,6 +69,11 @@ public class WorkoutDFragment extends DialogFragment{
                 Toast.makeText(getActivity(), ""+experience.getSelectedItemId()+" and "+goal.getSelectedItemId(), Toast.LENGTH_SHORT).show();
                 trainee.setExperience(experience.getSelectedItemId());
                 trainee.setGoal(goal.getSelectedItemId());
+                
+                //načíst nový dialog fragment s výběrem tréninku
+                CreateTrainingDFragment dialog = new CreateTrainingDFragment();
+        	    dialog.setArguments(args);
+        		dialog.show(getFragmentManager(), "CreateTrainingD");
                 dismiss();
 			}
 		});

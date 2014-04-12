@@ -21,6 +21,8 @@
     <string name="next">Next</string>
     <string name="experience">Set your experience</string>
     <string name="goal">Set your goal</string>
+    <string name="createT_button">Create training</string>
+    <string name="chooseT_button">Recommended training</string>
     
     <string-array name="experience_array">
         <item>Beginner</item>
