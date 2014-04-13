@@ -18,7 +18,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class LoginActivity extends FragmentActivity {
-	Menu addTraining, addWorkout, addExercise, addSerie;
+	public MenuItem addTraining, addWorkout, addExercise, addSerie;
+	Bundle args = new Bundle();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,44 +33,56 @@ public class LoginActivity extends FragmentActivity {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	/*@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.actionbar_training, menu);
+	    Log.i("Z loginactitvity",".i.");
+	    addTraining = menu.findItem(R.id.add_training_button);
+	    addWorkout = menu.findItem(R.id.add_workout_button);
+	    addExercise = menu.findItem(R.id.add_exercise_button);
+	    addSerie = menu.findItem(R.id.add_serie_button);
+	    addTraining.setVisible(false);
+	    addWorkout.setVisible(false);
+	    addExercise.setVisible(false);
+	    addSerie.setVisible(false);
+	    Log.i("Z loginactitvity",""+(addWorkout==null));
+	    return true;
+	}*/
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		checkGooglePlayServicesAvailable();
 	}
+	
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; this adds items to the action bar if it is present.
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.actionbar_training, menu);
-	    addTraining = (Menu) findViewById(R.id.add_training_button);
-	    return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
+	/*@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
         case R.id.add_training_button:
-            showAddWorkoutDialog();
+            //showAddWorkoutDialog();
             return true;
         case R.id.add_workout_button:
             showAddWorkoutDialog();
             return true;
         case R.id.add_exercise_button:
-            showAddWorkoutDialog();
+            showAddExerciseDialog();
             return true;
         case R.id.add_serie_button:
-            showAddWorkoutDialog();
+            //showAddWorkoutDialog();
             return true;
         default:
             return super.onOptionsItemSelected(item);
     }
-	}
+	}*/
 	
 	@Override
 	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {

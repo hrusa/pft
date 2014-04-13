@@ -44,4 +44,13 @@ public class MuscleGroup extends SugarRecord<MuscleGroup>{
 		this.name = name;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getName();
+	}
+
 }

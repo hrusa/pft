@@ -86,9 +86,9 @@ public class ItemListActivity extends FragmentActivity implements
 		//Workout workout = new Workout(getApplicationContext(), training, "Chest workout", "2014-03-20");
 		//workout.save();
 		//Log.i("DB insert: ", workout.getTraining().getName()+" has on "+workout.getDate()+workout.getName());
-		Exercise exercise = new Exercise(getApplicationContext(), "Bench press", diff, "Work hard on bench press.", "https://www.youtube.com/watch?v=rT7DgCr-3pg");
-		exercise.save();
-		Log.i("DB insert: ", exercise.getName()+" with "+exercise.getDifficulty().getName()+" difficulty, so "+exercise.getDescription()+" or "+exercise.getVideo());
+		//Exercise exercise = new Exercise(getApplicationContext(), "Bench press", diff, "Work hard on bench press.", "https://www.youtube.com/watch?v=rT7DgCr-3pg");
+		//exercise.save();
+		//Log.i("DB insert: ", exercise.getName()+" with "+exercise.getDifficulty().getName()+" difficulty, so "+exercise.getDescription()+" or "+exercise.getVideo());
 		//ExerciseUnit exerciseU = new ExerciseUnit(getApplicationContext(), exercise, workout);
 		//exerciseU.save();
 		//Log.i("DB insert: ", exerciseU.getWorkout().getName()+" contains "+exerciseU.getExercise().getName());
@@ -98,9 +98,9 @@ public class ItemListActivity extends FragmentActivity implements
 		MusclePart muscleP = new MusclePart(getApplicationContext(), muscleG, "Pectoralis major");
 		muscleP.save();
 		Log.i("DB insert: ", muscleP.getMuscleGroup().getName()+" muscle group contains "+muscleP.getName());
-		MuscleBlock muscleB = new MuscleBlock(getApplicationContext(), exercise, muscleP, "Primary");
-		muscleB.save();
-		Log.i("DB insert: ", muscleB.getExercise().getName()+" is "+muscleB.getBlock()+" focused on "+muscleB.getMusclePart().getName());
+		//MuscleBlock muscleB = new MuscleBlock(getApplicationContext(), exercise, muscleP, "Primary");
+		//muscleB.save();
+		//Log.i("DB insert: ", muscleB.getExercise().getName()+" is "+muscleB.getBlock()+" focused on "+muscleB.getMusclePart().getName());
 	}
 
 	/**
