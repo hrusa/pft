@@ -18,6 +18,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class LoginActivity extends FragmentActivity {
+	Menu addTraining, addWorkout, addExercise, addSerie;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class LoginActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.actionbar_training, menu);
+	    addTraining = (Menu) findViewById(R.id.add_training_button);
 	    return super.onCreateOptionsMenu(menu);
 	}
 
@@ -52,7 +54,16 @@ public class LoginActivity extends FragmentActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
-        case R.id.add_button:
+        case R.id.add_training_button:
+            showAddWorkoutDialog();
+            return true;
+        case R.id.add_workout_button:
+            showAddWorkoutDialog();
+            return true;
+        case R.id.add_exercise_button:
+            showAddWorkoutDialog();
+            return true;
+        case R.id.add_serie_button:
             showAddWorkoutDialog();
             return true;
         default:
@@ -135,7 +146,7 @@ public class LoginActivity extends FragmentActivity {
 	}
 	
 	public void showAddWorkoutDialog() {
-		Toast.makeText(this, "Pøidej workout", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Pï¿½idej workout", Toast.LENGTH_SHORT).show();
 		AddWorkoutDFragment dialog = new AddWorkoutDFragment();
 		dialog.show(getSupportFragmentManager(), "AddWorkoutD");
 	}
