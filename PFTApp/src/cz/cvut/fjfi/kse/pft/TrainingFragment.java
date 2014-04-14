@@ -20,7 +20,7 @@ import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
 import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
- * @author Mastah
+ * @author Petr Hruška
  * 
  */
 public class TrainingFragment extends ListFragment {

@@ -47,6 +47,7 @@ import cz.cvut.fjfi.kse.pft.db.Trainee;
 public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		OnConnectionFailedListener, OnClickListener,
 		ResultCallback<People.LoadPeopleResult> {
+	Bundle args = new Bundle();
 	/* Request code used to invoke sign in user interactions. */
 	private static final int RC_SIGN_IN = 0;
 	/* Client used to interact with Google APIs. */
@@ -148,12 +149,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		/*
-		 * Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-		 * Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient); //smaže
-		 * povolení k přístupu na google účet mGoogleApiClient =
-		 * buildGoogleApiClient(); mGoogleApiClient.connect();
-		 */
 	}
 
 	/*
@@ -220,7 +215,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		List<Trainee> trainee = Trainee.find(Trainee.class, "email = ?",
 				getAccountNames());
 		if (trainee.isEmpty()) {
-			Bundle args = new Bundle();
 			args.putString("name", currentUser.getDisplayName());
 			args.putString("email", getAccountNames());
 			// Log.i("Has Gender", ""+currentUser.hasGender()); //píše true i
@@ -230,8 +224,12 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 			getFragmentManager().beginTransaction()
 					.replace(R.id.container, dialog).commit();
 		} else {
-			Toast.makeText(getActivity(), "Acc created", Toast.LENGTH_SHORT)
-					.show();
+			args.clear();
+			args.putLong("trainee", trainee.get(0).getId());
+			ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
+			dialog.setArguments(args);
+			dialog.show(getFragmentManager(), "ChooseTrainingD");
+			Log.i("LoginFragment", "Starting choose training dialog");
 		}
 	}
 

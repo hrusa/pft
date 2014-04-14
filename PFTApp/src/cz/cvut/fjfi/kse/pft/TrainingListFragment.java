@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -82,6 +83,7 @@ public class TrainingListFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.actionbar_traininglist, menu);
+		Log.i("Actionbar menu", "created");
 	}
 
 	/*
@@ -96,6 +98,7 @@ public class TrainingListFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.add_training_button:
+			Log.i("TrainingList", "Add training clicked");
 			showAddTrainingDialog();
 			return true;
 		default:

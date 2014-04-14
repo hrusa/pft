@@ -5,6 +5,7 @@ package cz.cvut.fjfi.kse.pft;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,6 +54,7 @@ public class ChooseTrainingDFragment extends DialogFragment {
 						.replace(R.id.container, fragment, "TrainingList")
 						.commit();
 				dismiss();
+				Log.i("ChooseTraining dialog", "starting training list fragment");
 			}
 		});
 		choose.setOnClickListener(new OnClickListener() {
