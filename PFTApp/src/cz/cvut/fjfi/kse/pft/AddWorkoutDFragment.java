@@ -20,6 +20,7 @@ import cz.cvut.fjfi.kse.pft.db.Workout;
  *
  */
 public class AddWorkoutDFragment extends DialogFragment{
+	Bundle args = new Bundle();
 	View view;
 	EditText nameW;
 	DatePicker dp;
@@ -31,6 +32,7 @@ public class AddWorkoutDFragment extends DialogFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		args = getArguments();
 		view = inflater.inflate(R.layout.fragmentd_addworkout, null);
 		Button cancel = (Button) view.findViewById(R.id.cancel_button);
 		Button add = (Button) view.findViewById(R.id.add_button);
@@ -51,12 +53,12 @@ public class AddWorkoutDFragment extends DialogFragment{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(!nameW.getText().toString().isEmpty()) {
-					Workout workout = new Workout(getActivity(), nameW.getText().toString(), dp.getYear()+"-"+dp.getMonth()+"-"+dp.getDayOfMonth());
+					Workout workout = new Workout(getActivity(), args.getLong("training"), nameW.getText().toString(), dp.getYear()+"-"+dp.getMonth()+"-"+dp.getDayOfMonth());
 					workout.save();
 				    ((TrainingFragment) getFragmentManager().findFragmentByTag("Training")).updateList(workout);
 					dismiss();
 				} else {
-					Toast.makeText(getActivity(), "VyplÚte n·zev", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "Vypl≈àte n√°zev", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

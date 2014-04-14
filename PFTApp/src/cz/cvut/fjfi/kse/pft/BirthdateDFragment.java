@@ -67,16 +67,4 @@ public class BirthdateDFragment extends DialogFragment {
 		dpd.setCancelable(false);
 		dpd.show();
 	}
-
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
-	 */
-	/*@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		getDialog().setTitle(R.string.title_fragmentd_birthdate);
-		View view = inflater.inflate(R.layout.fragmentd_birthdate, null);
-		return view;
-	}*/
 }

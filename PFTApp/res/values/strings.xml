@@ -25,6 +25,7 @@
     <string name="chooseT_button">Recommended training</string>
     <string name="add_button">Add</string>
     <string name="text_addworkout">Workout name</string>
+    <string name="text_addtraining">Training name</string>
     <string name="cancel">Cancel</string>
     
     <string-array name="experience_array">

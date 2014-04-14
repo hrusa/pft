@@ -40,7 +40,7 @@ public class WorkoutDFragment extends DialogFragment{
 		// TODO Auto-generated method stub
 		args = this.getArguments();
 		view = inflater.inflate(R.layout.fragmentd_workout, null);
-		trainee = Trainee.findById(Trainee.class, args.getLong("id"));
+		trainee = Trainee.findById(Trainee.class, args.getLong("trainee"));
 		Button previous = (Button) view.findViewById(R.id.previous_button);
 		Button next = (Button) view.findViewById(R.id.next_button);
 		experience = (Spinner) view.findViewById(R.id.experience_spinner);
@@ -57,7 +57,9 @@ public class WorkoutDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				((LoginActivity) getActivity()).showBasicInfoDialog();
+				BasicInfoDFragment dialog = new BasicInfoDFragment();
+				dialog.setArguments(args);
+				dialog.show(getFragmentManager(), "BasicInfoD");
 				dismiss();
 			}
 		});
@@ -71,9 +73,9 @@ public class WorkoutDFragment extends DialogFragment{
                 trainee.setGoal(goal.getSelectedItemId());
                 
                 //načíst nový dialog fragment s výběrem tréninku
-                CreateTrainingDFragment dialog = new CreateTrainingDFragment();
+                ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
         	    dialog.setArguments(args);
-        		dialog.show(getFragmentManager(), "CreateTrainingD");
+        		dialog.show(getFragmentManager(), "ChooseTrainingD");
                 dismiss();
 			}
 		});

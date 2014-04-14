@@ -99,17 +99,17 @@ public class BasicInfoDFragment extends DialogFragment{
                 }
                 attrs = Attribute.find(Attribute.class, "name = ?", "Height");
                 //přidat kontrolu zadání hodnot!
-                mHeight = new Measure(getActivity(), trainee, attrs.get(0), getTodayDate(), Integer.parseInt(heightText.getText().toString()));
+                mHeight = new Measure(getActivity(), trainee.getId(), attrs.get(0).getId(), getTodayDate(), Integer.parseInt(heightText.getText().toString()));
                 mHeight.save();
-                Log.i("DB insert: ", "Trainee "+mHeight.getTrainee().getId()+" with "+mHeight.getAttribute().getName()+mHeight.getValue());
+                Log.i("DB insert: ", "Trainee "+mHeight.getTrainee()+" with "+mHeight.getAttribute()+mHeight.getValue());
                 attrs.clear();
                 attrs = Attribute.find(Attribute.class, "name = ?", "Weight");
                 Log.i("Test attributu s názvem Weight", ""+attrs.isEmpty());
-                mWeight = new Measure(getActivity(), trainee, attrs.get(0), getTodayDate(), Integer.parseInt(weightText.getText().toString()));
+                mWeight = new Measure(getActivity(), trainee.getId(), attrs.get(0).getId(), getTodayDate(), Integer.parseInt(weightText.getText().toString()));
                 mWeight.save();
-                Log.i("DB insert: ", "Trainee "+mWeight.getTrainee().getId()+" with "+mWeight.getAttribute().getName()+mWeight.getValue());
+                Log.i("DB insert: ", "Trainee "+mWeight.getTrainee()+" with "+mWeight.getAttribute()+mWeight.getValue());
                 args.clear();
-            	args.putLong("id", trainee.getId());
+            	args.putLong("trainee", trainee.getId());
                 WorkoutDFragment dialog = new WorkoutDFragment();
         	    dialog.setArguments(args);
         		dialog.show(getFragmentManager(), "WorkoutD");

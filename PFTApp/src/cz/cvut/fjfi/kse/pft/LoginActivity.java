@@ -8,9 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,60 +26,15 @@ public class LoginActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			checkGooglePlayServicesAvailable();
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.container, new TrainingFragment(), "Training").commit();
+					.replace(R.id.container, new LoginFragment(), "Login").commit();
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	/*@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.actionbar_training, menu);
-	    Log.i("Z loginactitvity",".i.");
-	    addTraining = menu.findItem(R.id.add_training_button);
-	    addWorkout = menu.findItem(R.id.add_workout_button);
-	    addExercise = menu.findItem(R.id.add_exercise_button);
-	    addSerie = menu.findItem(R.id.add_serie_button);
-	    addTraining.setVisible(false);
-	    addWorkout.setVisible(false);
-	    addExercise.setVisible(false);
-	    addSerie.setVisible(false);
-	    Log.i("Z loginactitvity",""+(addWorkout==null));
-	    return true;
-	}*/
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		checkGooglePlayServicesAvailable();
 	}
-	
-
-	/*@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		switch (item.getItemId()) {
-        case R.id.add_training_button:
-            //showAddWorkoutDialog();
-            return true;
-        case R.id.add_workout_button:
-            showAddWorkoutDialog();
-            return true;
-        case R.id.add_exercise_button:
-            showAddExerciseDialog();
-            return true;
-        case R.id.add_serie_button:
-            //showAddWorkoutDialog();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-    }
-	}*/
 	
 	@Override
 	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
@@ -98,36 +50,6 @@ public class LoginActivity extends FragmentActivity {
 	    return activeNetworkInfo != null;
 	}
 	
-	/*public boolean hasActiveInternetConnection() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Internet connection error")
-		.setMessage("You have no internet connection, please establish one.")
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			 public void onClick(DialogInterface dialog, int which) {
-				 Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-				 startActivity(intent);
-				 }
-				});
-		AlertDialog alertDialog = builder.create();
-	    if (isNetworkAvailable()) {
-	        try {
-	            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
-	            urlc.setRequestProperty("User-Agent", "Test");
-	            urlc.setRequestProperty("Connection", "close");
-	            urlc.setConnectTimeout(6000); 
-	            urlc.connect();
-	            return (urlc.getResponseCode() == 200);
-	        } catch (IOException e) {
-	            Log.e("Internet test", "Error checking internet connection");
-	            alertDialog.show();
-	        }
-	    } else {
-	        Log.d("Internet test", "No network available!");
-	        alertDialog.show();
-	    }
-	    return false;
-	}*/
-	
 	private void checkGooglePlayServicesAvailable() {
 	    int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 	    if (status != ConnectionResult.SUCCESS) {
@@ -140,27 +62,5 @@ public class LoginActivity extends FragmentActivity {
 	            finish();
 	        }
 	    }
-	}
-	
-	public void showBirthdateDialog() {
-		getSupportFragmentManager().beginTransaction()
-		.replace(R.id.container, new BirthdateDFragment()).commit();
-	}
-	
-	public void showBasicInfoDialog() {
-		Log.i("Start showBasicInfoDialog", "jede");
-		BasicInfoDFragment dialog = new BasicInfoDFragment();
-		dialog.show(getSupportFragmentManager(), "BasicInfoD");
-	}
-	
-	public void showWorkoutDialog() {
-		WorkoutDFragment dialog = new WorkoutDFragment();
-		dialog.show(getSupportFragmentManager(), "WorkoutD");
-	}
-	
-	public void showAddWorkoutDialog() {
-		Toast.makeText(this, "P�idej workout", Toast.LENGTH_SHORT).show();
-		AddWorkoutDFragment dialog = new AddWorkoutDFragment();
-		dialog.show(getSupportFragmentManager(), "AddWorkoutD");
 	}
 }

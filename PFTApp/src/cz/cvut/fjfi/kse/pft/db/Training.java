@@ -12,7 +12,7 @@ import android.content.Context;
  *
  */
 public class Training extends SugarRecord<Training> {
-	private Trainee trainee;
+	private long trainee;
 	private String name;
 
 	/**
@@ -28,7 +28,7 @@ public class Training extends SugarRecord<Training> {
 	 * @param trainee
 	 * @param name
 	 */
-	public Training(Context arg0, Trainee trainee, String name) {
+	public Training(Context arg0, long trainee, String name) {
 		super(arg0);
 		this.trainee = trainee;
 		this.name = name;
@@ -37,14 +37,14 @@ public class Training extends SugarRecord<Training> {
 	/**
 	 * @return the trainee
 	 */
-	public Trainee getTrainee() {
+	public long getTrainee() {
 		return trainee;
 	}
 
 	/**
 	 * @param trainee the trainee to set
 	 */
-	public void setTrainee(Trainee trainee) {
+	public void setTrainee(long trainee) {
 		this.trainee = trainee;
 	}
 

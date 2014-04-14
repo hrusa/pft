@@ -12,7 +12,7 @@ import android.content.Context;
  *
  */
 public class Workout extends SugarRecord<Workout> {
-	//private Training training;
+	private long training;
 	private String name;
 	private String date;	//YYYY-MM-DD
 
@@ -30,26 +30,26 @@ public class Workout extends SugarRecord<Workout> {
 	 * @param name
 	 * @param date
 	 */
-	public Workout(Context arg0, String name, String date) {
+	public Workout(Context arg0, long training, String name, String date) {
 		super(arg0);
-		//this.training = training;
+		this.training = training;
 		this.name = name;
 		this.date = date;
 	}
 
 	/**
 	 * @return the training
-	 *//*
-	public Training getTraining() {
+	 */
+	public long getTraining() {
 		return training;
 	}
 
-	*//**
+	/**
 	 * @param training the training to set
-	 *//*
-	public void setTraining(Training training) {
+	 */
+	public void setTraining(long training) {
 		this.training = training;
-	}*/
+	}
 
 	/**
 	 * @return the name

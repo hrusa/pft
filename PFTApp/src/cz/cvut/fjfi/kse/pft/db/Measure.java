@@ -12,8 +12,8 @@ import android.content.Context;
  *
  */
 public class Measure extends SugarRecord<Measure> {
-	private Trainee trainee;
-	private Attribute attribute;
+	private long trainee;
+	private long attribute;
 	private String date;	//YYYY-MM-DD
 	private int value;
 	
@@ -32,7 +32,7 @@ public class Measure extends SugarRecord<Measure> {
 	 * @param date
 	 * @param value
 	 */
-	public Measure(Context arg0, Trainee trainee, Attribute attribute,
+	public Measure(Context arg0, long trainee, long attribute,
 			String date, int value) {
 		super(arg0);
 		this.trainee = trainee;
@@ -44,28 +44,28 @@ public class Measure extends SugarRecord<Measure> {
 	/**
 	 * @return the trainee
 	 */
-	public Trainee getTrainee() {
+	public long getTrainee() {
 		return trainee;
 	}
 
 	/**
 	 * @param trainee the trainee to set
 	 */
-	public void setTrainee(Trainee trainee) {
+	public void setTrainee(long trainee) {
 		this.trainee = trainee;
 	}
 
 	/**
 	 * @return the attribute
 	 */
-	public Attribute getAttribute() {
+	public long getAttribute() {
 		return attribute;
 	}
 
 	/**
 	 * @param attribute the attribute to set
 	 */
-	public void setAttribute(Attribute attribute) {
+	public void setAttribute(long attribute) {
 		this.attribute = attribute;
 	}
 

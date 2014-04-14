@@ -16,7 +16,7 @@ public class Exercise extends SugarRecord<Exercise> {
 	private Difficulty difficulty;
 	private String description;
 	private String video;
-	private String musclegroup;
+	private long musclegroup;
 
 	/**
 	 * @param arg0
@@ -34,7 +34,7 @@ public class Exercise extends SugarRecord<Exercise> {
 	 * @param video
 	 */
 	public Exercise(Context arg0, String name, Difficulty difficulty,
-			String description, String video, String group) {
+			String description, String video, long group) {
 		super(arg0);
 		this.name = name;
 		this.difficulty = difficulty;
@@ -46,14 +46,14 @@ public class Exercise extends SugarRecord<Exercise> {
 	/**
 	 * @return the group
 	 */
-	public String getGroup() {
+	public long getGroup() {
 		return musclegroup;
 	}
 
 	/**
 	 * @param group the group to set
 	 */
-	public void setGroup(String group) {
+	public void setGroup(long group) {
 		this.musclegroup = group;
 	}
 

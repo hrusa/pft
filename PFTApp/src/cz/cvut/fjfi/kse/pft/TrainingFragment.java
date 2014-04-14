@@ -26,7 +26,7 @@ import cz.cvut.fjfi.kse.pft.db.Workout;
 public class TrainingFragment extends ListFragment {
 	// ListView workouts;
 	private ArrayAdapter<Workout> adapter;
-	Bundle args;
+	Bundle args = new Bundle();
 
 	public TrainingFragment() {
 
@@ -39,6 +39,7 @@ public class TrainingFragment extends ListFragment {
 		// TODO: replace with a real list adapter.
 		insertDB();
 		setHasOptionsMenu(true);
+		args = getArguments();
 		List<Workout> workouts = Workout.listAll(Workout.class);
 		adapter = new ArrayAdapter<Workout>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
@@ -52,8 +53,7 @@ public class TrainingFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		Workout workout = adapter.getItem(position);
-		args = new Bundle();
-		args.putLong("id", workout.getId());
+		args.putLong("workout", workout.getId());
 		WorkoutFragment fragment = new WorkoutFragment();
 		fragment.setArguments(args);
 		getFragmentManager().beginTransaction()
@@ -101,6 +101,7 @@ public class TrainingFragment extends ListFragment {
 		Toast.makeText(getActivity(), "Přidej workout", Toast.LENGTH_SHORT)
 				.show();
 		AddWorkoutDFragment dialog = new AddWorkoutDFragment();
+		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddWorkoutD");
 	}
 
@@ -130,7 +131,7 @@ public class TrainingFragment extends ListFragment {
 					diff,
 					"Sit down on a pull-down machine with a wide bar attached to the top pulley. Make sure that you adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.",
 					"https://www.youtube.com/watch?v=JEb-dwU3VF4", group
-							.getName());
+							.getId());
 			exercise.save();
 			group = new MuscleGroup(getActivity(), "Legs");
 			group.save();
@@ -144,7 +145,7 @@ public class TrainingFragment extends ListFragment {
 					diff,
 					"Stand up with your torso upright while holding a barbell at a shoulder-width grip. The palm of your hands should be facing forward and the elbows should be close to the torso. This will be your starting position.",
 					"https://www.youtube.com/watch?v=LY1V6UbRHFM", group
-							.getName());
+							.getId());
 			exercise.save();
 			group = new MuscleGroup(getActivity(), "Triceps");
 			group.save();
@@ -154,7 +155,7 @@ public class TrainingFragment extends ListFragment {
 					diff,
 					"Attach a straight or angled bar to a high pulley and grab with an overhand grip (palms facing down) at shoulder width.",
 					"https://www.youtube.com/watch?v=2-LAMcpzODU", group
-							.getName());
+							.getId());
 			exercise.save();
 			group = new MuscleGroup(getActivity(), "Abdominal");
 			group.save();

@@ -15,7 +15,7 @@ import android.widget.Toast;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
 
 /**
- * @author Mastah
+ * @author Petr Hruška
  * 
  */
 public class WorkoutFragment extends ListFragment {

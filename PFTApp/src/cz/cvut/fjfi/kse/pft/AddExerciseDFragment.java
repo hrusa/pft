@@ -97,7 +97,7 @@ public class AddExerciseDFragment extends DialogFragment{
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
 							Workout workout = Workout.findById(Workout.class, args.getLong("id"));
-							exerciseU = new ExerciseUnit(getActivity(), exercise, workout);
+							exerciseU = new ExerciseUnit(getActivity(), exercise.getId(), workout.getId());
 							exerciseU.save();
 							((WorkoutFragment) getFragmentManager().findFragmentByTag("Workout")).updateList(exerciseU);
 							dismiss();

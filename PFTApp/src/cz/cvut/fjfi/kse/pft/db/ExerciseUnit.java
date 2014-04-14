@@ -12,8 +12,8 @@ import android.content.Context;
  *
  */
 public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
-	private Exercise exercise;
-	private Workout workout;
+	private long exercise;
+	private long workout;
 
 	/**
 	 * @param arg0
@@ -28,7 +28,7 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	 * @param exercise
 	 * @param workout
 	 */
-	public ExerciseUnit(Context arg0, Exercise exercise, Workout workout) {
+	public ExerciseUnit(Context arg0, long exercise, long workout) {
 		super(arg0);
 		this.exercise = exercise;
 		this.workout = workout;
@@ -37,28 +37,28 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	/**
 	 * @return the exercise
 	 */
-	public Exercise getExercise() {
+	public long getExercise() {
 		return exercise;
 	}
 
 	/**
 	 * @param exercise the exercise to set
 	 */
-	public void setExercise(Exercise exercise) {
+	public void setExercise(long exercise) {
 		this.exercise = exercise;
 	}
 
 	/**
 	 * @return the workout
 	 */
-	public Workout getWorkout() {
+	public long getWorkout() {
 		return workout;
 	}
 
 	/**
 	 * @param workout the workout to set
 	 */
-	public void setWorkout(Workout workout) {
+	public void setWorkout(long workout) {
 		this.workout = workout;
 	}
 
