@@ -1,95 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1" >
+        android:orientation="vertical"
+        android:scrollbars="vertical" >
 
-        <TextView
-            android:id="@+id/weight_textView"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:text="@string/text_weight" />
-
-        <NumberPicker
-            android:id="@+id/weight_numberPicker"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:orientation="horizontal"
+            android:weightSum="1" >
 
+            <TextView
+                android:id="@+id/weight_textView"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="@string/text_weight" />
+
+            <NumberPicker
+                android:id="@+id/weight_numberPicker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/repetition_textView"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="@string/text_repetition" />
+
+            <NumberPicker
+                android:id="@+id/repetition_numberPicker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/pause_textView"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="@string/text_pause" />
+
+            <NumberPicker
+                android:id="@+id/pause_numberPicker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:background="#00DBDB" />
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1.0" >
+
+            <Button
+                android:id="@+id/cancel_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/cancel_button" />
+
+            <Button
+                android:id="@+id/save_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/save_button" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1" >
-
-        <TextView
-            android:id="@+id/repetition_textView"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:text="@string/text_repetition" />
-
-        <NumberPicker
-            android:id="@+id/repetition_numberPicker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1" >
-
-        <TextView
-            android:id="@+id/pause_textView"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:text="@string/text_pause" />
-
-        <NumberPicker
-            android:id="@+id/pause_numberPicker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1.0"
-        style="?android:attr/buttonBarStyle" >
-        <Button 
-            android:id="@+id/cancel_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel_button"
-            android:layout_weight="0.5"
-            style="?android:attr/buttonBarButtonStyle" />
-        <Button 
-            android:id="@+id/save_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/save_button"
-            android:layout_weight="0.5"
-            style="?android:attr/buttonBarButtonStyle" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

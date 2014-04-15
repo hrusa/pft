@@ -97,6 +97,7 @@ public class ExerciseFragment extends ListFragment{
 		Toast.makeText(getActivity(), "Přidej serii", Toast.LENGTH_SHORT)
 			.show();
 		AddSerieDFragment dialog = new AddSerieDFragment();
+		args.remove("serie");
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddSerieD");
 	}

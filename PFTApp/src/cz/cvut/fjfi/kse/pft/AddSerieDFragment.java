@@ -5,6 +5,7 @@ package cz.cvut.fjfi.kse.pft;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,11 +43,18 @@ public class AddSerieDFragment extends DialogFragment{
 		Button cancel = (Button) view.findViewById(R.id.cancel_button);
 		Button save = (Button) view.findViewById(R.id.save_button);
 		npWeight = (NumberPicker) view.findViewById(R.id.weight_numberPicker);
+		npWeight.setMinValue(1);
+		npWeight.setMaxValue(300);
 		npRepetition = (NumberPicker) view.findViewById(R.id.repetition_numberPicker);
+		npRepetition.setMinValue(1);
+		npRepetition.setMaxValue(50);
 		npPause = (NumberPicker) view.findViewById(R.id.pause_numberPicker);
-		
-		if(args.getBoolean("serie")) {
+		npPause.setMinValue(1);
+		npPause.setMaxValue(500);
+		Log.i("Je serie inicializována?", ""+args.getBoolean("serie"));
+		if(args.containsKey("serie")) {
 			Serie serie = Serie.findById(Serie.class, args.getLong("serie"));
+			
 			npWeight.setValue(serie.getWeight());
 			npRepetition.setValue(serie.getRepetition());
 			npPause.setValue(serie.getPause());
@@ -68,6 +76,7 @@ public class AddSerieDFragment extends DialogFragment{
 				if(npWeight.getValue()>0 && npRepetition.getValue()>0 && npPause.getValue()>0) {
 					Serie serie = new Serie(getActivity(), args.getLong("exerciseu"), npWeight.getValue(), npRepetition.getValue(), npPause.getValue());
 					serie.save();
+					((ExerciseFragment) getFragmentManager().findFragmentByTag("Exercise")).updateList(serie);
 					dismiss();
 				} else {
 					Toast.makeText(getActivity(), "Serie attributes should not be zero.", Toast.LENGTH_SHORT).show();

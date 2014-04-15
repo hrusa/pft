@@ -128,4 +128,12 @@ public class Serie extends SugarRecord<Serie> {
 		this.finish = finish;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Weight: "+getWeight()+"kg, Repetition: "+getRepetition()+", Rest: "+getPause()+"s";
+	}
 }

@@ -10,8 +10,8 @@
     <string name="desc_logo">App logo</string>
     <string name="status_sign_in">Logged in as %s</string>
     <string name="status_sign_out">Unknown user</string>
-    <string name="text_height">Height</string>
-    <string name="text_weight">Weight</string>
+    <string name="text_height">Height (cm)</string>
+    <string name="text_weight">Weight (kg)</string>
     <string name="title_fragmentd_birthdate">Set your birthdate</string>
     <string name="title_fragmentd_basicinfo">Set your</string>
     <string name="title_fragmentd_workout">Set your workout info</string>
@@ -29,7 +29,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
     <string name="text_repetition">Repetition</string>
-    <string name="text_pause">Pause</string>
+    <string name="text_pause">Pause (s)</string>
     
     <string-array name="experience_array">
         <item>Beginner</item>
