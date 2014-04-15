@@ -44,7 +44,7 @@
             android:id="@+id/cancel_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/cancel"
+            android:text="@string/cancel_button"
             android:layout_weight="0.5"
             style="?android:attr/buttonBarButtonStyle" />
         <Button 

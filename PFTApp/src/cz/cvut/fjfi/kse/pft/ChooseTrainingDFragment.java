@@ -65,6 +65,7 @@ public class ChooseTrainingDFragment extends DialogFragment {
 				createRecommendedTraining(args.getLong("id"));
 			}
 		});
+		setCancelable(false);
 		return view;
 	}
 

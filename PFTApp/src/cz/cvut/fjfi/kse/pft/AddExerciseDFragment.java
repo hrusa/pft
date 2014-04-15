@@ -71,7 +71,7 @@ public class AddExerciseDFragment extends DialogFragment{
 					MuscleGroup group = adapterGroup.getItem(arg2);
 					//List<Exercise> exercises = Exercise.find(Exercise.class, "muscleGroup = ?", group.getName());
 					//List<Exercise> exercises = Exercise.listAll(Exercise.class);
-					List<Exercise> exercises = Exercise.findWithQuery(Exercise.class, "SELECT * FROM Exercise WHERE musclegroup =?", group.getName());
+					List<Exercise> exercises = Exercise.find(Exercise.class, "musclegroup =?", group.getId().toString());
 					adapterExercise = new ArrayAdapter<Exercise>(getActivity(), android.R.layout.simple_list_item_activated_1,
 						android.R.id.text1, exercises);
 					lv.setAdapter(adapterExercise);
@@ -83,7 +83,7 @@ public class AddExerciseDFragment extends DialogFragment{
 					exercise = adapterExercise.getItem(arg2);
 					alertDialogBuilder.setTitle("Add exercise?")
 					.setMessage("Do you really want to add "+exercise.getName()+" to your workout?")
-					.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					.setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -96,10 +96,15 @@ public class AddExerciseDFragment extends DialogFragment{
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							Workout workout = Workout.findById(Workout.class, args.getLong("id"));
+							Workout workout = Workout.findById(Workout.class, args.getLong("workout"));
+							Log.i("exercise", ""+exercise.getId());
+							Log.i("Workout", ""+workout.getId());
 							exerciseU = new ExerciseUnit(getActivity(), exercise.getId(), workout.getId());
 							exerciseU.save();
 							((WorkoutFragment) getFragmentManager().findFragmentByTag("Workout")).updateList(exerciseU);
+							List<ExerciseUnit> exerciseU = ExerciseUnit.listAll(ExerciseUnit.class);
+							Log.i("Test uloženi do DB exercise", ""+exerciseU.get(0).getExercise());
+							Log.i("Test uloženi do DB id", ""+exerciseU.get(0).getId());
 							dismiss();
 						}
 					});
@@ -110,6 +115,7 @@ public class AddExerciseDFragment extends DialogFragment{
 			}
 			
 		});
+		setCancelable(false);
 		return view;
 	}
 }

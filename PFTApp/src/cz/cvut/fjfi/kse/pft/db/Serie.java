@@ -16,8 +16,8 @@ public class Serie extends SugarRecord<Serie> {
 	private int weight;
 	private int repetition;
 	private int pause;
-	private String start;
-	private String finish;
+	private String start = null;
+	private String finish = null;
 
 	/**
 	 * @param arg0
@@ -36,14 +36,12 @@ public class Serie extends SugarRecord<Serie> {
 	 * @param start
 	 * @param finish
 	 */
-	public Serie(Context arg0, long exerciseUnit, int weight, int repetition, int pause, String start, String finish) {
+	public Serie(Context arg0, long exerciseUnit, int weight, int repetition, int pause) {
 		super(arg0);
 		this.exerciseUnit = exerciseUnit;
 		this.weight = weight;
 		this.repetition = repetition;
 		this.pause = pause;
-		this.start = start;
-		this.finish = finish;
 	}
 
 	/**

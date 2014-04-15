@@ -7,7 +7,6 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,18 +14,21 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Serie;
 
 /**
  * @author Petr Hruška
- * 
+ *
  */
-public class WorkoutFragment extends ListFragment {
-	private ArrayAdapter<ExerciseUnit> adapter;
+public class ExerciseFragment extends ListFragment{
+
+	private ArrayAdapter<Serie> adapter;
 	Bundle args;
-
-	public WorkoutFragment() {
-
+	/**
+	 * 
+	 */
+	public ExerciseFragment() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -35,21 +37,12 @@ public class WorkoutFragment extends ListFragment {
 
 		// TODO: replace with a real list adapter.
 		setHasOptionsMenu(true);
-		List<ExerciseUnit> exerciseU = ExerciseUnit.listAll(ExerciseUnit.class);
-		adapter = new ArrayAdapter<ExerciseUnit>(getActivity(),
+		List<Serie> serie = Serie.listAll(Serie.class);
+		adapter = new ArrayAdapter<Serie>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, exerciseU);
+				android.R.id.text1, serie);
 		args = this.getArguments();
-		if(!exerciseU.isEmpty()) {
-			Log.i("Počet eU", ""+exerciseU.size());
-			Log.i("WorkoutFragment", "Exercise id: "+exerciseU.get(0).getExercise());
-			Log.i("WorkoutFragment", "Workout id: "+exerciseU.get(0).getWorkout());
-			Log.i("WorkoutFragment", "ExerciseUnit id: "+exerciseU.get(0).getId());
-		} else {
-			Log.i("WorkoutFragment", "Workout is empty!");
-		}
 		setListAdapter(adapter);
-		Log.i("WorkoutFragment", "po setListAdapter");
 	}
 
 	/*
@@ -63,7 +56,7 @@ public class WorkoutFragment extends ListFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.actionbar_workout, menu);
+		inflater.inflate(R.menu.actionbar_exercise, menu);
 	}
 
 	/*
@@ -77,36 +70,35 @@ public class WorkoutFragment extends ListFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-		case R.id.add_exercise_button:
-			showAddExerciseDialog();
+		case R.id.add_serie_button:
+			showAddSerieDialog();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-		ExerciseUnit exerciseU = adapter.getItem(position);
-		args.putLong("exerciseu", exerciseU.getId());
-		ExerciseFragment fragment = new ExerciseFragment();
-		fragment.setArguments(args);
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment, "Exercise").commit();
+		Serie serie = adapter.getItem(position);
+		args.putLong("serie", serie.getId());
+		AddSerieDFragment dialog= new AddSerieDFragment();
+		dialog.setArguments(args);
+		dialog.show(getFragmentManager(), "AddSerieD");
 	}
-
+	
 	/**
 	 * 
 	 */
-	private void showAddExerciseDialog() {
+	private void showAddSerieDialog() {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Přidej cvik", Toast.LENGTH_SHORT)
+		Toast.makeText(getActivity(), "Přidej serii", Toast.LENGTH_SHORT)
 			.show();
-		AddExerciseDFragment dialog = new AddExerciseDFragment();
+		AddSerieDFragment dialog = new AddSerieDFragment();
 		dialog.setArguments(args);
-		dialog.show(getFragmentManager(), "AddExerciseD");
+		dialog.show(getFragmentManager(), "AddSerieD");
 	}
 
 	/*
@@ -120,8 +112,8 @@ public class WorkoutFragment extends ListFragment {
 		super.onDestroy();
 	}
 	
-	public void updateList(ExerciseUnit exerciseU) {
-		adapter.add(exerciseU);
+	public void updateList(Serie serie) {
+		adapter.add(serie);
 		adapter.notifyDataSetChanged();
 	}
 }

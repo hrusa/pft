@@ -61,5 +61,14 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	public void setWorkout(long workout) {
 		this.workout = workout;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		Exercise ex = Exercise.findById(Exercise.class, getExercise());
+		return ex.getName();
+	}
 }

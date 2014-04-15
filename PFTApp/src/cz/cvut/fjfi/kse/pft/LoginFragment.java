@@ -39,6 +39,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 import cz.cvut.fjfi.kse.pft.db.Trainee;
+import cz.cvut.fjfi.kse.pft.db.Training;
 
 /**
  * @author Petr Hruška
@@ -226,10 +227,17 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		} else {
 			args.clear();
 			args.putLong("trainee", trainee.get(0).getId());
-			ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
-			dialog.setArguments(args);
-			dialog.show(getFragmentManager(), "ChooseTrainingD");
-			Log.i("LoginFragment", "Starting choose training dialog");
+			List<Training> training = Training.listAll(Training.class);
+			if(training.isEmpty()) {
+				ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
+				dialog.setArguments(args);
+				dialog.show(getFragmentManager(), "ChooseTrainingD");
+				Log.i("LoginFragment", "Starting choose training dialog");
+			} else {
+				TrainingListFragment fragment = new TrainingListFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+			}
 		}
 	}
 

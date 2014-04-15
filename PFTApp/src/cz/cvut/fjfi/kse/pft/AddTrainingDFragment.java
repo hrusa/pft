@@ -47,9 +47,6 @@ public class AddTrainingDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
-				dialog.setArguments(args);
-				dialog.show(getFragmentManager(), "ChooseTrainingD");
 				dismiss();
 			}
 		});
@@ -68,6 +65,7 @@ public class AddTrainingDFragment extends DialogFragment{
 				}
 			}
 		});
+		setCancelable(false);
 		return view;
 	}
 }

@@ -26,7 +26,10 @@
     <string name="add_button">Add</string>
     <string name="text_addworkout">Workout name</string>
     <string name="text_addtraining">Training name</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="text_repetition">Repetition</string>
+    <string name="text_pause">Pause</string>
     
     <string-array name="experience_array">
         <item>Beginner</item>
