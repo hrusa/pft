@@ -227,7 +227,10 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		} else {
 			args.clear();
 			args.putLong("trainee", trainee.get(0).getId());
-			List<Training> training = Training.listAll(Training.class);
+			MenuFragment fragment = new MenuFragment();
+			fragment.setArguments(args);
+			getFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").commit();
+			/*List<Training> training = Training.listAll(Training.class);
 			if(training.isEmpty()) {
 				ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
 				dialog.setArguments(args);
@@ -237,7 +240,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				TrainingListFragment fragment = new TrainingListFragment();
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-			}
+			}*/
 		}
 	}
 

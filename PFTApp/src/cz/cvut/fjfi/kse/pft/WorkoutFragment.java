@@ -34,22 +34,15 @@ public class WorkoutFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		// TODO: replace with a real list adapter.
-		setHasOptionsMenu(true);
+		args = this.getArguments();
+		if (!args.getBoolean("record")) {
+			setHasOptionsMenu(true);
+		}
 		List<ExerciseUnit> exerciseU = ExerciseUnit.listAll(ExerciseUnit.class);
 		adapter = new ArrayAdapter<ExerciseUnit>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, exerciseU);
-		args = this.getArguments();
-		if(!exerciseU.isEmpty()) {
-			Log.i("Počet eU", ""+exerciseU.size());
-			Log.i("WorkoutFragment", "Exercise id: "+exerciseU.get(0).getExercise());
-			Log.i("WorkoutFragment", "Workout id: "+exerciseU.get(0).getWorkout());
-			Log.i("WorkoutFragment", "ExerciseUnit id: "+exerciseU.get(0).getId());
-		} else {
-			Log.i("WorkoutFragment", "Workout is empty!");
-		}
 		setListAdapter(adapter);
-		Log.i("WorkoutFragment", "po setListAdapter");
 	}
 
 	/*
@@ -84,17 +77,24 @@ public class WorkoutFragment extends ListFragment {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		ExerciseUnit exerciseU = adapter.getItem(position);
 		args.putLong("exerciseu", exerciseU.getId());
-		ExerciseFragment fragment = new ExerciseFragment();
-		fragment.setArguments(args);
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment, "Exercise").commit();
+		if (args.getBoolean("record")) {
+			StartRecordFragment fragment = new StartRecordFragment();
+			Log.i("Workout", ""+args.getBoolean("record"));
+			fragment.setArguments(args);
+			getFragmentManager().beginTransaction().replace(R.id.container, fragment, "StartRecord").commit();
+		} else {
+			ExerciseFragment fragment = new ExerciseFragment();
+			fragment.setArguments(args);
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, fragment, "Exercise").commit();
+		}
 	}
 
 	/**
@@ -102,8 +102,7 @@ public class WorkoutFragment extends ListFragment {
 	 */
 	private void showAddExerciseDialog() {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Přidej cvik", Toast.LENGTH_SHORT)
-			.show();
+		Toast.makeText(getActivity(), "Přidej cvik", Toast.LENGTH_SHORT).show();
 		AddExerciseDFragment dialog = new AddExerciseDFragment();
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddExerciseD");
@@ -119,7 +118,7 @@ public class WorkoutFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
-	
+
 	public void updateList(ExerciseUnit exerciseU) {
 		adapter.add(exerciseU);
 		adapter.notifyDataSetChanged();

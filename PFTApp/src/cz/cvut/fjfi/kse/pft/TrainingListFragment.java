@@ -42,7 +42,10 @@ public class TrainingListFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		//needed for action bar items, without this are items not visible
-		setHasOptionsMenu(true);
+		args = getArguments();
+		if(!args.getBoolean("record")) {
+			setHasOptionsMenu(true);
+		}
 		List<Training> trainings = Training.listAll(Training.class);
 		adapter = new ArrayAdapter<Training>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
@@ -66,6 +69,7 @@ public class TrainingListFragment extends ListFragment {
 
 		args.putLong("training", training.getId());
 		TrainingFragment fragment = new TrainingFragment();
+		Log.i("TrainingList", ""+args.getBoolean("record"));
 		fragment.setArguments(args);
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment, "Training").commit();
@@ -114,7 +118,6 @@ public class TrainingListFragment extends ListFragment {
 		Toast.makeText(getActivity(), "Přidej training", Toast.LENGTH_SHORT)
 				.show();
 		AddTrainingDFragment dialog = new AddTrainingDFragment();
-		args = getArguments();
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddTrainingD");
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,8 +39,10 @@ public class TrainingFragment extends ListFragment {
 
 		// TODO: replace with a real list adapter.
 		insertDB();
-		setHasOptionsMenu(true);
 		args = getArguments();
+		if(!args.getBoolean("record")) {
+			setHasOptionsMenu(true);
+		}
 		List<Workout> workouts = Workout.listAll(Workout.class);
 		adapter = new ArrayAdapter<Workout>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
@@ -55,6 +58,7 @@ public class TrainingFragment extends ListFragment {
 		Workout workout = adapter.getItem(position);
 		args.putLong("workout", workout.getId());
 		WorkoutFragment fragment = new WorkoutFragment();
+		Log.i("Training", ""+args.getBoolean("record"));
 		fragment.setArguments(args);
 		getFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment, "Workout").commit();

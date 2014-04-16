@@ -30,6 +30,12 @@
     <string name="save_button">Save</string>
     <string name="text_repetition">Repetition</string>
     <string name="text_pause">Pause (s)</string>
+    <string name="start_button">Start training</string>
+    <string name="exercise_button">Exercises</string>
+    <string name="statistic_button">Statistics</string>
+    <string name="exit_button">Exit</string>
+    <string name="video_button">Video</string>
+    <string name="start">Start</string>
     
     <string-array name="experience_array">
         <item>Beginner</item>
