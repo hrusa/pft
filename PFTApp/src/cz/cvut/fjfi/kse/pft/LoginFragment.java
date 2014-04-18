@@ -39,7 +39,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 import cz.cvut.fjfi.kse.pft.db.Trainee;
-import cz.cvut.fjfi.kse.pft.db.Training;
 
 /**
  * @author Petr Hruška

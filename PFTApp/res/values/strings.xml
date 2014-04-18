@@ -36,6 +36,9 @@
     <string name="exit_button">Exit</string>
     <string name="video_button">Video</string>
     <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="currentSerie_text">Serie #%s</string>
+    <string name="finish_exercise">Finish exercise</string>
     
     <string-array name="experience_array">
         <item>Beginner</item>

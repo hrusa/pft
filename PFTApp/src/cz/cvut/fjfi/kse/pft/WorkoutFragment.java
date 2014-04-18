@@ -86,9 +86,10 @@ public class WorkoutFragment extends ListFragment {
 		args.putLong("exerciseu", exerciseU.getId());
 		if (args.getBoolean("record")) {
 			StartRecordFragment fragment = new StartRecordFragment();
-			Log.i("Workout", ""+args.getBoolean("record"));
+			Log.i("Workout", "" + args.getBoolean("record"));
 			fragment.setArguments(args);
-			getFragmentManager().beginTransaction().replace(R.id.container, fragment, "StartRecord").commit();
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, fragment, "StartRecord").commit();
 		} else {
 			ExerciseFragment fragment = new ExerciseFragment();
 			fragment.setArguments(args);

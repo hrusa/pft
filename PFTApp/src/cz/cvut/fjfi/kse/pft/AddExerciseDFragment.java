@@ -20,7 +20,6 @@ import android.widget.ListView;
 import cz.cvut.fjfi.kse.pft.db.Exercise;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
 import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
-import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
  * @author Petr Hruška
@@ -96,15 +95,27 @@ public class AddExerciseDFragment extends DialogFragment{
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							Workout workout = Workout.findById(Workout.class, args.getLong("workout"));
-							Log.i("exercise", ""+exercise.getId());
-							Log.i("Workout", ""+workout.getId());
-							exerciseU = new ExerciseUnit(getActivity(), exercise.getId(), workout.getId());
+							List<ExerciseUnit> exerciseUs = ExerciseUnit.find(ExerciseUnit.class, "workout = ? and exercise = ?", ""+args.getLong("workout"), ""+exercise.getId());
+							if(exerciseUs.isEmpty()) {
+							exerciseU = new ExerciseUnit(getActivity(), exercise.getId(), args.getLong("workout"));
 							exerciseU.save();
 							((WorkoutFragment) getFragmentManager().findFragmentByTag("Workout")).updateList(exerciseU);
-							List<ExerciseUnit> exerciseU = ExerciseUnit.listAll(ExerciseUnit.class);
-							Log.i("Test uloženi do DB exercise", ""+exerciseU.get(0).getExercise());
-							Log.i("Test uloženi do DB id", ""+exerciseU.get(0).getId());
+							} else {
+								AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+								alertDialogBuilder.setTitle("Exercise already added!")
+								.setMessage(exercise.getName()+" is already in your workout plan.")
+								.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										//getFragmentManager().findFragmentByTag("Workout");
+									}
+								})
+								.setCancelable(false);
+								AlertDialog alertDialog = alertDialogBuilder.create();
+								alertDialog.show();
+							}
 							dismiss();
 						}
 					});

@@ -18,12 +18,13 @@ import cz.cvut.fjfi.kse.pft.db.Serie;
 
 /**
  * @author Petr Hruška
- *
+ * 
  */
-public class ExerciseFragment extends ListFragment{
+public class ExerciseFragment extends ListFragment {
 
 	private ArrayAdapter<Serie> adapter;
 	Bundle args;
+
 	/**
 	 * 
 	 */
@@ -36,12 +37,12 @@ public class ExerciseFragment extends ListFragment{
 		super.onCreate(savedInstanceState);
 
 		// TODO: replace with a real list adapter.
+		args = this.getArguments();
 		setHasOptionsMenu(true);
-		List<Serie> serie = Serie.listAll(Serie.class);
+		List<Serie> serie = Serie.find(Serie.class, "exerciseunit = ?", ""+args.getLong("exerciseunit"));
 		adapter = new ArrayAdapter<Serie>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, serie);
-		args = this.getArguments();
 		setListAdapter(adapter);
 	}
 
@@ -84,18 +85,18 @@ public class ExerciseFragment extends ListFragment{
 		super.onListItemClick(l, v, position, id);
 		Serie serie = adapter.getItem(position);
 		args.putLong("serie", serie.getId());
-		AddSerieDFragment dialog= new AddSerieDFragment();
+		AddSerieDFragment dialog = new AddSerieDFragment();
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddSerieD");
 	}
-	
+
 	/**
 	 * 
 	 */
 	private void showAddSerieDialog() {
 		// TODO Auto-generated method stub
 		Toast.makeText(getActivity(), "Přidej serii", Toast.LENGTH_SHORT)
-			.show();
+				.show();
 		AddSerieDFragment dialog = new AddSerieDFragment();
 		args.remove("serie");
 		dialog.setArguments(args);
@@ -112,7 +113,7 @@ public class ExerciseFragment extends ListFragment{
 		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
-	
+
 	public void updateList(Serie serie) {
 		adapter.add(serie);
 		adapter.notifyDataSetChanged();

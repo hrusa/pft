@@ -12,7 +12,7 @@ import android.content.Context;
  *
  */
 public class Serie extends SugarRecord<Serie> {
-	private long exerciseUnit;
+	private long exerciseunit;
 	private int weight;
 	private int repetition;
 	private int pause;
@@ -38,7 +38,7 @@ public class Serie extends SugarRecord<Serie> {
 	 */
 	public Serie(Context arg0, long exerciseUnit, int weight, int repetition, int pause) {
 		super(arg0);
-		this.exerciseUnit = exerciseUnit;
+		this.exerciseunit = exerciseUnit;
 		this.weight = weight;
 		this.repetition = repetition;
 		this.pause = pause;
@@ -48,14 +48,14 @@ public class Serie extends SugarRecord<Serie> {
 	 * @return the exerciseUnit
 	 */
 	public long getExerciseUnit() {
-		return exerciseUnit;
+		return exerciseunit;
 	}
 
 	/**
 	 * @param exerciseUnit the exerciseUnit to set
 	 */
 	public void setExerciseUnit(long exerciseUnit) {
-		this.exerciseUnit = exerciseUnit;
+		this.exerciseunit = exerciseUnit;
 	}
 
 	/**

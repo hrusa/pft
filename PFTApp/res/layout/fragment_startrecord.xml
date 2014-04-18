@@ -8,10 +8,16 @@
         android:id="@+id/recordName_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center" />
+    
+    <TextView
+        android:id="@+id/recordSerie_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/weight_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1.0" >
@@ -37,6 +43,7 @@
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/rep_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1.0" >
@@ -62,6 +69,7 @@
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/pause_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1.0" >
@@ -91,5 +99,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/start" />
+    
+    <Button
+        android:id="@+id/stop_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/stop"
+        android:visibility="gone" />
+    
+    <Button
+        android:id="@+id/finish_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/finish_exercise"
+        android:visibility="gone" />
 
 </LinearLayout>
