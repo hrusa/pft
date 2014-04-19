@@ -77,7 +77,7 @@ public class ShowExerciseFragment extends ListFragment {
 			ShowExerciseInfoFragment fragment = new ShowExerciseInfoFragment();
 			fragment.setArguments(args);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fragment, "ShowExerciseDetail").commit();
+					.replace(R.id.container, fragment, "ShowExerciseDetail").addToBackStack(null).commit();
 		}
 	}
 

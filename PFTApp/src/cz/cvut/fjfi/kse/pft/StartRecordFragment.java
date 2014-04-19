@@ -40,6 +40,7 @@ public class StartRecordFragment extends Fragment {
 	List<Serie> series;
 	Bundle args = new Bundle();
 	int size, currentSerie = 0;
+	ExerciseUnit exerciseU;
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	/**
@@ -73,12 +74,12 @@ public class StartRecordFragment extends Fragment {
 		startBtn = (Button) view.findViewById(R.id.start_button);
 		stopBtn = (Button) view.findViewById(R.id.stop_button);
 		finishBtn = (Button) view.findViewById(R.id.finish_button);
-		
+
 		lWeight = (LinearLayout) view.findViewById(R.id.weight_linearLayout);
 		lRep = (LinearLayout) view.findViewById(R.id.rep_linearLayout);
 		lPause = (LinearLayout) view.findViewById(R.id.pause_linearLayout);
 
-		ExerciseUnit exerciseU = ExerciseUnit.findById(ExerciseUnit.class,
+		exerciseU = ExerciseUnit.findById(ExerciseUnit.class,
 				args.getLong("exerciseu"));
 		series = Serie.find(Serie.class, "exerciseunit = ?", exerciseU.getId()
 				.toString());
@@ -132,6 +133,8 @@ public class StartRecordFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				exerciseU.setDone(true);
+				exerciseU.save();
 				showWorkoutFragment();
 			}
 		});
@@ -186,17 +189,17 @@ public class StartRecordFragment extends Fragment {
 
 	private void setupRecordSerie() {
 		if (currentSerie < size) {
-			if(series.get(currentSerie).getFinish()==null) {
-			serie = series.get(currentSerie);
-			eSerie.setText(String.format(
-					getResources().getString(R.string.currentSerie_text), ""
-							+ (currentSerie + 1)));
-			lWeight.setVisibility(View.VISIBLE);
-			lRep.setVisibility(View.VISIBLE);
-			lPause.setVisibility(View.VISIBLE);
-			sWeight.setText(String.valueOf(serie.getWeight()));
-			sRepetition.setText(String.valueOf(serie.getRepetition()));
-			sPause.setText(String.valueOf(serie.getPause()));
+			if (series.get(currentSerie).getFinish() == null) {
+				serie = series.get(currentSerie);
+				eSerie.setText(String.format(
+						getResources().getString(R.string.currentSerie_text),
+						"" + (currentSerie + 1)));
+				lWeight.setVisibility(View.VISIBLE);
+				lRep.setVisibility(View.VISIBLE);
+				lPause.setVisibility(View.VISIBLE);
+				sWeight.setText(String.valueOf(serie.getWeight()));
+				sRepetition.setText(String.valueOf(serie.getRepetition()));
+				sPause.setText(String.valueOf(serie.getPause()));
 			} else {
 				currentSerie++;
 				setupRecordSerie();
@@ -254,6 +257,6 @@ public class StartRecordFragment extends Fragment {
 		WorkoutFragment fragment = new WorkoutFragment();
 		fragment.setArguments(args);
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment, "Workout").commit();
+				.replace(R.id.container, fragment, "Workout").addToBackStack(null).commit();
 	}
 }

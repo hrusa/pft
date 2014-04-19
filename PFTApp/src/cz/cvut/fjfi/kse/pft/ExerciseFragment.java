@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import cz.cvut.fjfi.kse.pft.db.Serie;
 
 /**
@@ -95,8 +94,6 @@ public class ExerciseFragment extends ListFragment {
 	 */
 	private void showAddSerieDialog() {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Přidej serii", Toast.LENGTH_SHORT)
-				.show();
 		AddSerieDFragment dialog = new AddSerieDFragment();
 		args.remove("serie");
 		dialog.setArguments(args);

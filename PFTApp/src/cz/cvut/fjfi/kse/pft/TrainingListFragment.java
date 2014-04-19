@@ -7,14 +7,12 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import cz.cvut.fjfi.kse.pft.db.Training;
 
 /**
@@ -69,10 +67,9 @@ public class TrainingListFragment extends ListFragment {
 
 		args.putLong("training", training.getId());
 		TrainingFragment fragment = new TrainingFragment();
-		Log.i("TrainingList", ""+args.getBoolean("record"));
 		fragment.setArguments(args);
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment, "Training").commit();
+				.replace(R.id.container, fragment, "Training").addToBackStack(null).commit();
 	}
 
 	/*
@@ -87,7 +84,6 @@ public class TrainingListFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.actionbar_traininglist, menu);
-		Log.i("Actionbar menu", "created");
 	}
 
 	/*
@@ -102,7 +98,6 @@ public class TrainingListFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.add_training_button:
-			Log.i("TrainingList", "Add training clicked");
 			showAddTrainingDialog();
 			return true;
 		default:
@@ -115,8 +110,6 @@ public class TrainingListFragment extends ListFragment {
 	 */
 	private void showAddTrainingDialog() {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Přidej training", Toast.LENGTH_SHORT)
-				.show();
 		AddTrainingDFragment dialog = new AddTrainingDFragment();
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddTrainingD");

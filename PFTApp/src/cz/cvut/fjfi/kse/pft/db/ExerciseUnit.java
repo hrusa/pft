@@ -14,6 +14,7 @@ import android.content.Context;
 public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	private long exercise;
 	private long workout;
+	private boolean done = false;
 
 	/**
 	 * @param arg0
@@ -62,6 +63,20 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 		this.workout = workout;
 	}
 	
+	/**
+	 * @return the done
+	 */
+	public boolean isDone() {
+		return done;
+	}
+
+	/**
+	 * @param done the done to set
+	 */
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

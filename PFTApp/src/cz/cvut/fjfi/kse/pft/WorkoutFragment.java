@@ -5,17 +5,18 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
  * @author Petr Hruška
@@ -38,11 +39,54 @@ public class WorkoutFragment extends ListFragment {
 		if (!args.getBoolean("record")) {
 			setHasOptionsMenu(true);
 		}
-		List<ExerciseUnit> exerciseU = ExerciseUnit.listAll(ExerciseUnit.class);
+		List<ExerciseUnit> exerciseU = ExerciseUnit.find(ExerciseUnit.class,
+				"workout = ? and done = ?", "" + args.getLong("workout"),
+				"false");
 		adapter = new ArrayAdapter<ExerciseUnit>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, exerciseU);
 		setListAdapter(adapter);
+
+		if (exerciseU.isEmpty() && args.getBoolean("record")) {
+			AlertDialog.Builder alertDialogB = new AlertDialog.Builder(
+					getActivity());
+			alertDialogB
+					.setTitle("Workout has no other exercises")
+					.setMessage("Add please exercise or finish your workout.")
+					.setNegativeButton("Finish",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+									Workout workout = Workout.findById(
+											Workout.class,
+											args.getLong("workout"));
+									workout.setDone(true);
+									workout.save();
+									TrainingFragment fragment = new TrainingFragment();
+									fragment.setArguments(args);
+									getFragmentManager()
+											.beginTransaction()
+											.replace(R.id.container, fragment,
+													"Training")
+											.addToBackStack(null).commit();
+								}
+							})
+					.setPositiveButton(R.string.add_button,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+									showAddExerciseDialog();
+								}
+							}).setCancelable(false);
+			AlertDialog alerDialog = alertDialogB.create();
+			alerDialog.show();
+		}
 	}
 
 	/*
@@ -86,15 +130,16 @@ public class WorkoutFragment extends ListFragment {
 		args.putLong("exerciseu", exerciseU.getId());
 		if (args.getBoolean("record")) {
 			StartRecordFragment fragment = new StartRecordFragment();
-			Log.i("Workout", "" + args.getBoolean("record"));
 			fragment.setArguments(args);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fragment, "StartRecord").commit();
+					.replace(R.id.container, fragment, "StartRecord")
+					.addToBackStack(null).commit();
 		} else {
 			ExerciseFragment fragment = new ExerciseFragment();
 			fragment.setArguments(args);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fragment, "Exercise").commit();
+					.replace(R.id.container, fragment, "Exercise")
+					.addToBackStack(null).commit();
 		}
 	}
 
@@ -103,7 +148,6 @@ public class WorkoutFragment extends ListFragment {
 	 */
 	private void showAddExerciseDialog() {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Přidej cvik", Toast.LENGTH_SHORT).show();
 		AddExerciseDFragment dialog = new AddExerciseDFragment();
 		dialog.setArguments(args);
 		dialog.show(getFragmentManager(), "AddExerciseD");

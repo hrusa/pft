@@ -15,6 +15,7 @@ public class Workout extends SugarRecord<Workout> {
 	private long training;
 	private String name;
 	private String date;	//YYYY-MM-DD
+	private boolean done = false;
 
 	/**
 	 * @param arg0
@@ -77,6 +78,20 @@ public class Workout extends SugarRecord<Workout> {
 	 */
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	/**
+	 * @return the done
+	 */
+	public boolean isDone() {
+		return done;
+	}
+
+	/**
+	 * @param done the done to set
+	 */
+	public void setDone(boolean done) {
+		this.done = done;
 	}
 
 	@Override

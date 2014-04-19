@@ -68,7 +68,7 @@ public class BasicInfoDFragment extends DialogFragment{
 				// TODO Auto-generated method stub
 				BirthdateDFragment dialog = new BirthdateDFragment();
 			    dialog.setArguments(args);
-			    getFragmentManager().beginTransaction().replace(R.id.container, dialog).commit();
+			    getFragmentManager().beginTransaction().replace(R.id.container, dialog).addToBackStack(null).commit();
 				dismiss();
 			}
 		});

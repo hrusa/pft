@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * @author Petr Hruška
@@ -52,6 +51,7 @@ public class ChooseTrainingDFragment extends DialogFragment {
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction()
 						.replace(R.id.container, fragment, "TrainingList")
+						.addToBackStack(null)
 						.commit();
 				dismiss();
 				Log.i("ChooseTraining dialog", "starting training list fragment");
@@ -63,6 +63,7 @@ public class ChooseTrainingDFragment extends DialogFragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				createRecommendedTraining(args.getLong("id"));
+				dismiss();
 			}
 		});
 		setCancelable(false);
@@ -70,8 +71,8 @@ public class ChooseTrainingDFragment extends DialogFragment {
 	}
 
 	void createRecommendedTraining(long trainee) {
-		Toast.makeText(getActivity(),
-				"Vybrán přednastavený trénink, je třeba dodělat",
-				Toast.LENGTH_SHORT).show();
+		GenerateTrainingFragment fragment = new GenerateTrainingFragment();
+		fragment.setArguments(args);
+		getFragmentManager().beginTransaction().replace(R.id.container, fragment, "GenerateTraining").addToBackStack(null).commit();
 	}
 }

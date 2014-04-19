@@ -3,7 +3,6 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
-import cz.cvut.fjfi.kse.pft.db.Trainee;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
+import cz.cvut.fjfi.kse.pft.db.Trainee;
 
 /**
  * @author Petr Hruška
@@ -68,14 +67,14 @@ public class WorkoutDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-                Toast.makeText(getActivity(), ""+experience.getSelectedItemId()+" and "+goal.getSelectedItemId(), Toast.LENGTH_SHORT).show();
-                trainee.setExperience(experience.getSelectedItemId());
-                trainee.setGoal(goal.getSelectedItemId());
+                trainee.setExperience((int) experience.getSelectedItemId());
+                trainee.setGoal((int) goal.getSelectedItemId());
+                trainee.save();
                 
                 //načíst nový dialog fragment s výběrem tréninku
-                ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
-        	    dialog.setArguments(args);
-        		dialog.show(getFragmentManager(), "ChooseTrainingD");
+                MenuFragment fragment = new MenuFragment();
+        	    fragment.setArguments(args);
+        		getFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").commit();
                 dismiss();
 			}
 		});

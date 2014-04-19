@@ -26,7 +26,7 @@ public class LoginActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			checkGooglePlayServicesAvailable();
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.container, new LoginFragment(), "Login").commit();
+					.replace(R.id.container, new LoginFragment(), "Login").addToBackStack(null).commit();
 		}
 	}
 

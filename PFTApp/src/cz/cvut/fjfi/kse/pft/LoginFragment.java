@@ -123,7 +123,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		mSignOutButton = (Button) rootView.findViewById(R.id.sign_out_button);
 		rootView.findViewById(R.id.sign_in_button).setOnClickListener(this);
 		rootView.findViewById(R.id.sign_out_button).setOnClickListener(this);
-		Log.i("onCreateView: ", "layout init");
 		return rootView;
 	}
 
@@ -131,7 +130,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	public void onStart() {
 		super.onStart();
 		mGoogleApiClient.connect();
-		Log.i("onStart: ", "started");
 	}
 
 	@Override
@@ -140,9 +138,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 
 		if (mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.disconnect();
-			Log.i("onStop: ", "disconnect");
 		}
-		Log.i("onStop: ", "ended");
 	}
 
 	// nemůžu to dát na ondestroy
@@ -161,12 +157,10 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
-		Log.i("onCF: ", "started");
 		if (!mIntentInProgress) {
 			// Store the ConnectionResult so that we can use it later when the
 			// user clicks
 			// 'sign-in'.
-			Log.i("onCF: ", "1 if");
 			mConnectionResult = result;
 			mSignInIntent = result.getResolution();
 
@@ -175,7 +169,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				// resolve all
 				// errors until the user is signed in, or they cancel.
 				resolveSignInError();
-				Log.i("onCF: ", "2 if");
 			}
 		}
 		mUser.setText(R.string.status_sign_out);
@@ -193,7 +186,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
-		Log.i("onConnected: ", "started");
 		mSignInClicked = false;
 		Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG)
 				.show();
@@ -203,22 +195,11 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				currentUser.getDisplayName()));
 		mSignInButton.setEnabled(false);
 		mSignOutButton.setEnabled(true);
-		Log.i("Narozeniny: ", "" + currentUser.getBirthday()); // tyto informace
-																// musejí být
-																// veřejně
-																// přístupné,
-																// jinak je zde
-																// uložena
-																// hodnota null
-		Log.i("Pozice: ", "" + currentUser.getCurrentLocation());
-		// ((LoginActivity) getActivity()).showBirthdateDialog();
 		List<Trainee> trainee = Trainee.find(Trainee.class, "email = ?",
 				getAccountNames());
 		if (trainee.isEmpty()) {
 			args.putString("name", currentUser.getDisplayName());
 			args.putString("email", getAccountNames());
-			// Log.i("Has Gender", ""+currentUser.hasGender()); //píše true i
-			// když je null, TODO: když zbyde čas tak nějak dodělat
 			BirthdateDFragment dialog = new BirthdateDFragment();
 			dialog.setArguments(args);
 			getFragmentManager().beginTransaction()
@@ -229,17 +210,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 			MenuFragment fragment = new MenuFragment();
 			fragment.setArguments(args);
 			getFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").commit();
-			/*List<Training> training = Training.listAll(Training.class);
-			if(training.isEmpty()) {
-				ChooseTrainingDFragment dialog = new ChooseTrainingDFragment();
-				dialog.setArguments(args);
-				dialog.show(getFragmentManager(), "ChooseTrainingD");
-				Log.i("LoginFragment", "Starting choose training dialog");
-			} else {
-				TrainingListFragment fragment = new TrainingListFragment();
-				fragment.setArguments(args);
-				getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-			}*/
 		}
 	}
 
@@ -247,7 +217,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		mAccountManager = AccountManager.get(getActivity());
 		Account[] accounts = mAccountManager
 				.getAccountsByType(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-		// Log.i("Mailik: ", accounts[1].name);
 		return accounts[0].name;
 	}
 
@@ -261,38 +230,30 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onConnectionSuspended(int arg0) {
 		// TODO Auto-generated method stub
-		Log.i("onConnectionSuspended: ", "started");
 	}
 
 	public void connect(int requestCode, int responseCode, Intent intent) {
-		Log.i("connect: ", "started");
 		if (requestCode == RC_SIGN_IN) {
-			Log.i("connect: ", "1 if");
 			if (responseCode != Activity.RESULT_OK) {
 				mSignInClicked = false;
-				Log.i("connect: ", "2.1 if");
 			}
 
 			mIntentInProgress = false;
 
 			if (!mGoogleApiClient.isConnecting()) {
 				mGoogleApiClient.connect();
-				Log.i("connect: ", "2.2 if");
 			}
 		}
 	}
 
 	/* A helper method to resolve the current ConnectionResult error. */
 	private void resolveSignInError() {
-		Log.i("resolveSignInError: ", "started");
 		if (mConnectionResult.hasResolution()) {
-			Log.i("resolveSignInError: ", "if");
 			try {
 				mIntentInProgress = true;
 				getActivity().startIntentSenderForResult(
 						mSignInIntent.getIntentSender(), RC_SIGN_IN, null, 0,
 						0, 0);
-				Log.i("resolveSignInError: ", "try");
 			} catch (SendIntentException e) {
 				// The intent was canceled before it was sent. Return to the
 				// default
@@ -300,22 +261,18 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				// ConnectionResult.
 				mIntentInProgress = false;
 				mGoogleApiClient.connect();
-				Log.i("resolveSignInError: ", "catch");
 			}
 		}
 	}
 
 	@Override
 	public void onClick(View view) {
-		Log.i("onClick: ", "started");
-
 		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
 			if (!mGoogleApiClient.isConnecting()) {
 				switch (view.getId()) {
 				case R.id.sign_in_button:
 					mSignInClicked = true;
 					resolveSignInError();
-					Log.i("onClick: ", "sign in clicked");
 					break;
 				case R.id.sign_out_button:
 					Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
