@@ -97,6 +97,6 @@ public class Workout extends SugarRecord<Workout> {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return getName();
+		return getName()+" planed on "+getDate();
 	}
 }

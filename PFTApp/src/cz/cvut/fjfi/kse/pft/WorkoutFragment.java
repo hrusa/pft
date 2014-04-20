@@ -3,8 +3,13 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -16,15 +21,18 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
  * @author Petr Hruška
  * 
  */
+@SuppressLint("SimpleDateFormat")
 public class WorkoutFragment extends ListFragment {
 	private ArrayAdapter<ExerciseUnit> adapter;
 	Bundle args;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public WorkoutFragment() {
 
@@ -65,6 +73,26 @@ public class WorkoutFragment extends ListFragment {
 											args.getLong("workout"));
 									workout.setDone(true);
 									workout.save();
+									Calendar calendar = Calendar.getInstance();
+									try {
+										calendar.setTime(dateFormat.parse(workout.getDate()));
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									calendar.add(Calendar.DATE, 7);
+									Workout newWorkout = new Workout(getActivity(), args.getLong("training"), workout.getName(), dateFormat.format(calendar.getTime()));
+									newWorkout.save();
+									List<ExerciseUnit> exerciseUs = ExerciseUnit.find(ExerciseUnit.class, "workout = ?", ""+workout.getId());
+									for(int i = 0; i < exerciseUs.size(); i++) {
+										ExerciseUnit newExersiseU = new ExerciseUnit(getActivity(), exerciseUs.get(i).getExercise(), exerciseUs.get(i).getWorkout());
+										newExersiseU.save();
+										List<Serie> series = Serie.find(Serie.class, "exerciseunit = ?", ""+exerciseUs.get(i).getId());
+										for(int j = 0; j < series.size(); j++) {
+											Serie serie = new Serie(getActivity(), newExersiseU.getId(), series.get(j).getWeight(), series.get(j).getRepetition(), series.get(j).getPause());
+											serie.save();
+										}
+									}
 									TrainingFragment fragment = new TrainingFragment();
 									fragment.setArguments(args);
 									getFragmentManager()
@@ -127,6 +155,12 @@ public class WorkoutFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		ExerciseUnit exerciseU = adapter.getItem(position);
+		List<ExerciseUnit> units = ExerciseUnit.find(ExerciseUnit.class, "exercise = ? and done = ?", ""+exerciseU.getExercise(), "true");
+		if(units.isEmpty()) {
+			args.putBoolean("1rm", true);
+		} else {
+			args.putBoolean("1rm", false);
+		}
 		args.putLong("exerciseu", exerciseU.getId());
 		if (args.getBoolean("record")) {
 			StartRecordFragment fragment = new StartRecordFragment();

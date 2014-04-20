@@ -3,10 +3,12 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import cz.cvut.fjfi.kse.pft.db.Serie;
  * @author Petr Hruška
  * 
  */
+@SuppressLint("SimpleDateFormat")
 public class StartRecordFragment extends Fragment {
 	View view;
 	TextView eName, eSerie;
@@ -41,7 +44,7 @@ public class StartRecordFragment extends Fragment {
 	Bundle args = new Bundle();
 	int size, currentSerie = 0;
 	ExerciseUnit exerciseU;
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	/**
 	 * 
@@ -96,8 +99,8 @@ public class StartRecordFragment extends Fragment {
 				sWeight.setEnabled(false);
 				sRepetition.setEnabled(false);
 				sPause.setEnabled(false);
-				Date date = new Date();
-				serie.setStart(dateFormat.format(date));
+				Calendar calendar = Calendar.getInstance();
+				serie.setStart(dateFormat.format(calendar.getTime()));
 				serie.setWeight(Integer.parseInt(sWeight.getText().toString()));
 				serie.setRepetition(Integer.parseInt(sRepetition.getText()
 						.toString()));
@@ -115,8 +118,8 @@ public class StartRecordFragment extends Fragment {
 				sWeight.setEnabled(true);
 				sRepetition.setEnabled(true);
 				sPause.setEnabled(true);
-				Date date = new Date();
-				serie.setFinish(dateFormat.format(date));
+				Calendar calendar = Calendar.getInstance();
+				serie.setFinish(dateFormat.format(calendar.getTime()));
 				serie.save();
 				startBtn.setVisibility(View.VISIBLE);
 				stopBtn.setVisibility(View.GONE);
@@ -188,58 +191,66 @@ public class StartRecordFragment extends Fragment {
 	}
 
 	private void setupRecordSerie() {
-		if (currentSerie < size) {
-			if (series.get(currentSerie).getFinish() == null) {
-				serie = series.get(currentSerie);
-				eSerie.setText(String.format(
-						getResources().getString(R.string.currentSerie_text),
-						"" + (currentSerie + 1)));
-				lWeight.setVisibility(View.VISIBLE);
-				lRep.setVisibility(View.VISIBLE);
-				lPause.setVisibility(View.VISIBLE);
-				sWeight.setText(String.valueOf(serie.getWeight()));
-				sRepetition.setText(String.valueOf(serie.getRepetition()));
-				sPause.setText(String.valueOf(serie.getPause()));
-			} else {
-				currentSerie++;
-				setupRecordSerie();
-			}
+		if (args.getBoolean("1rm") && currentSerie == 0) {
+			// code for 1RM, to else možná smazat
+			//alertdialog, upozorňující na 1RM
 		} else {
-			setHasOptionsMenu(true);
-			startBtn.setVisibility(View.GONE);
-			if (size == 0) {
-				AlertDialog.Builder alertDialogB = new AlertDialog.Builder(
-						getActivity());
-				alertDialogB
-						.setTitle("Exercise has no series")
-						.setMessage("Add please serie to your exercise")
-						.setNegativeButton(R.string.cancel_button,
-								new DialogInterface.OnClickListener() {
-
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										// TODO Auto-generated method stub
-										showWorkoutFragment();
-									}
-								})
-						.setPositiveButton(R.string.add_button,
-								new DialogInterface.OnClickListener() {
-
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										// TODO Auto-generated method stub
-										showAddSerieDialog();
-									}
-								}).setCancelable(false);
-				AlertDialog alerDialog = alertDialogB.create();
-				alerDialog.show();
+			if (currentSerie < size) {
+				if (series.get(currentSerie).getFinish() == null) {
+					serie = series.get(currentSerie);
+					eSerie.setText(String.format(
+							getResources()
+									.getString(R.string.currentSerie_text), ""
+									+ (currentSerie + 1)));
+					lWeight.setVisibility(View.VISIBLE);
+					lRep.setVisibility(View.VISIBLE);
+					lPause.setVisibility(View.VISIBLE);
+					sWeight.setText(String.valueOf(serie.getWeight()));
+					sRepetition.setText(String.valueOf(serie.getRepetition()));
+					sPause.setText(String.valueOf(serie.getPause()));
+				} else {
+					currentSerie++;
+					setupRecordSerie();
+				}
 			} else {
-				finishBtn.setVisibility(View.VISIBLE);
-				lWeight.setVisibility(View.INVISIBLE);
-				lRep.setVisibility(View.INVISIBLE);
-				lPause.setVisibility(View.INVISIBLE);
+				setHasOptionsMenu(true);
+				startBtn.setVisibility(View.GONE);
+				if (size == 0) {
+					AlertDialog.Builder alertDialogB = new AlertDialog.Builder(
+							getActivity());
+					alertDialogB
+							.setTitle("Exercise has no series")
+							.setMessage("Add please serie to your exercise")
+							.setNegativeButton(R.string.cancel_button,
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+											showWorkoutFragment();
+										}
+									})
+							.setPositiveButton(R.string.add_button,
+									new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+											showAddSerieDialog();
+										}
+									}).setCancelable(false);
+					AlertDialog alerDialog = alertDialogB.create();
+					alerDialog.show();
+				} else {
+					finishBtn.setVisibility(View.VISIBLE);
+					lWeight.setVisibility(View.INVISIBLE);
+					lRep.setVisibility(View.INVISIBLE);
+					lPause.setVisibility(View.INVISIBLE);
+				}
 			}
 		}
 	}
@@ -257,6 +268,7 @@ public class StartRecordFragment extends Fragment {
 		WorkoutFragment fragment = new WorkoutFragment();
 		fragment.setArguments(args);
 		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment, "Workout").addToBackStack(null).commit();
+				.replace(R.id.container, fragment, "Workout")
+				.addToBackStack(null).commit();
 	}
 }

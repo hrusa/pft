@@ -86,9 +86,8 @@ public class GenerateTrainingFragment extends Fragment {
 			case 2:
 
 			default:
-				Log.i("DateFormat", dateFormat.format(calendar.getTime()));
 				workout = new Workout(getActivity(), training.getId(), "Day 1",
-						dateFormat.format(calendar.getTime()).toString());
+						dateFormat.format(calendar.getTime()));
 				workout.save();
 				exerciseU = new ExerciseUnit(getActivity(),
 						Long.parseLong(String.valueOf(3)), workout.getId());
@@ -165,6 +164,7 @@ public class GenerateTrainingFragment extends Fragment {
 						pause);
 				serie.save();
 
+				calendar.add(Calendar.DATE, 2);
 				workout = new Workout(getActivity(), training.getId(), "Day 2",
 						dateFormat.format(calendar.getTime()));
 				workout.save();
@@ -243,6 +243,7 @@ public class GenerateTrainingFragment extends Fragment {
 						pause);
 				serie.save();
 
+				calendar.add(Calendar.DATE, 2);
 				workout = new Workout(getActivity(), training.getId(), "Day 3",
 						dateFormat.format(calendar.getTime()));
 				workout.save();
