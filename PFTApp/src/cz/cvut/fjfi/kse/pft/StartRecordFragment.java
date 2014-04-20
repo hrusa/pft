@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +44,7 @@ public class StartRecordFragment extends Fragment {
 	List<Serie> series;
 	Bundle args = new Bundle();
 	int size, currentSerie = 0;
+	double orm = 0;
 	ExerciseUnit exerciseU;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -115,20 +117,14 @@ public class StartRecordFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				sWeight.setEnabled(true);
-				sRepetition.setEnabled(true);
-				sPause.setEnabled(true);
-				Calendar calendar = Calendar.getInstance();
-				serie.setFinish(dateFormat.format(calendar.getTime()));
-				serie.save();
-				startBtn.setVisibility(View.VISIBLE);
-				stopBtn.setVisibility(View.GONE);
-				currentSerie++;
-				args.putInt("pause", serie.getPause());
-				PauseFragment dialog = new PauseFragment();
-				dialog.setArguments(args);
-				dialog.show(getFragmentManager(), "Pause");
-				setupRecordSerie();
+				if (args.getBoolean("1rm") && currentSerie == 0) {
+					ORMDFragment dialog = new ORMDFragment();
+					dialog.setArguments(args);
+					dialog.show(getFragmentManager(), "ORMD");
+
+				} else {
+					doOnStopClick();
+				}
 			}
 		});
 		finishBtn.setOnClickListener(new OnClickListener() {
@@ -142,6 +138,32 @@ public class StartRecordFragment extends Fragment {
 			}
 		});
 		return view;
+	}
+
+	public void doOnStopClick() {
+		if (args.getBoolean("1rm") && currentSerie == 0) {
+			Log.i("StartRecord", "Serie ID: " + args.getLong("serie"));
+			serie = Serie.findById(Serie.class, args.getLong("serie"));
+			Log.i("StartRecord", "Weight: " + serie.getWeight());
+			Log.i("StartRecord", "Rep: " + serie.getRepetition());
+			orm = serie.getWeight() / (1.0278 - 0.0278 * serie.getRepetition());
+			Log.i("ORM", orm + "");
+		}
+		Calendar calendar = Calendar.getInstance();
+
+		serie.setFinish(dateFormat.format(calendar.getTime()));
+		serie.save();
+		startBtn.setVisibility(View.VISIBLE);
+		stopBtn.setVisibility(View.GONE);
+		currentSerie++;
+		args.putInt("pause", serie.getPause());
+		PauseFragment pauseD = new PauseFragment();
+		pauseD.setArguments(args);
+		pauseD.show(getFragmentManager(), "Pause");
+		sWeight.setEnabled(true);
+		sRepetition.setEnabled(true);
+		sPause.setEnabled(true);
+		setupRecordSerie();
 	}
 
 	/*
@@ -191,37 +213,18 @@ public class StartRecordFragment extends Fragment {
 	}
 
 	private void setupRecordSerie() {
-		if (args.getBoolean("1rm") && currentSerie == 0) {
-			// code for 1RM, to else možná smazat
-			//alertdialog, upozorňující na 1RM
-		} else {
-			if (currentSerie < size) {
-				if (series.get(currentSerie).getFinish() == null) {
-					serie = series.get(currentSerie);
-					eSerie.setText(String.format(
-							getResources()
-									.getString(R.string.currentSerie_text), ""
-									+ (currentSerie + 1)));
-					lWeight.setVisibility(View.VISIBLE);
-					lRep.setVisibility(View.VISIBLE);
-					lPause.setVisibility(View.VISIBLE);
-					sWeight.setText(String.valueOf(serie.getWeight()));
-					sRepetition.setText(String.valueOf(serie.getRepetition()));
-					sPause.setText(String.valueOf(serie.getPause()));
-				} else {
-					currentSerie++;
-					setupRecordSerie();
-				}
-			} else {
-				setHasOptionsMenu(true);
-				startBtn.setVisibility(View.GONE);
-				if (size == 0) {
+		if (currentSerie < size) {
+			if (series.get(currentSerie).getFinish() == null) {
+				if (args.getBoolean("1rm") && currentSerie == 0) {
+					// code for 1RM, to else možná smazat
+					// alertdialog, upozorňující na 1RM
 					AlertDialog.Builder alertDialogB = new AlertDialog.Builder(
 							getActivity());
 					alertDialogB
-							.setTitle("Exercise has no series")
-							.setMessage("Add please serie to your exercise")
-							.setNegativeButton(R.string.cancel_button,
+							.setTitle("One repeatable maximum")
+							.setMessage(
+									"Please try to do maximum repetitons with setted weight.")
+							.setPositiveButton(R.string.ok_button,
 									new DialogInterface.OnClickListener() {
 
 										@Override
@@ -229,28 +232,72 @@ public class StartRecordFragment extends Fragment {
 												DialogInterface dialog,
 												int which) {
 											// TODO Auto-generated method stub
-											showWorkoutFragment();
-										}
-									})
-							.setPositiveButton(R.string.add_button,
-									new DialogInterface.OnClickListener() {
-
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											// TODO Auto-generated method stub
-											showAddSerieDialog();
 										}
 									}).setCancelable(false);
 					AlertDialog alerDialog = alertDialogB.create();
 					alerDialog.show();
-				} else {
-					finishBtn.setVisibility(View.VISIBLE);
-					lWeight.setVisibility(View.INVISIBLE);
 					lRep.setVisibility(View.INVISIBLE);
-					lPause.setVisibility(View.INVISIBLE);
+				} else {
+					lRep.setVisibility(View.VISIBLE);
 				}
+				serie = series.get(currentSerie);
+				args.remove("serie");
+				args.putLong("serie", serie.getId());
+				eSerie.setText(String.format(
+						getResources().getString(R.string.currentSerie_text),
+						"" + (currentSerie + 1)));
+				if (orm != 0) {
+					serie.setWeight((int) (orm * (1.0278 - 0.0278 * serie
+							.getRepetition())));
+					serie.save();
+					Log.i("StartRecord",
+							"seting new weight to:" + serie.getWeight());
+				}
+				lWeight.setVisibility(View.VISIBLE);
+				lPause.setVisibility(View.VISIBLE);
+				sWeight.setText(String.valueOf(serie.getWeight()));
+				sRepetition.setText(String.valueOf(serie.getRepetition()));
+				sPause.setText(String.valueOf(serie.getPause()));
+			} else {
+				currentSerie++;
+				setupRecordSerie();
+			}
+		} else {
+			setHasOptionsMenu(true);
+			startBtn.setVisibility(View.GONE);
+			if (size == 0) {
+				AlertDialog.Builder alertDialogB = new AlertDialog.Builder(
+						getActivity());
+				alertDialogB
+						.setTitle("Exercise has no series")
+						.setMessage("Add please serie to your exercise")
+						.setNegativeButton(R.string.cancel_button,
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										showWorkoutFragment();
+									}
+								})
+						.setPositiveButton(R.string.add_button,
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										showAddSerieDialog();
+									}
+								}).setCancelable(false);
+				AlertDialog alerDialog = alertDialogB.create();
+				alerDialog.show();
+			} else {
+				finishBtn.setVisibility(View.VISIBLE);
+				lWeight.setVisibility(View.INVISIBLE);
+				lRep.setVisibility(View.INVISIBLE);
+				lPause.setVisibility(View.INVISIBLE);
 			}
 		}
 	}

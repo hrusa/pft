@@ -8,14 +8,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class LoginActivity extends FragmentActivity {
-	public MenuItem addTraining, addWorkout, addExercise, addSerie;
 	Bundle args = new Bundle();
 	
 	@Override

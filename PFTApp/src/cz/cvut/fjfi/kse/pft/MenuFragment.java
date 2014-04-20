@@ -5,10 +5,6 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
-import cz.cvut.fjfi.kse.pft.db.Difficulty;
-import cz.cvut.fjfi.kse.pft.db.Exercise;
-import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
-import cz.cvut.fjfi.kse.pft.db.Training;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,7 +12,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import cz.cvut.fjfi.kse.pft.db.Difficulty;
+import cz.cvut.fjfi.kse.pft.db.Exercise;
+import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
+import cz.cvut.fjfi.kse.pft.db.Training;
 
 /**
  * @author Petr Hruška
@@ -24,7 +23,7 @@ import android.widget.Toast;
  */
 public class MenuFragment extends Fragment {
 	View view;
-	Button startBtn, createBtn, exerciseBtn, statisticBtn, exitBtn;
+	Button startBtn, createBtn, measureBtn, exerciseBtn, statisticBtn, exitBtn;
 	Bundle args = new Bundle();
 	Exercise exercise;
 	List<Training> trainings;
@@ -55,6 +54,7 @@ public class MenuFragment extends Fragment {
 
 		startBtn = (Button) view.findViewById(R.id.start_button);
 		createBtn = (Button) view.findViewById(R.id.create_button);
+		measureBtn = (Button) view.findViewById(R.id.measure_button);
 		exerciseBtn = (Button) view.findViewById(R.id.exercise_button);
 		statisticBtn = (Button) view.findViewById(R.id.statistic_button);
 		exitBtn = (Button) view.findViewById(R.id.exit_button);
@@ -90,6 +90,14 @@ public class MenuFragment extends Fragment {
 				dialog.show(getFragmentManager(), "ChooseTrainingD");
 			}
 		});
+		measureBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		exerciseBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -110,9 +118,11 @@ public class MenuFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getActivity(),
-						"Statistiky je třeba ještě dodělat.",
-						Toast.LENGTH_SHORT).show();
+				StatisticsMenuFragment fragment = new StatisticsMenuFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, fragment, "StatisticsMenu")
+						.addToBackStack(null).commit();
 			}
 		});
 		exitBtn.setOnClickListener(new OnClickListener() {

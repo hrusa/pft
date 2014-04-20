@@ -33,12 +33,14 @@
     <string name="start_button">Start training</string>
     <string name="exercise_button">Exercises</string>
     <string name="statistic_button">Statistics</string>
+    <string name="measure_button">Measures</string>
     <string name="exit_button">Exit</string>
     <string name="video_button">Video</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="currentSerie_text">Serie #%s</string>
     <string name="finish_exercise">Finish exercise</string>
+    <string name="ok_button">Ok</string>
     
     <string-array name="experience_array">
         <item>Beginner</item>
@@ -51,6 +53,11 @@
         <item>Gain strength</item>
         <item>Bulking</item>
         <item>Cutting</item>
+    </string-array>
+    
+    <string-array name="measure_array">
+        <item>Height</item>
+        <item>Weight</item>
     </string-array>
 
 </resources>

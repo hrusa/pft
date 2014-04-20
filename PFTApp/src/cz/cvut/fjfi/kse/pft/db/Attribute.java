@@ -44,4 +44,12 @@ public class Attribute extends SugarRecord<Attribute>{
 		this.name = name;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getName();
+	}
 }
