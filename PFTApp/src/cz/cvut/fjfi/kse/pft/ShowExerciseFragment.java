@@ -74,10 +74,18 @@ public class ShowExerciseFragment extends ListFragment {
 		} else {
 			Exercise exercise = adapterExercise.getItem(position);
 			args.putLong("exercise", exercise.getId());
-			ShowExerciseInfoFragment fragment = new ShowExerciseInfoFragment();
-			fragment.setArguments(args);
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fragment, "ShowExerciseDetail").addToBackStack(null).commit();
+			if (args.getBoolean("statistics")) {
+				ShowExerciseDFragment dialog = new ShowExerciseDFragment();
+				dialog.setArguments(args);
+				dialog.show(getFragmentManager(), "ShowExerciseD");
+			} else {
+				ShowExerciseInfoFragment fragment = new ShowExerciseInfoFragment();
+				fragment.setArguments(args);
+				getFragmentManager()
+						.beginTransaction()
+						.replace(R.id.container, fragment, "ShowExerciseInfo")
+						.addToBackStack(null).commit();
+			}
 		}
 	}
 

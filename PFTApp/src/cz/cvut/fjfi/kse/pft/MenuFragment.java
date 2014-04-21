@@ -95,7 +95,9 @@ public class MenuFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				AddMeasureDFragment dialog = new AddMeasureDFragment();
+				dialog.setArguments(args);
+				dialog.show(getFragmentManager(), "AddMeasureD");
 			}
 		});
 		exerciseBtn.setOnClickListener(new OnClickListener() {
@@ -106,6 +108,7 @@ public class MenuFragment extends Fragment {
 				// vytvořit nový list fragment, který bude pouze zobrazovat
 				// cviky, po kliknutí na jednotlivý cvik je uživateli zobrazen
 				// popis
+				args.putBoolean("statistics", false);
 				ShowExerciseFragment fragment = new ShowExerciseFragment();
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction()

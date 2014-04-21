@@ -3,23 +3,36 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
-import cz.cvut.fjfi.kse.pft.db.Training;
+import cz.cvut.fjfi.kse.pft.db.Measure;
 
 /**
  * @author Petr Hruška
  *
  */
+@SuppressLint("SimpleDateFormat")
 public class AddMeasureDFragment extends DialogFragment{
 	View view;
+	Bundle args = new Bundle();
+	Spinner measure;
+	EditText mValue;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	/**
 	 * 
 	 */
@@ -38,7 +51,11 @@ public class AddMeasureDFragment extends DialogFragment{
 		args = getArguments();
 		Button cancel = (Button) view.findViewById(R.id.cancel_button);
 		Button add = (Button) view.findViewById(R.id.add_button);
-		nameT = (EditText) view.findViewById(R.id.name_editText);
+		mValue = (EditText) view.findViewById(R.id.measure_editText);
+		measure = (Spinner) view.findViewById(R.id.measure_spinner);
+		ArrayAdapter<CharSequence> adapterM = ArrayAdapter.createFromResource(getActivity(), R.array.measure_array, android.R.layout.simple_spinner_item);
+		adapterM.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		measure.setAdapter(adapterM);
 		cancel.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -52,13 +69,14 @@ public class AddMeasureDFragment extends DialogFragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(nameT.length()>0) {
-					Training training = new Training(getActivity(), args.getLong("id"), nameT.getText().toString());
-					training.save();
-					((TrainingListFragment) getFragmentManager().findFragmentByTag("TrainingList")).updateList(training);
+				Log.i("AddMeasureD", mValue.getText().toString());
+				if(mValue.length()>0) {
+					Date date = new Date();
+					Measure nMeasure = new Measure(getActivity(), args.getLong("trainee"), (int) measure.getSelectedItemId()+1, dateFormat.format(date), Integer.parseInt(mValue.getText().toString()));
+					nMeasure.save();
 					dismiss();
 				} else {
-					Toast.makeText(getActivity(), "Please insert the name of the Training.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "Please set measure value.", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

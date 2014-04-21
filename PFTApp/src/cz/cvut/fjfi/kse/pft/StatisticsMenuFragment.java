@@ -5,7 +5,6 @@ package cz.cvut.fjfi.kse.pft;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,13 +42,19 @@ public class StatisticsMenuFragment extends Fragment {
 		exercise = (Button) view.findViewById(R.id.exercise_button);
 		measure = (Button) view.findViewById(R.id.measure_button);
 		args = getArguments();
+		args.putBoolean("statistics", false);
 
 		exercise.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Log.i("StatisticsMenu", "exercise");
+				args.putBoolean("statistics", true);
+				ShowExerciseFragment fragment = new ShowExerciseFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, fragment, "ShowExercise")
+						.addToBackStack(null).commit();
 			}
 		});
 

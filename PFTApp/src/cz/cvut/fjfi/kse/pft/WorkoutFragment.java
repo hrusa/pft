@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -85,12 +86,14 @@ public class WorkoutFragment extends ListFragment {
 									newWorkout.save();
 									List<ExerciseUnit> exerciseUs = ExerciseUnit.find(ExerciseUnit.class, "workout = ?", ""+workout.getId());
 									for(int i = 0; i < exerciseUs.size(); i++) {
-										ExerciseUnit newExersiseU = new ExerciseUnit(getActivity(), exerciseUs.get(i).getExercise(), exerciseUs.get(i).getWorkout());
+										ExerciseUnit newExersiseU = new ExerciseUnit(getActivity(), exerciseUs.get(i).getExercise(), newWorkout.getId());
 										newExersiseU.save();
+										Log.i("WorkoutFragment", "přidána exerciseunit #"+i);
 										List<Serie> series = Serie.find(Serie.class, "exerciseunit = ?", ""+exerciseUs.get(i).getId());
 										for(int j = 0; j < series.size(); j++) {
 											Serie serie = new Serie(getActivity(), newExersiseU.getId(), series.get(j).getWeight(), series.get(j).getRepetition(), series.get(j).getPause());
 											serie.save();
+											Log.i("WorkoutFragment", "přidána serie #"+j);
 										}
 									}
 									TrainingFragment fragment = new TrainingFragment();

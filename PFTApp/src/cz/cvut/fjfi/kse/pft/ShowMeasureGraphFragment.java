@@ -3,6 +3,12 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,12 +21,24 @@ import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 
+import cz.cvut.fjfi.kse.pft.db.Attribute;
+import cz.cvut.fjfi.kse.pft.db.Measure;
+
 /**
  * @author Petr Hruška
- *
+ * 
  */
-public class ShowMeasureGraphFragment extends Fragment{
+@SuppressLint("SimpleDateFormat")
+public class ShowMeasureGraphFragment extends Fragment {
 	View view;
+	Bundle args = new Bundle();
+	List<Measure> measures;
+	Measure nMeasure, oMeasure;
+	int size, axisX = 0;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	long diff;
+	String[] labelsH;
+
 	/**
 	 * 
 	 */
@@ -28,31 +46,61 @@ public class ShowMeasureGraphFragment extends Fragment{
 		// TODO Auto-generated constructor stub
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater,
+	 * android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		view = inflater.inflate(R.layout.fragment_showmeasuregraph, null);
+		args = getArguments();
+		Attribute attr = Attribute.findById(Attribute.class, args.getLong("attribute"));
+		measures = Measure.find(Measure.class, "attribute = ?",
+				"" + args.getLong("attribute"));
+		size = measures.size();
+		GraphViewData[] graphData = new GraphViewData[size];
+		labelsH = new String[size];
+
+		for (int i = 0; i < size; i++) {
+			nMeasure = measures.get(i);
+			if (i != 0) {
+				try {
+					diff = dateFormat.parse(nMeasure.getDate()).getTime()
+							- dateFormat.parse(oMeasure.getDate()).getTime();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				axisX += (int) (diff / (24 * 60 * 60 * 1000));
+			}
+			graphData[i] = new GraphViewData(axisX, nMeasure.getValue());
+			labelsH[i] = nMeasure.getDate();
+			oMeasure = nMeasure;
+		}
+
+		GraphViewSeries measureSeries = new GraphViewSeries(graphData);
+		GraphView graphView = new LineGraphView(getActivity(), attr.getName()+" progress");
+		graphView.addSeries(measureSeries);
+		graphView.setHorizontalLabels(labelsH);
 		
-		// init example series data
-		GraphViewSeries exampleSeries = new GraphViewSeries(new GraphViewData[] {
-		    new GraphViewData(1, 2.0d)
-		    , new GraphViewData(2, 1.5d)
-		    , new GraphViewData(3, 2.5d)
-		    , new GraphViewData(4, 1.0d)
-		});
-		 
-		GraphView graphView = new LineGraphView(
-		    getActivity() // context
-		    , "GraphViewDemo" // heading
-		);
-		graphView.addSeries(exampleSeries); // data
-		
-		LinearLayout layout = (LinearLayout) view.findViewById(R.id.measure_linearLayout);
+		LinearLayout layout = (LinearLayout) view
+				.findViewById(R.id.measure_linearLayout);
 		layout.addView(graphView);
 		return view;
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		getActivity().finish();
 	}
 }
