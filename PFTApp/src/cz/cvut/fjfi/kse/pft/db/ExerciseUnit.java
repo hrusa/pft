@@ -12,29 +12,57 @@ import android.content.Context;
  *
  */
 public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
+	private int idexerciseunit = 0;
 	private long exercise;
 	private long workout;
 	private boolean done = false;
 
 	/**
-	 * @param arg0
+	 * @param ctx
 	 */
-	public ExerciseUnit(Context arg0) {
-		super(arg0);
+	public ExerciseUnit(Context ctx) {
+		super(ctx);
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param arg0
+	 * @param ctx
 	 * @param exercise
 	 * @param workout
 	 */
-	public ExerciseUnit(Context arg0, long exercise, long workout) {
-		super(arg0);
+	public ExerciseUnit(Context ctx, long exercise, long workout) {
+		super(ctx);
+		this.exercise = exercise;
+		this.workout = workout;
+	}
+	
+	/**
+	 * @param ctx
+	 * @param id
+	 * @param exercise
+	 * @param workout
+	 */
+	public ExerciseUnit(Context ctx, int id, long exercise, long workout) {
+		super(ctx);
+		this.idexerciseunit = id;
 		this.exercise = exercise;
 		this.workout = workout;
 	}
 
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idexerciseunit;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idexerciseunit = id;
+	}
+	
 	/**
 	 * @return the exercise
 	 */
@@ -85,5 +113,9 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 		// TODO Auto-generated method stub
 		Exercise ex = Exercise.findById(Exercise.class, getExercise());
 		return ex.getName();
+	}
+	
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"exerciseId\":"+exercise+",\"workoutId\":"+workout+",\"done\":\""+done+"\"}";
 	}
 }

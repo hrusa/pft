@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Measure extends SugarRecord<Measure> {
+	private int idmeasure = 0;
 	private long trainee;
 	private long attribute;
 	private String date;	//YYYY-MM-DD
@@ -40,7 +41,39 @@ public class Measure extends SugarRecord<Measure> {
 		this.date = date;
 		this.value = value;
 	}
+	
+	/**
+	 * @param arg0
+	 * @param id
+	 * @param trainee
+	 * @param attribute
+	 * @param date
+	 * @param value
+	 */
+	public Measure(Context arg0, int id, long trainee, long attribute,
+			String date, int value) {
+		super(arg0);
+		this.idmeasure = id;
+		this.trainee = trainee;
+		this.attribute = attribute;
+		this.date = date;
+		this.value = value;
+	}
 
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idmeasure;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idmeasure = id;
+	}
+	
 	/**
 	 * @return the trainee
 	 */
@@ -97,4 +130,7 @@ public class Measure extends SugarRecord<Measure> {
 		this.value = value;
 	}
 
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"traineeId\":"+trainee+",\"attributeId\":"+attribute+",\"date\":\""+date+"\",\"value\":"+value+"}";
+	}
 }

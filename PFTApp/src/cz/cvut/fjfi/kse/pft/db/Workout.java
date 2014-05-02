@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Workout extends SugarRecord<Workout> {
+	private int idworkout = 0;
 	private long training;
 	private String name;
 	private String date;	//YYYY-MM-DD
@@ -36,6 +37,35 @@ public class Workout extends SugarRecord<Workout> {
 		this.training = training;
 		this.name = name;
 		this.date = date;
+	}
+	
+	/**
+	 * @param arg0
+	 * @param id
+	 * @param training
+	 * @param name
+	 * @param date
+	 */
+	public Workout(Context arg0, int id, long training, String name, String date) {
+		super(arg0);
+		this.idworkout = id;
+		this.training = training;
+		this.name = name;
+		this.date = date;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idworkout;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idworkout = id;
 	}
 
 	/**
@@ -98,5 +128,9 @@ public class Workout extends SugarRecord<Workout> {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return getName()+" planed on "+getDate();
+	}
+	
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"trainingId\":"+training+",\"name\":\""+name+"\",\"date\":\""+date+"\",\"done\":\""+done+"\"}";
 	}
 }

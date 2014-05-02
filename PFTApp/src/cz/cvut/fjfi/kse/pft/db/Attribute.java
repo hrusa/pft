@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Attribute extends SugarRecord<Attribute>{
+	private int idattribute = 0;
 	private String name;
 
 	/**
@@ -28,6 +29,31 @@ public class Attribute extends SugarRecord<Attribute>{
 	public Attribute(Context ctx, String name) {
 		super(ctx);
 		this.name = name;
+	}
+	
+	/**
+	 * @param ctx
+	 * @param id
+	 * @param name
+	 */
+	public Attribute(Context ctx, int id, String name) {
+		super(ctx);
+		this.idattribute = id;
+		this.name = name;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idattribute;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idattribute = id;
 	}
 
 	/**
@@ -51,5 +77,9 @@ public class Attribute extends SugarRecord<Attribute>{
 	public String toString() {
 		// TODO Auto-generated method stub
 		return getName();
+	}
+	
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\"}";
 	}
 }

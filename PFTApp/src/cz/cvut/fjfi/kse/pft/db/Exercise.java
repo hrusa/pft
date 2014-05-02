@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Exercise extends SugarRecord<Exercise> {
+	private int idexercise;
 	private String name;
 	private Difficulty difficulty;
 	private String description;
@@ -42,7 +43,40 @@ public class Exercise extends SugarRecord<Exercise> {
 		this.video = video;
 		this.musclegroup = group;
 	}
+	
+	/**
+	 * @param ctx
+	 * @param id
+	 * @param name
+	 * @param difficulty
+	 * @param description
+	 * @param video
+	 */
+	public Exercise(Context ctx, int id, String name, Difficulty difficulty,
+			String description, String video, long group) {
+		super(ctx);
+		this.idexercise = id;
+		this.name = name;
+		this.difficulty = difficulty;
+		this.description = description;
+		this.video = video;
+		this.musclegroup = group;
+	}
 
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idexercise;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idexercise = id;
+	}
+	
 	/**
 	 * @return the group
 	 */
@@ -122,4 +156,7 @@ public class Exercise extends SugarRecord<Exercise> {
 		return getName();
 	}
 
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\",\"difficultyId\":"+difficulty+",\"description\":\""+description+"\",\"video\":\""+video+"\",\"musclegroupId\":"+musclegroup+"}";
+	}
 }

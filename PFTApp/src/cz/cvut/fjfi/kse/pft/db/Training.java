@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Training extends SugarRecord<Training> {
+	private int idtraining = 0;
 	private long trainee;
 	private String name;
 
@@ -32,6 +33,33 @@ public class Training extends SugarRecord<Training> {
 		super(arg0);
 		this.trainee = trainee;
 		this.name = name;
+	}
+	
+	/**
+	 * @param arg0
+	 * @param id
+	 * @param trainee
+	 * @param name
+	 */
+	public Training(Context arg0, int id, long trainee, String name) {
+		super(arg0);
+		this.idtraining = id;
+		this.trainee = trainee;
+		this.name = name;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idtraining;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idtraining = id;
 	}
 
 	/**
@@ -69,5 +97,9 @@ public class Training extends SugarRecord<Training> {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return getName();
+	}
+	
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"traineeId\":"+trainee+",\"name\":\""+name+"\"}";
 	}
 }

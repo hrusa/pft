@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Trainee extends SugarRecord<Trainee> {
+	private int idtrainee = 0;
 	private String name;
 	private String email;
 	private String birth;	//YYYY-MM-DD
@@ -29,7 +30,10 @@ public class Trainee extends SugarRecord<Trainee> {
 	
 	/**
 	 * @param arg0
+	 * @param name
+	 * @param email
 	 * @param birth
+	 * @param gender
 	 */
 	public Trainee(Context arg0, String name, String email, String birth, int gender) {
 		super(arg0);
@@ -37,6 +41,37 @@ public class Trainee extends SugarRecord<Trainee> {
 		this.email = email;
 		this.birth = birth;
 		this.gender = gender;
+	}
+	
+	/**
+	 * @param arg0
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @param birth
+	 * @param gender
+	 */
+	public Trainee(Context arg0, int id, String name, String email, String birth, int gender) {
+		super(arg0);
+		this.idtrainee = id;
+		this.name = name;
+		this.email = email;
+		this.birth = birth;
+		this.gender = gender;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idtrainee;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idtrainee = id;
 	}
 	
 	/**
@@ -123,4 +158,7 @@ public class Trainee extends SugarRecord<Trainee> {
 		this.birth = birth;
 	}
 
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\",\"email\":\""+email+"\",\"birth\":\""+birth+"\",\"gender\":"+gender+",\"experience\":"+experience+",\"goal\":"+goal+"}";
+	}
 }

@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Serie extends SugarRecord<Serie> {
+	private int idserie = 0;
 	private long exerciseunit;
 	private int weight;
 	private int repetition;
@@ -42,6 +43,39 @@ public class Serie extends SugarRecord<Serie> {
 		this.weight = weight;
 		this.repetition = repetition;
 		this.pause = pause;
+	}
+	
+	/**
+	 * @param arg0
+	 * @param id
+	 * @param exerciseUnit
+	 * @param weight
+	 * @param repetition
+	 * @param pause
+	 * @param start
+	 * @param finish
+	 */
+	public Serie(Context arg0, int id, long exerciseUnit, int weight, int repetition, int pause) {
+		super(arg0);
+		this.idserie = id;
+		this.exerciseunit = exerciseUnit;
+		this.weight = weight;
+		this.repetition = repetition;
+		this.pause = pause;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idserie;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idserie = id;
 	}
 
 	/**
@@ -135,5 +169,9 @@ public class Serie extends SugarRecord<Serie> {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Weight: "+getWeight()+"kg, Repetition: "+getRepetition()+", Rest: "+getPause()+"s";
+	}
+	
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"exerciseunitId\":"+exerciseunit+",\"weight\":"+weight+",\"repetition\":"+repetition+",\"pause\":"+pause+",\"start\":\""+start+"\",\"finish\":\""+finish+"\"}";
 	}
 }

@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class MuscleGroup extends SugarRecord<MuscleGroup>{
+	private int idmusclegroup = 0;
 	private String name;
 
 	/**
@@ -28,6 +29,31 @@ public class MuscleGroup extends SugarRecord<MuscleGroup>{
 	public MuscleGroup(Context ctx, String name) {
 		super(ctx);
 		this.name = name;
+	}
+	
+	/**
+	 * @param ctx
+	 * @param id
+	 * @param name
+	 */
+	public MuscleGroup(Context ctx, int id, String name) {
+		super(ctx);
+		this.idmusclegroup = id;
+		this.name = name;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return idmusclegroup;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.idmusclegroup = id;
 	}
 
 	/**
@@ -53,4 +79,7 @@ public class MuscleGroup extends SugarRecord<MuscleGroup>{
 		return getName();
 	}
 
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\"}";
+	}
 }

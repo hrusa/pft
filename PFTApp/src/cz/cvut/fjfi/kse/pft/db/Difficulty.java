@@ -12,6 +12,7 @@ import android.content.Context;
  *
  */
 public class Difficulty extends SugarRecord<Difficulty>{
+	int iddifficulty = 0;
 	private String name;
 	
 	/**
@@ -29,7 +30,32 @@ public class Difficulty extends SugarRecord<Difficulty>{
 		super(ctx);
 		this.name = name;
 	}
+	
+	/**
+	 * @param ctx
+	 * @param id
+	 * @param name
+	 */
+	public Difficulty(Context ctx, int id, String name) {
+		super(ctx);
+		this.iddifficulty = id;
+		this.name = name;
+	}
 
+	/**
+	 * @return the id
+	 */
+	public int getWebId() {
+		return iddifficulty;
+	}
+
+	/**
+	 * @param id, the id to set
+	 */
+	public void setWebId(int id) {
+		this.iddifficulty = id;
+	}
+	
 	/**
 	 * @return the name
 	 */
@@ -44,4 +70,7 @@ public class Difficulty extends SugarRecord<Difficulty>{
 		this.name = name;
 	}
 
+	public String JSONString() {
+		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\"}";
+	}
 }
