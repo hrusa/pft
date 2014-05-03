@@ -24,7 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import cz.cvut.fjfi.kse.pft.db.Attribute;
+import cz.cvut.fjfi.kse.pft.db.Trainee;
 
 /**
  * @author Petr Hruska
@@ -43,7 +43,7 @@ public class UploadFragment extends Fragment{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		//new HttpAsyncTask().execute("http://192.168.1.100:1188/api/restexercises");
-		List<Attribute> attrs = Attribute.listAll(Attribute.class);
+	/*	List<Attribute> attrs = Attribute.listAll(Attribute.class);
 		for (Attribute attribute : attrs) {
 			Log.i("Attribute", attribute.toString());
 		}
@@ -53,8 +53,9 @@ public class UploadFragment extends Fragment{
 		List<Attribute> attrs2 = Attribute.listAll(Attribute.class);
 		for (Attribute attribute : attrs2) {
 			Log.i("Attribute", attribute.toString());
-		}
+		}*/
 
+		new HttpAsyncTask().execute();
 	}
 	
 	@Override
@@ -66,7 +67,7 @@ public class UploadFragment extends Fragment{
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 		
-		public static String POST(String url) {
+		public static String POST() {
 	        InputStream inputStream = null;
 	        String result = "";
 	        try {
@@ -74,9 +75,37 @@ public class UploadFragment extends Fragment{
 	            // 1. create HttpClient
 	            HttpClient httpclient = new DefaultHttpClient();
 	 
+	            //List<Trainee> trainees = Trainee.find(Trainee.class, "sync =?", "false");
+	            List<Trainee> trainees = Trainee.listAll(Trainee.class);
 	            // 2. make POST request to the given URL
-	            HttpPost httpPost = new HttpPost(url);
+	            if(!trainees.isEmpty()){
+	            	Log.i("Upload", "neni empty");
+	            	HttpPost httpPost = new HttpPost("http://192.168.1.100:1188/api/trainees");
+	            	String json = "";
+	            	for (Trainee trainee : trainees) {
+	            		JSONObject jsonObject = new JSONObject(trainee.JSONString());
+	            		json = jsonObject.toString();
+	            		StringEntity se = new StringEntity(json);
+	            		httpPost.setEntity(se);
+	            		httpPost.setHeader("Accept", "application/json");
+	    	            httpPost.setHeader("Content-type", "application/json");
+	    	            HttpResponse httpResponse = httpclient.execute(httpPost);
+	    	            inputStream = httpResponse.getEntity().getContent();
+	    	            if(inputStream != null) {
+	    	                result = convertInputStreamToString(inputStream);
+	    	                Log.i("Upload", "proslo to");
+	    	                Log.i("Upload", "result:"+result);
+	    	            }
+	    	            else {
+	    	                result = "null";
+	    	                Log.i("Upload", "neproslo to");
+	    	            }
+					}
+	            	Log.i("Upload result", result);
+	            }
+	           /* HttpPost httpPost = new HttpPost(url);
 	            String json = "";
+	            
 	            Attribute attribute = Attribute.findById(Attribute.class, Long.parseLong("1"));
 	            attribute.setId(Long.parseLong("25"));
 	            attribute.save();
@@ -114,7 +143,7 @@ public class UploadFragment extends Fragment{
 	            else {
 	                result = "Did not work!";
 	                Log.i("Upload", "neproslo to");
-	            }
+	            }*/
 	 
 	        } catch (Exception e) {
 	            Log.d("InputStream", e.getLocalizedMessage());
@@ -128,7 +157,7 @@ public class UploadFragment extends Fragment{
 	    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 	        @Override
 	        protected String doInBackground(String... urls) {
-	            return POST(urls[0]);
+	            return POST();
 	        }
 	        // onPostExecute displays the results of the AsyncTask.
 	        /*@Override

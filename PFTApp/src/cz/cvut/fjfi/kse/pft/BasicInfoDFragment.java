@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 import cz.cvut.fjfi.kse.pft.db.Attribute;
 import cz.cvut.fjfi.kse.pft.db.Measure;
 import cz.cvut.fjfi.kse.pft.db.Trainee;
@@ -81,22 +80,20 @@ public class BasicInfoDFragment extends DialogFragment{
                 //Do stuff, possibly set wantToCloseDialog to true then...
                 Log.i("RB", ""+rg.getCheckedRadioButtonId());
                 if(R.id.male_radio == rg.getCheckedRadioButtonId()) {
-                	Toast.makeText(getActivity(), "Male madafaka", Toast.LENGTH_SHORT).show();
                 	trainee = new Trainee(getActivity(), args.getString("name"), args.getString("email"), args.getString("birth"), 0);
                 	
                 } else {
-                	Toast.makeText(getActivity(), "Female biatch", Toast.LENGTH_SHORT).show();
                 	trainee = new Trainee(getActivity(), args.getString("name"), args.getString("email"), args.getString("birth"), 0);
                 }
                 trainee.save();
                 Log.i("DB insert: ", "Trainee ID " + trainee.getId() + " inserted as " + trainee.getName()+" "+ trainee.getEmail() +" "+trainee.getBirth()+trainee.getExperience()+trainee.getGoal()+trainee.getGender());
                 attrs = Attribute.listAll(Attribute.class);
-                if(attrs.isEmpty()) {
+/*                if(attrs.isEmpty()) {
 					height = new Attribute(getActivity(), "Height");
 					height.save();
 					weight = new Attribute(getActivity(), "Weight");
 					weight.save();
-                }
+                }*/
                 attrs = Attribute.find(Attribute.class, "name = ?", "Height");
                 //přidat kontrolu zadání hodnot!
                 mHeight = new Measure(getActivity(), trainee.getId(), attrs.get(0).getId(), getTodayDate(), Integer.parseInt(heightText.getText().toString()));

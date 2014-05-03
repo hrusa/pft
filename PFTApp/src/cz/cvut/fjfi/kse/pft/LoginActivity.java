@@ -5,9 +5,11 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
@@ -24,7 +26,7 @@ public class LoginActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		
 		// Odkomentovat az budu na linuxu a muzeme spustit login via google acc
 		if (savedInstanceState == null) {
 			List<Trainee> trainee = Trainee.listAll(Trainee.class);
@@ -43,7 +45,7 @@ public class LoginActivity extends FragmentActivity {
 		}
 
 		/*getSupportFragmentManager().beginTransaction()
-				.replace(R.id.container, new DownloadFragment(), "Download")
+				.replace(R.id.container, new UploadFragment(), "Upload")
 				.commit();*/
 
 		// Docasne reseni bez Google loginu, pak smazat

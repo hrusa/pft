@@ -80,6 +80,6 @@ public class Attribute extends SugarRecord<Attribute>{
 	}
 	
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"name\":\""+name+"\"}";
 	}
 }

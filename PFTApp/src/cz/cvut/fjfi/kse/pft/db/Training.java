@@ -15,6 +15,7 @@ public class Training extends SugarRecord<Training> {
 	private int idtraining = 0;
 	private long trainee;
 	private String name;
+	private boolean sync = false;
 
 	/**
 	 * @param arg0
@@ -46,6 +47,7 @@ public class Training extends SugarRecord<Training> {
 		this.idtraining = id;
 		this.trainee = trainee;
 		this.name = name;
+		this.sync = true;
 	}
 	
 	/**
@@ -90,6 +92,20 @@ public class Training extends SugarRecord<Training> {
 		this.name = name;
 	}
 
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -100,6 +116,6 @@ public class Training extends SugarRecord<Training> {
 	}
 	
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"traineeId\":"+trainee+",\"name\":\""+name+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"traineeId\":"+trainee+",\"name\":\""+name+"\"}";
 	}
 }

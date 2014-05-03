@@ -16,6 +16,7 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	private long exercise;
 	private long workout;
 	private boolean done = false;
+	private boolean sync = false;
 
 	/**
 	 * @param ctx
@@ -47,6 +48,7 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 		this.idexerciseunit = id;
 		this.exercise = exercise;
 		this.workout = workout;
+		this.sync = true;
 	}
 
 	/**
@@ -103,6 +105,20 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	 */
 	public void setDone(boolean done) {
 		this.done = done;
+	}	
+
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
 	}
 
 	/* (non-Javadoc)
@@ -116,6 +132,6 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	}
 	
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"exerciseId\":"+exercise+",\"workoutId\":"+workout+",\"done\":\""+done+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"exerciseId\":"+exercise+",\"workoutId\":"+workout+",\"done\":\""+done+"\"}";
 	}
 }

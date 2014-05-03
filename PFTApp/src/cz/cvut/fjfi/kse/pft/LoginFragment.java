@@ -436,7 +436,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 							jsonObject.getInt("id"),
 							jsonObject.getString("name"));
 					attribute.save();
-					Log.i("Attribute:", attribute.JSONString());
+					//Log.i("Attribute:", attribute.JSONString());
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -480,7 +480,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 							jsonObject.getInt("id"),
 							jsonObject.getString("name"));
 					muscleGroup.save();
-					Log.i("MuscleGroup:", muscleGroup.JSONString());
+					//Log.i("MuscleGroup:", muscleGroup.JSONString());
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -526,10 +526,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 							jsonObject.getString("description"),
 							jsonObject.getString("video"),
 							jsonObject.getLong("musclegroupId"));
-					/*
-					 * Long.valueOf(jsonObject.getString("difficultyId"))
-					 * Long.valueOf(jsonObject.getString("musclegroupId"))
-					 */
 					exercise.save();
 					Log.i("Exercise:", exercise.JSONString());
 				} catch (JSONException e) {
@@ -538,6 +534,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				}
 
 			}
+			new traineeDL().execute("http://192.168.1.100:1188/api/trainees/hruskapetr89");
 		}
 	}
 
@@ -579,9 +576,16 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 					new trainingDL()
 							.execute("http://192.168.1.100:1188/api/trainings/"
 									+ trainee.getWebId());
-					new measureDL()
-							.execute("http://192.168.1.100:1188/api/measures/"
-									+ trainee.getWebId());
+					Log.i("SAve trainee", trainee.JSONString());
+					List<Attribute> attrs = Attribute.listAll(Attribute.class);
+					for (Attribute attribute : attrs) {
+						new measureDL()
+								.execute("http://192.168.1.100:1188/api/measures/"
+										+ trainee.getWebId()
+										+ "/"
+										+ attribute.getWebId());
+					}
+
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -601,39 +605,28 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
-			if (result.contains("null")) {
+			JSONObject json = null;
+			try {
+				json = new JSONObject(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+			if (json == null) {
 
 			} else {
-				JSONArray json = null;
+				Measure measure;
 				try {
-					json = new JSONArray(result);
+					measure = new Measure(getActivity(), json.getInt("id"),
+							args.getLong("trainee"),
+							json.getLong("attributeId"),
+							json.getString("date"), json.getInt("value"));
+					measure.save();
+					Log.i("SAve measure", measure.JSONString());
 				} catch (JSONException e) {
-					Log.e("JSON Parser", "Error parsing data " + e.toString());
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
-				JSONObject jsonObject = null;
-				for (int i = 0; i < json.length(); i++) {
-					try {
-						jsonObject = json.getJSONObject(i);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					Measure measure;
-					try {
-						measure = new Measure(getActivity(),
-								jsonObject.getInt("id"),
-								args.getLong("trainee"),
-								jsonObject.getLong("attributeId"),
-								jsonObject.getString("date"),
-								jsonObject.getInt("value"));
-						measure.save();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				}
 			}
 		}
 	}
@@ -648,19 +641,19 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
-			if (result.contains("null")) {
-				MenuFragment fragment = new MenuFragment();
-				fragment.setArguments(args);
-				getFragmentManager().beginTransaction()
-						.replace(R.id.container, fragment, "Menu").commit();
-			} else {
 				JSONArray json = null;
 				try {
 					json = new JSONArray(result);
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
-
+				if(json==null) {
+					Log.i("Save training result:", result);
+					MenuFragment fragment = new MenuFragment();
+					fragment.setArguments(args);
+					getFragmentManager().beginTransaction()
+							.replace(R.id.container, fragment, "Menu").commit();
+				} else {
 				JSONObject jsonObject = null;
 				for (int i = 0; i < json.length(); i++) {
 					try {
@@ -681,6 +674,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 						new workoutDL()
 								.execute("http://192.168.1.100:1188/api/workouts/"
 										+ training.getWebId());
+						Log.i("Save training", training.JSONString());
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -701,19 +695,19 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
-			if (result.contains("null")) {
+			JSONArray json = null;
+			try {
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+			if(json==null) {
+				Log.i("Save training result:", result);
 				MenuFragment fragment = new MenuFragment();
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction()
 						.replace(R.id.container, fragment, "Menu").commit();
 			} else {
-				JSONArray json = null;
-				try {
-					json = new JSONArray(result);
-				} catch (JSONException e) {
-					Log.e("JSON Parser", "Error parsing data " + e.toString());
-				}
-
 				JSONObject jsonObject = null;
 				for (int i = 0; i < json.length(); i++) {
 					try {
@@ -732,6 +726,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 						workout.save();
 						args.remove("workout");
 						args.putLong("workout", workout.getId());
+						Log.i("Save workout", workout.JSONString());
 						new exerciseUnitDL()
 								.execute("http://192.168.1.100:1188/api/exerciseunits/"
 										+ workout.getWebId());
@@ -756,19 +751,19 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
-			if (result.contains("null")) {
+			JSONArray json = null;
+			try {
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+			if(json==null) {
+				Log.i("Save serie result:", result);
 				MenuFragment fragment = new MenuFragment();
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction()
 						.replace(R.id.container, fragment, "Menu").commit();
 			} else {
-				JSONArray json = null;
-				try {
-					json = new JSONArray(result);
-				} catch (JSONException e) {
-					Log.e("JSON Parser", "Error parsing data " + e.toString());
-				}
-
 				JSONObject jsonObject = null;
 				for (int i = 0; i < json.length(); i++) {
 					try {
@@ -786,9 +781,11 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 						exerciseUnit.save();
 						args.remove("exerciseunit");
 						args.putLong("exerciseunit", exerciseUnit.getId());
+						Log.i("Save exerciseunit", exerciseUnit.JSONString());
 						new serieDL()
 								.execute("http://192.168.1.100:1188/api/series/"
 										+ exerciseUnit.getWebId());
+						Log.i("Pokus o pridani serii z unitu:", exerciseUnit.getWebId()+"");
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -810,16 +807,22 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(String result) {
-			if (result.contains("null")) {
-
+			JSONArray json = null;
+			try {
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+			if(json==null) {
+				Log.i("Save training result:", result);
+				/*MenuFragment fragment = new MenuFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, fragment, "Menu").commit();*/
+				getFragmentManager().beginTransaction()
+				.replace(R.id.container, new UploadFragment(), "Upload")
+				.commit();
 			} else {
-				JSONArray json = null;
-				try {
-					json = new JSONArray(result);
-				} catch (JSONException e) {
-					Log.e("JSON Parser", "Error parsing data " + e.toString());
-				}
-
 				JSONObject jsonObject = null;
 				for (int i = 0; i < json.length(); i++) {
 					try {
@@ -837,6 +840,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 								jsonObject.getInt("repetition"),
 								jsonObject.getInt("pause"));
 						serie.save();
+						Log.i("Save serie", serie.JSONString());
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -844,10 +848,11 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 
 				}
 			}
-			MenuFragment fragment = new MenuFragment();
+			/*MenuFragment fragment = new MenuFragment();
 			fragment.setArguments(args);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fragment, "Menu").commit();
+					.replace(R.id.container, fragment, "Menu").commit();*/
+			
 		}
 
 	}

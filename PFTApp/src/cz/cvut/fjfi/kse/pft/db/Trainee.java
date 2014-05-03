@@ -19,6 +19,7 @@ public class Trainee extends SugarRecord<Trainee> {
 	private int gender;		//0 = male, 1 = female
 	private int experience = -1;	//0 = beginner, 1 = advanced, 2 = experienced
 	private int goal = -1;		//0 = lose fat, 2 = gain strength, 3 = bulking, 4 = cutting
+	private boolean sync = false;
 	
 	/**
 	 * @param arg0
@@ -62,6 +63,7 @@ public class Trainee extends SugarRecord<Trainee> {
 		this.gender = gender;
 		this.experience = experience;
 		this.goal = goal;
+		this.sync = true;
 	}
 	
 	/**
@@ -162,7 +164,21 @@ public class Trainee extends SugarRecord<Trainee> {
 		this.birth = birth;
 	}
 
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\",\"email\":\""+email+"\",\"birth\":\""+birth+"\",\"gender\":"+gender+",\"experience\":"+experience+",\"goal\":"+goal+"}";
+		return "{\"id\":"+this.getWebId()+",\"name\":\""+name+"\",\"email\":\""+email+"\",\"birth\":\""+birth+"\",\"gender\":"+gender+",\"experience\":"+experience+",\"goal\":"+goal+"}";
 	}
 }

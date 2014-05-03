@@ -17,6 +17,7 @@ public class Measure extends SugarRecord<Measure> {
 	private long attribute;
 	private String date;	//YYYY-MM-DD
 	private int value;
+	private boolean sync = false; 
 	
 	/**
 	 * @param arg0
@@ -58,6 +59,7 @@ public class Measure extends SugarRecord<Measure> {
 		this.attribute = attribute;
 		this.date = date;
 		this.value = value;
+		this.sync = true;
 	}
 
 	/**
@@ -130,7 +132,21 @@ public class Measure extends SugarRecord<Measure> {
 		this.value = value;
 	}
 
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"traineeId\":"+trainee+",\"attributeId\":"+attribute+",\"date\":\""+date+"\",\"value\":"+value+"}";
+		return "{\"id\":"+this.getWebId()+",\"traineeId\":"+trainee+",\"attributeId\":"+attribute+",\"date\":\""+date+"\",\"value\":"+value+"}";
 	}
 }

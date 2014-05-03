@@ -30,7 +30,7 @@ import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
 import cz.cvut.fjfi.kse.pft.db.Serie;
 
 /**
- * @author Petr Hruška
+ * @author Petr HruĹˇka
  * 
  */
 @SuppressLint("SimpleDateFormat")
@@ -107,6 +107,7 @@ public class StartRecordFragment extends Fragment {
 				serie.setRepetition(Integer.parseInt(sRepetition.getText()
 						.toString()));
 				serie.setPause(Integer.parseInt(sPause.getText().toString()));
+				serie.setSync(false);
 				serie.save();
 				startBtn.setVisibility(View.GONE);
 				stopBtn.setVisibility(View.VISIBLE);
@@ -133,6 +134,7 @@ public class StartRecordFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				exerciseU.setDone(true);
+				exerciseU.setSync(false);
 				exerciseU.save();
 				showWorkoutFragment();
 			}
@@ -152,6 +154,7 @@ public class StartRecordFragment extends Fragment {
 		Calendar calendar = Calendar.getInstance();
 
 		serie.setFinish(dateFormat.format(calendar.getTime()));
+		serie.setSync(false);
 		serie.save();
 		startBtn.setVisibility(View.VISIBLE);
 		stopBtn.setVisibility(View.GONE);
@@ -204,7 +207,7 @@ public class StartRecordFragment extends Fragment {
 	 */
 	private void showAddSerieDialog() {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Přidej serii", Toast.LENGTH_SHORT)
+		Toast.makeText(getActivity(), "PĹ™idej serii", Toast.LENGTH_SHORT)
 				.show();
 		AddSerieDFragment dialog = new AddSerieDFragment();
 		args.remove("serie");
@@ -216,8 +219,8 @@ public class StartRecordFragment extends Fragment {
 		if (currentSerie < size) {
 			if (series.get(currentSerie).getFinish() == null) {
 				if (args.getBoolean("1rm") && currentSerie == 0) {
-					// code for 1RM, to else možná smazat
-					// alertdialog, upozorňující na 1RM
+					// code for 1RM, to else moĹľnĂˇ smazat
+					// alertdialog, upozorĹ�ujĂ­cĂ­ na 1RM
 					AlertDialog.Builder alertDialogB = new AlertDialog.Builder(
 							getActivity());
 					alertDialogB
@@ -249,6 +252,7 @@ public class StartRecordFragment extends Fragment {
 				if (orm != 0) {
 					serie.setWeight((int) (orm * (1.0278 - 0.0278 * serie
 							.getRepetition())));
+					serie.setSync(false);
 					serie.save();
 					Log.i("StartRecord",
 							"seting new weight to:" + serie.getWeight());

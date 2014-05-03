@@ -71,6 +71,6 @@ public class Difficulty extends SugarRecord<Difficulty>{
 	}
 
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"name\":\""+name+"\"}";
 	}
 }

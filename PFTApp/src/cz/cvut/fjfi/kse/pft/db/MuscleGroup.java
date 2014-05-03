@@ -80,6 +80,6 @@ public class MuscleGroup extends SugarRecord<MuscleGroup>{
 	}
 
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"name\":\""+name+"\"}";
 	}
 }

@@ -56,6 +56,7 @@ public class ORMDFragment extends DialogFragment {
 				Log.i("ORMD", "Serie ID: "+args.getLong("serie"));
 				Serie serie = Serie.findById(Serie.class, args.getLong("serie"));
 				serie.setRepetition(Integer.parseInt(rep.getText().toString()));
+				serie.setSync(false);
 				serie.save();
 				((StartRecordFragment) getFragmentManager().findFragmentByTag("StartRecord")).doOnStopClick();
 				/*orm = serie.getWeight()

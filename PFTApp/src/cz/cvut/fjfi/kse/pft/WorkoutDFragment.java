@@ -69,6 +69,7 @@ public class WorkoutDFragment extends DialogFragment{
 				// TODO Auto-generated method stub
                 trainee.setExperience((int) experience.getSelectedItemId());
                 trainee.setGoal((int) goal.getSelectedItemId());
+                trainee.setSync(false);
                 trainee.save();
                 
                 //načíst nový dialog fragment s výběrem tréninku

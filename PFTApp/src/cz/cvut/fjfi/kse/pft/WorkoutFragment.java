@@ -73,6 +73,7 @@ public class WorkoutFragment extends ListFragment {
 											Workout.class,
 											args.getLong("workout"));
 									workout.setDone(true);
+									workout.setSync(false);
 									workout.save();
 									Calendar calendar = Calendar.getInstance();
 									try {

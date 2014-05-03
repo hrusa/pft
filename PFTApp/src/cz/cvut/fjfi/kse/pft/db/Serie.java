@@ -19,6 +19,7 @@ public class Serie extends SugarRecord<Serie> {
 	private int pause;
 	private String start = null;
 	private String finish = null;
+	private boolean sync = false;
 
 	/**
 	 * @param arg0
@@ -62,6 +63,7 @@ public class Serie extends SugarRecord<Serie> {
 		this.weight = weight;
 		this.repetition = repetition;
 		this.pause = pause;
+		this.sync = true;
 	}
 	
 	/**
@@ -162,6 +164,20 @@ public class Serie extends SugarRecord<Serie> {
 		this.finish = finish;
 	}
 
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -172,6 +188,6 @@ public class Serie extends SugarRecord<Serie> {
 	}
 	
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"exerciseunitId\":"+exerciseunit+",\"weight\":"+weight+",\"repetition\":"+repetition+",\"pause\":"+pause+",\"start\":\""+start+"\",\"finish\":\""+finish+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"exerciseunitId\":"+exerciseunit+",\"weight\":"+weight+",\"repetition\":"+repetition+",\"pause\":"+pause+",\"start\":\""+start+"\",\"finish\":\""+finish+"\"}";
 	}
 }

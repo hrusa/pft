@@ -157,6 +157,6 @@ public class Exercise extends SugarRecord<Exercise> {
 	}
 
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"name\":\""+name+"\",\"difficultyId\":"+difficulty+",\"description\":\""+description+"\",\"video\":\""+video+"\",\"musclegroupId\":"+musclegroup+"}";
+		return "{\"id\":"+this.getWebId()+",\"name\":\""+name+"\",\"difficultyId\":"+difficulty+",\"description\":\""+description+"\",\"video\":\""+video+"\",\"musclegroupId\":"+musclegroup+"}";
 	}
 }

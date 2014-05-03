@@ -17,6 +17,7 @@ public class Workout extends SugarRecord<Workout> {
 	private String name;
 	private String date;	//YYYY-MM-DD
 	private boolean done = false;
+	private boolean sync = false;
 
 	/**
 	 * @param arg0
@@ -52,6 +53,7 @@ public class Workout extends SugarRecord<Workout> {
 		this.training = training;
 		this.name = name;
 		this.date = date;
+		this.sync = true;
 	}
 	
 	/**
@@ -124,6 +126,20 @@ public class Workout extends SugarRecord<Workout> {
 		this.done = done;
 	}
 
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
@@ -131,6 +147,6 @@ public class Workout extends SugarRecord<Workout> {
 	}
 	
 	public String JSONString() {
-		return "{\"id\":"+this.getId()+",\"trainingId\":"+training+",\"name\":\""+name+"\",\"date\":\""+date+"\",\"done\":\""+done+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"trainingId\":"+training+",\"name\":\""+name+"\",\"date\":\""+date+"\",\"done\":\""+done+"\"}";
 	}
 }
