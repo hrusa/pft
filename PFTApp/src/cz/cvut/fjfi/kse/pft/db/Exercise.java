@@ -14,7 +14,7 @@ import android.content.Context;
 public class Exercise extends SugarRecord<Exercise> {
 	private int idexercise;
 	private String name;
-	private Difficulty difficulty;
+	private long difficulty;
 	private String description;
 	private String video;
 	private long musclegroup;
@@ -34,7 +34,7 @@ public class Exercise extends SugarRecord<Exercise> {
 	 * @param description
 	 * @param video
 	 */
-	public Exercise(Context arg0, String name, Difficulty difficulty,
+	public Exercise(Context arg0, String name, long difficulty,
 			String description, String video, long group) {
 		super(arg0);
 		this.name = name;
@@ -52,7 +52,7 @@ public class Exercise extends SugarRecord<Exercise> {
 	 * @param description
 	 * @param video
 	 */
-	public Exercise(Context ctx, int id, String name, Difficulty difficulty,
+	public Exercise(Context ctx, int id, String name, long difficulty,
 			String description, String video, long group) {
 		super(ctx);
 		this.idexercise = id;
@@ -108,14 +108,14 @@ public class Exercise extends SugarRecord<Exercise> {
 	/**
 	 * @return the difficulty
 	 */
-	public Difficulty getDifficulty() {
+	public long getDifficulty() {
 		return difficulty;
 	}
 
 	/**
 	 * @param difficulty the difficulty to set
 	 */
-	public void setDifficulty(Difficulty difficulty) {
+	public void setDifficulty(long difficulty) {
 		this.difficulty = difficulty;
 	}
 

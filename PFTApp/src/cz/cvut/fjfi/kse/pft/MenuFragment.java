@@ -12,9 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import cz.cvut.fjfi.kse.pft.db.Difficulty;
 import cz.cvut.fjfi.kse.pft.db.Exercise;
-import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
 import cz.cvut.fjfi.kse.pft.db.Training;
 
 /**
@@ -48,7 +46,7 @@ public class MenuFragment extends Fragment {
 		// TODO Auto-generated method stub
 		view = inflater.inflate(R.layout.fragment_menu, null);
 		args = getArguments();
-		insertDB();
+		//insertDB();
 
 		trainings = Training.listAll(Training.class);
 
@@ -139,7 +137,7 @@ public class MenuFragment extends Fragment {
 		return view;
 	}
 
-	private void insertDB() {
+	/*private void insertDB() {
 		List<Difficulty> diffs = Difficulty.listAll(Difficulty.class);
 		if (diffs.isEmpty()) {
 			Difficulty diff = new Difficulty(getActivity(), "Beginner");
@@ -294,5 +292,5 @@ public class MenuFragment extends Fragment {
 			exercise.save();
 
 		}
-	}
+	}*/
 }

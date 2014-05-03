@@ -3,7 +3,19 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -13,6 +25,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -38,7 +51,16 @@ import com.google.android.gms.plus.People.LoadPeopleResult;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
+import cz.cvut.fjfi.kse.pft.db.Attribute;
+import cz.cvut.fjfi.kse.pft.db.Difficulty;
+import cz.cvut.fjfi.kse.pft.db.Exercise;
+import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Measure;
+import cz.cvut.fjfi.kse.pft.db.MuscleGroup;
+import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Trainee;
+import cz.cvut.fjfi.kse.pft.db.Training;
+import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
  * @author Petr Hruška
@@ -71,6 +93,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	private TextView mUser;
 	private SignInButton mSignInButton;
 	private Button mSignOutButton;
+	private String email, name = "";
 
 	private AccountManager mAccountManager;
 
@@ -90,6 +113,12 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		List<Difficulty> diffs = Difficulty.listAll(Difficulty.class);
+		if (diffs.isEmpty()) {
+			new difficultyDL()
+					.execute("http://192.168.1.100:1188/api/difficulties/");
+			Log.i("login", "po startu asyncu");
+		}
 		Log.i("onCreate: ", "started");
 
 		mGoogleApiClient = buildGoogleApiClient();
@@ -198,18 +227,19 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		List<Trainee> trainee = Trainee.find(Trainee.class, "email = ?",
 				getAccountNames());
 		if (trainee.isEmpty()) {
-			args.putString("name", currentUser.getDisplayName());
-			args.putString("email", getAccountNames());
-			BirthdateDFragment dialog = new BirthdateDFragment();
-			dialog.setArguments(args);
-			getFragmentManager().beginTransaction()
-					.replace(R.id.container, dialog).commit();
+			// args.putString("name", currentUser.getDisplayName());
+			// args.putString("email", getAccountNames().split("@")[0]);
+			name = currentUser.getDisplayName();
+			email = getAccountNames().split("@")[0];
+			new traineeDL().execute("http://192.168.1.100:1188/api/trainees/"
+					+ email);
 		} else {
 			args.clear();
 			args.putLong("trainee", trainee.get(0).getId());
 			MenuFragment fragment = new MenuFragment();
 			fragment.setArguments(args);
-			getFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").commit();
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, fragment, "Menu").commit();
 		}
 	}
 
@@ -325,5 +355,540 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	public void onResult(LoadPeopleResult arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	// AsyncTask
+
+	private class difficultyDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+			Log.i("async diff", "started");
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			JSONArray json = null;
+			try {
+				Log.i("async diff", "tvorba json arraye");
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+
+			JSONObject jsonObject = null;
+			for (int i = 0; i < json.length(); i++) {
+				try {
+					Log.i("async diff", "tvorba json objectu");
+					jsonObject = json.getJSONObject(i);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.i("async diff", "inicializace diff");
+				Difficulty difficulty;
+				try {
+					difficulty = new Difficulty(getActivity(),
+							jsonObject.getInt("id"),
+							jsonObject.getString("name"));
+					difficulty.save();
+					Log.i("Difficulty:", difficulty.JSONString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			new attributeDL()
+					.execute("http://192.168.1.100:1188/api/attributes");
+		}
+	}
+
+	private class attributeDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			JSONArray json = null;
+			try {
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+
+			JSONObject jsonObject = null;
+			for (int i = 0; i < json.length(); i++) {
+				try {
+					jsonObject = json.getJSONObject(i);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Attribute attribute;
+				try {
+					attribute = new Attribute(getActivity(),
+							jsonObject.getInt("id"),
+							jsonObject.getString("name"));
+					attribute.save();
+					Log.i("Attribute:", attribute.JSONString());
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			new muscleGroupDL()
+					.execute("http://192.168.1.100:1188/api/musclegroups");
+		}
+	}
+
+	private class muscleGroupDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			JSONArray json = null;
+			try {
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+
+			JSONObject jsonObject = null;
+			for (int i = 0; i < json.length(); i++) {
+				try {
+					jsonObject = json.getJSONObject(i);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				MuscleGroup muscleGroup;
+				try {
+					muscleGroup = new MuscleGroup(getActivity(),
+							jsonObject.getInt("id"),
+							jsonObject.getString("name"));
+					muscleGroup.save();
+					Log.i("MuscleGroup:", muscleGroup.JSONString());
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			new exerciseDL().execute("http://192.168.1.100:1188/api/exercises");
+		}
+	}
+
+	private class exerciseDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			JSONArray json = null;
+			try {
+				json = new JSONArray(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+
+			JSONObject jsonObject = null;
+			for (int i = 0; i < json.length(); i++) {
+				try {
+					jsonObject = json.getJSONObject(i);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Exercise exercise;
+				try {
+					exercise = new Exercise(getActivity(),
+							jsonObject.getInt("id"),
+							jsonObject.getString("name"),
+							jsonObject.getLong("difficultyId"),
+							jsonObject.getString("description"),
+							jsonObject.getString("video"),
+							jsonObject.getLong("musclegroupId"));
+					/*
+					 * Long.valueOf(jsonObject.getString("difficultyId"))
+					 * Long.valueOf(jsonObject.getString("musclegroupId"))
+					 */
+					exercise.save();
+					Log.i("Exercise:", exercise.JSONString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private class traineeDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			JSONObject json = null;
+			try {
+				json = new JSONObject(result);
+			} catch (JSONException e) {
+				Log.e("JSON Parser", "Error parsing data " + e.toString());
+			}
+
+			if (json == null) {
+				args.putString("name", name);
+				args.putString("email", email);
+				BirthdateDFragment dialog = new BirthdateDFragment();
+				dialog.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, dialog).commit();
+			} else {
+				Trainee trainee;
+				try {
+					trainee = new Trainee(getActivity(), json.getInt("id"),
+							json.getString("name"), json.getString("email"),
+							json.getString("birth").split("T")[0],
+							json.getInt("gender"), json.getInt("experience"),
+							json.getInt("goal"));
+					trainee.save();
+					args.clear();
+					args.putLong("trainee", trainee.getId());
+					new trainingDL()
+							.execute("http://192.168.1.100:1188/api/trainings/"
+									+ trainee.getWebId());
+					new measureDL()
+							.execute("http://192.168.1.100:1188/api/measures/"
+									+ trainee.getWebId());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private class measureDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.contains("null")) {
+
+			} else {
+				JSONArray json = null;
+				try {
+					json = new JSONArray(result);
+				} catch (JSONException e) {
+					Log.e("JSON Parser", "Error parsing data " + e.toString());
+				}
+
+				JSONObject jsonObject = null;
+				for (int i = 0; i < json.length(); i++) {
+					try {
+						jsonObject = json.getJSONObject(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Measure measure;
+					try {
+						measure = new Measure(getActivity(),
+								jsonObject.getInt("id"),
+								args.getLong("trainee"),
+								jsonObject.getLong("attributeId"),
+								jsonObject.getString("date"),
+								jsonObject.getInt("value"));
+						measure.save();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+		}
+	}
+
+	private class trainingDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.contains("null")) {
+				MenuFragment fragment = new MenuFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, fragment, "Menu").commit();
+			} else {
+				JSONArray json = null;
+				try {
+					json = new JSONArray(result);
+				} catch (JSONException e) {
+					Log.e("JSON Parser", "Error parsing data " + e.toString());
+				}
+
+				JSONObject jsonObject = null;
+				for (int i = 0; i < json.length(); i++) {
+					try {
+						jsonObject = json.getJSONObject(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Training training;
+					try {
+						training = new Training(getActivity(),
+								jsonObject.getInt("id"),
+								args.getLong("trainee"),
+								jsonObject.getString("name"));
+						training.save();
+						args.remove("training");
+						args.putLong("training", training.getId());
+						new workoutDL()
+								.execute("http://192.168.1.100:1188/api/workouts/"
+										+ training.getWebId());
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+		}
+	}
+
+	private class workoutDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.contains("null")) {
+				MenuFragment fragment = new MenuFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, fragment, "Menu").commit();
+			} else {
+				JSONArray json = null;
+				try {
+					json = new JSONArray(result);
+				} catch (JSONException e) {
+					Log.e("JSON Parser", "Error parsing data " + e.toString());
+				}
+
+				JSONObject jsonObject = null;
+				for (int i = 0; i < json.length(); i++) {
+					try {
+						jsonObject = json.getJSONObject(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Workout workout;
+					try {
+						workout = new Workout(getActivity(),
+								jsonObject.getInt("id"),
+								args.getLong("training"),
+								jsonObject.getString("name"), jsonObject
+										.getString("date").split("T")[0]);
+						workout.save();
+						args.remove("workout");
+						args.putLong("workout", workout.getId());
+						new exerciseUnitDL()
+								.execute("http://192.168.1.100:1188/api/exerciseunits/"
+										+ workout.getWebId());
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+		}
+
+	}
+
+	private class exerciseUnitDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.contains("null")) {
+				MenuFragment fragment = new MenuFragment();
+				fragment.setArguments(args);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.container, fragment, "Menu").commit();
+			} else {
+				JSONArray json = null;
+				try {
+					json = new JSONArray(result);
+				} catch (JSONException e) {
+					Log.e("JSON Parser", "Error parsing data " + e.toString());
+				}
+
+				JSONObject jsonObject = null;
+				for (int i = 0; i < json.length(); i++) {
+					try {
+						jsonObject = json.getJSONObject(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ExerciseUnit exerciseUnit;
+					try {
+						exerciseUnit = new ExerciseUnit(getActivity(),
+								jsonObject.getInt("id"),
+								jsonObject.getInt("exerciseId"),
+								args.getLong("workout"));
+						exerciseUnit.save();
+						args.remove("exerciseunit");
+						args.putLong("exerciseunit", exerciseUnit.getId());
+						new serieDL()
+								.execute("http://192.168.1.100:1188/api/series/"
+										+ exerciseUnit.getWebId());
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+		}
+
+	}
+
+	private class serieDL extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+
+			return GET(urls[0]);
+		}
+
+		// onPostExecute displays the results of the AsyncTask.
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.contains("null")) {
+
+			} else {
+				JSONArray json = null;
+				try {
+					json = new JSONArray(result);
+				} catch (JSONException e) {
+					Log.e("JSON Parser", "Error parsing data " + e.toString());
+				}
+
+				JSONObject jsonObject = null;
+				for (int i = 0; i < json.length(); i++) {
+					try {
+						jsonObject = json.getJSONObject(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Serie serie;
+					try {
+						serie = new Serie(getActivity(),
+								jsonObject.getInt("id"),
+								args.getLong("exerciseunit"),
+								jsonObject.getInt("weight"),
+								jsonObject.getInt("repetition"),
+								jsonObject.getInt("pause"));
+						serie.save();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+			MenuFragment fragment = new MenuFragment();
+			fragment.setArguments(args);
+			getFragmentManager().beginTransaction()
+					.replace(R.id.container, fragment, "Menu").commit();
+		}
+
+	}
+
+	public static String GET(String url) {
+		InputStream inputStream = null;
+		String result = "";
+		try {
+
+			// create HttpClient
+			HttpClient httpclient = new DefaultHttpClient();
+
+			// make GET request to the given URL
+			HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+			// receive response as inputStream
+			inputStream = httpResponse.getEntity().getContent();
+
+			// convert inputstream to string
+			if (inputStream != null)
+				result = convertInputStreamToString(inputStream);
+			else
+				result = "Did not work!";
+
+		} catch (Exception e) {
+			Log.d("InputStream", e.getLocalizedMessage());
+		}
+
+		return result;
+	}
+
+	private static String convertInputStreamToString(InputStream inputStream)
+			throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(inputStream));
+		String line = "";
+		String result = "";
+		while ((line = bufferedReader.readLine()) != null)
+			result += line;
+
+		inputStream.close();
+		return result;
 	}
 }

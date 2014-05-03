@@ -27,7 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
+import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
 
 /**
  * @author Petr Hruska
@@ -60,7 +60,7 @@ public class DownloadFragment extends Fragment {
 			e.printStackTrace();
 		}*/
 		
-		new HttpAsyncTask().execute("http://192.168.1.100:1188/api/restexercises");
+		new HttpAsyncTask().execute("http://192.168.1.100:1188/api/exerciseunits/8");
 		//getActivity().finish();
 	}
 	
@@ -82,36 +82,47 @@ public class DownloadFragment extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getActivity(), "Received!", Toast.LENGTH_LONG).show();
-            /*JSONObject json = null;
-			try {
-				json = new JSONObject(result);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            try {
-				text.setText(json.toString(1));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+        	if(result.contains("null")) {
+        		Log.i("Save exerciseUnit", "Naprdet");
+        	} else {
             JSONArray json = null;
             try {
                 json = new JSONArray(result);
             } catch (JSONException e) {
                 Log.e("JSON Parser", "Error parsing data " + e.toString());
             }
-            Log.i("Jak je dlouhe pole", ""+json.length());
             
-            try {
-				text.setText(json.getJSONObject(0).toString(1));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+            if(json.length() == 0) {
+            	Log.i("Save exerciseUnit", "Naprdet");
+			} else {
+				JSONObject jsonObject = null;
+				for(int i =0;i<json.length();i++) {
+					try {
+						jsonObject = json.getJSONObject(i);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ExerciseUnit exerciseUnit;
+					try {
+						text.setText(json.toString());
+						exerciseUnit = new ExerciseUnit(getActivity(), jsonObject.getInt("id"), jsonObject.getInt("exerciseId"), Long.valueOf("9"));
+						exerciseUnit.save();
+						Log.i("Save exerciseUnit", exerciseUnit.JSONString());
+						exerciseUnit.delete();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}				
 			}
+        	}
        }
+        
+        
     }
+
 	
 	public static String GET(String url){
         InputStream inputStream = null;

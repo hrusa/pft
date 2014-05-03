@@ -50,14 +50,18 @@ public class Trainee extends SugarRecord<Trainee> {
 	 * @param email
 	 * @param birth
 	 * @param gender
+	 * @param experience
+	 * @param goal
 	 */
-	public Trainee(Context arg0, int id, String name, String email, String birth, int gender) {
+	public Trainee(Context arg0, int id, String name, String email, String birth, int gender, int experience, int goal) {
 		super(arg0);
 		this.idtrainee = id;
 		this.name = name;
 		this.email = email;
 		this.birth = birth;
 		this.gender = gender;
+		this.experience = experience;
+		this.goal = goal;
 	}
 	
 	/**
