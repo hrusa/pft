@@ -12,6 +12,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -19,8 +20,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
 import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Workout;
@@ -32,6 +35,7 @@ import cz.cvut.fjfi.kse.pft.db.Workout;
 @SuppressLint("SimpleDateFormat")
 public class WorkoutFragment extends ListFragment {
 	private ArrayAdapter<ExerciseUnit> adapter;
+	private ExerciseUnit exerciseUnit;
 	Bundle args;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -54,6 +58,52 @@ public class WorkoutFragment extends ListFragment {
 		adapter = new ArrayAdapter<ExerciseUnit>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, exerciseU);
+
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				exerciseUnit = adapter.getItem(arg2);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						getActivity());
+				alertDialogBuilder
+						.setTitle("Delete " + exerciseUnit.toString() + "?")
+						.setMessage(
+								"Do you realy want to delete \""
+										+ exerciseUnit.toString()
+										+ "\" exercise unit?")
+						.setCancelable(false)
+						.setPositiveButton("Yes", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+
+								List<Serie> series = Serie.find(Serie.class,
+										"exerciseunit =?",
+										"" + exerciseUnit.getId());
+								for (Serie serie : series) {
+									serie.delete();
+								}
+								exerciseUnit.delete();
+							}
+						}).setNegativeButton("No", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								dialog.cancel();
+							}
+						}).create().show();
+				return false;
+			}
+
+		});
+
 		setListAdapter(adapter);
 
 		if (exerciseU.isEmpty() && args.getBoolean("record")) {
@@ -77,24 +127,47 @@ public class WorkoutFragment extends ListFragment {
 									workout.save();
 									Calendar calendar = Calendar.getInstance();
 									try {
-										calendar.setTime(dateFormat.parse(workout.getDate()));
+										calendar.setTime(dateFormat
+												.parse(workout.getDate()));
 									} catch (ParseException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 									calendar.add(Calendar.DATE, 7);
-									Workout newWorkout = new Workout(getActivity(), args.getLong("training"), workout.getName(), dateFormat.format(calendar.getTime()));
+									Workout newWorkout = new Workout(
+											getActivity(), args
+													.getLong("training"),
+											workout.getName(), dateFormat
+													.format(calendar.getTime()));
 									newWorkout.save();
-									List<ExerciseUnit> exerciseUs = ExerciseUnit.find(ExerciseUnit.class, "workout = ?", ""+workout.getId());
-									for(int i = 0; i < exerciseUs.size(); i++) {
-										ExerciseUnit newExersiseU = new ExerciseUnit(getActivity(), exerciseUs.get(i).getExercise(), newWorkout.getId());
+									List<ExerciseUnit> exerciseUs = ExerciseUnit
+											.find(ExerciseUnit.class,
+													"workout = ?",
+													"" + workout.getId());
+									for (int i = 0; i < exerciseUs.size(); i++) {
+										ExerciseUnit newExersiseU = new ExerciseUnit(
+												getActivity(), exerciseUs
+														.get(i).getExercise(),
+												newWorkout.getId());
 										newExersiseU.save();
-										Log.i("WorkoutFragment", "přidána exerciseunit #"+i);
-										List<Serie> series = Serie.find(Serie.class, "exerciseunit = ?", ""+exerciseUs.get(i).getId());
-										for(int j = 0; j < series.size(); j++) {
-											Serie serie = new Serie(getActivity(), newExersiseU.getId(), series.get(j).getWeight(), series.get(j).getRepetition(), series.get(j).getPause());
+										Log.i("WorkoutFragment",
+												"přidána exerciseunit #" + i);
+										List<Serie> series = Serie.find(
+												Serie.class,
+												"exerciseunit = ?", ""
+														+ exerciseUs.get(i)
+																.getId());
+										for (int j = 0; j < series.size(); j++) {
+											Serie serie = new Serie(
+													getActivity(), newExersiseU
+															.getId(),
+													series.get(j).getWeight(),
+													series.get(j)
+															.getRepetition(),
+													series.get(j).getPause());
 											serie.save();
-											Log.i("WorkoutFragment", "přidána serie #"+j);
+											Log.i("WorkoutFragment",
+													"přidána serie #" + j);
 										}
 									}
 									TrainingFragment fragment = new TrainingFragment();
@@ -159,8 +232,10 @@ public class WorkoutFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		ExerciseUnit exerciseU = adapter.getItem(position);
-		List<ExerciseUnit> units = ExerciseUnit.find(ExerciseUnit.class, "exercise = ? and done = ?", ""+exerciseU.getExercise(), "true");
-		if(units.isEmpty()) {
+		List<ExerciseUnit> units = ExerciseUnit.find(ExerciseUnit.class,
+				"exercise = ? and done = ?", "" + exerciseU.getExercise(),
+				"true");
+		if (units.isEmpty()) {
 			args.putBoolean("1rm", true);
 		} else {
 			args.putBoolean("1rm", false);

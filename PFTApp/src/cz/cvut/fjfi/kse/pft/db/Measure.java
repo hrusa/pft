@@ -145,8 +145,18 @@ public class Measure extends SugarRecord<Measure> {
 	public void setSync(boolean sync) {
 		this.sync = sync;
 	}
+	
+	public int getTraineeWeb() {
+		Trainee tre = Trainee.findById(Trainee.class, getTrainee());
+		return tre.getWebId();
+	}
+	
+	public int getAttributeWeb() {
+		Attribute attr = Attribute.findById(Attribute.class, getAttribute());
+		return attr.getWebId();
+	}
 
 	public String JSONString() {
-		return "{\"id\":"+this.getWebId()+",\"traineeId\":"+trainee+",\"attributeId\":"+attribute+",\"date\":\""+date+"\",\"value\":"+value+"}";
+		return "{\"id\":"+this.getWebId()+",\"traineeId\":"+getTraineeWeb()+",\"attributeId\":"+getAttributeWeb()+",\"date\":\""+date+"\",\"value\":"+value+"}";
 	}
 }

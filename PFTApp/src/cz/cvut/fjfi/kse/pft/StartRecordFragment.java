@@ -217,7 +217,7 @@ public class StartRecordFragment extends Fragment {
 
 	private void setupRecordSerie() {
 		if (currentSerie < size) {
-			if (series.get(currentSerie).getFinish() == null) {
+			if (series.get(currentSerie).getFinish() == "1970-01-01") {
 				if (args.getBoolean("1rm") && currentSerie == 0) {
 					// code for 1RM, to else moĹľnĂˇ smazat
 					// alertdialog, upozorĹ�ujĂ­cĂ­ na 1RM

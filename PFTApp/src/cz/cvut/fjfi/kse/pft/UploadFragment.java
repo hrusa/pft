@@ -24,7 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Measure;
+import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Trainee;
+import cz.cvut.fjfi.kse.pft.db.Training;
+import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
  * @author Petr Hruska
@@ -55,7 +60,7 @@ public class UploadFragment extends Fragment{
 			Log.i("Attribute", attribute.toString());
 		}*/
 
-		new HttpAsyncTask().execute();
+		//new HttpAsyncTask().execute();
 	}
 	
 	@Override
@@ -75,8 +80,8 @@ public class UploadFragment extends Fragment{
 	            // 1. create HttpClient
 	            HttpClient httpclient = new DefaultHttpClient();
 	 
-	            //List<Trainee> trainees = Trainee.find(Trainee.class, "sync =?", "false");
-	            List<Trainee> trainees = Trainee.listAll(Trainee.class);
+	            List<Trainee> trainees = Trainee.find(Trainee.class, "sync =?", "false");
+	            //List<Trainee> trainees = Trainee.listAll(Trainee.class);
 	            // 2. make POST request to the given URL
 	            if(!trainees.isEmpty()){
 	            	Log.i("Upload", "neni empty");
@@ -100,50 +105,193 @@ public class UploadFragment extends Fragment{
 	    	                result = "null";
 	    	                Log.i("Upload", "neproslo to");
 	    	            }
+	    	            jsonObject = new JSONObject(result);
+		            	if(jsonObject!=null) {
+		            		trainee.setWebId(jsonObject.getInt("id"));
+		            		trainee.setSync(true);
+		            		trainee.save();
+		            	}
 					}
 	            	Log.i("Upload result", result);
+	            	
 	            }
-	           /* HttpPost httpPost = new HttpPost(url);
-	            String json = "";
 	            
-	            Attribute attribute = Attribute.findById(Attribute.class, Long.parseLong("1"));
-	            attribute.setId(Long.parseLong("25"));
-	            attribute.save();
-	            String attr = attribute.JSONString();
-	            Log.i("Test JSONString", attr);
-	            // 3. build jsonObject
-	            //String attr = "{\"id\":3,\"name\":\"Pupek\"}";
-	            JSONObject jsonObject = new JSONObject(attr);
-
-	            // 4. convert JSONObject to JSON to String
-	            json = jsonObject.toString();
-	            Log.i("Test json", json);
-	            // 5. set json to StringEntity
-	            StringEntity se = new StringEntity(json);
-	 
-	            // 6. set httpPost Entity
-	            httpPost.setEntity(se);
-	 
-	            // 7. Set some headers to inform server about the type of the content   
-	            httpPost.setHeader("Accept", "application/json");
-	            httpPost.setHeader("Content-type", "application/json");
-	 
-	            // 8. Execute POST request to the given URL
-	            HttpResponse httpResponse = httpclient.execute(httpPost);
-	 
-	            // 9. receive response as inputStream
-	            inputStream = httpResponse.getEntity().getContent();
-	 
-	            // 10. convert inputstream to string
-	            if(inputStream != null) {
-	                result = convertInputStreamToString(inputStream);
-	                Log.i("Upload", "proslo to");
-	                Log.i("Upload", "result:"+result);
+	            List<Measure> measures = Measure.find(Measure.class, "sync =?", "false");
+	            //List<Measure> measures = Measure.listAll(Measure.class);
+	            if(!measures.isEmpty()){
+	            	Log.i("Upload", "neni empty");
+	            	HttpPost httpPost = new HttpPost("http://192.168.1.100:1188/api/measures");
+	            	String json = "";
+	            	for (Measure measure : measures) {
+	            		JSONObject jsonObject = new JSONObject(measure.JSONString());
+	            		json = jsonObject.toString();
+	            		StringEntity se = new StringEntity(json);
+	            		httpPost.setEntity(se);
+	            		httpPost.setHeader("Accept", "application/json");
+	    	            httpPost.setHeader("Content-type", "application/json");
+	    	            HttpResponse httpResponse = httpclient.execute(httpPost);
+	    	            inputStream = httpResponse.getEntity().getContent();
+	    	            if(inputStream != null) {
+	    	                result = convertInputStreamToString(inputStream);
+	    	                Log.i("Upload", "proslo to");
+	    	                Log.i("Upload", "result:"+result);
+	    	            }
+	    	            else {
+	    	                result = "null";
+	    	                Log.i("Upload", "neproslo to");
+	    	            }
+	    	            jsonObject = new JSONObject(result);
+		            	if(jsonObject!=null) {
+		            		measure.setWebId(jsonObject.getInt("id"));
+		            		measure.setSync(true);
+		            		measure.save();
+		            	}
+					}
+	            	Log.i("Upload result", result);
+	            	
 	            }
-	            else {
-	                result = "Did not work!";
-	                Log.i("Upload", "neproslo to");
-	            }*/
+	            
+	            List<Training> trainings = Training.find(Training.class, "sync =?", "false");
+	            //List<Training> trainings = Training.listAll(Training.class);
+	            if(!measures.isEmpty()){
+	            	Log.i("Upload", "neni empty");
+	            	HttpPost httpPost = new HttpPost("http://192.168.1.100:1188/api/trainings");
+	            	String json = "";
+	            	for (Training training : trainings) {
+	            		JSONObject jsonObject = new JSONObject(training.JSONString());
+	            		json = jsonObject.toString();
+	            		StringEntity se = new StringEntity(json);
+	            		httpPost.setEntity(se);
+	            		httpPost.setHeader("Accept", "application/json");
+	    	            httpPost.setHeader("Content-type", "application/json");
+	    	            HttpResponse httpResponse = httpclient.execute(httpPost);
+	    	            inputStream = httpResponse.getEntity().getContent();
+	    	            if(inputStream != null) {
+	    	                result = convertInputStreamToString(inputStream);
+	    	                Log.i("Upload", "proslo to");
+	    	                Log.i("Upload", "result:"+result);
+	    	            }
+	    	            else {
+	    	                result = "null";
+	    	                Log.i("Upload", "neproslo to");
+	    	            }
+	    	            jsonObject = new JSONObject(result);
+		            	if(jsonObject!=null) {
+		            		training.setWebId(jsonObject.getInt("id"));
+		            		training.setSync(true);
+		            		training.save();
+		            	}
+					}
+	            	Log.i("Upload result", result);
+	            	
+	            }
+	            
+	            List<Workout> workouts = Workout.find(Workout.class, "sync =?", "false");
+	            //List<Workout> workouts = Workout.listAll(Workout.class);
+	            if(!measures.isEmpty()){
+	            	Log.i("Upload", "neni empty");
+	            	HttpPost httpPost = new HttpPost("http://192.168.1.100:1188/api/workouts");
+	            	String json = "";
+	            	for (Workout workout : workouts) {
+	            		JSONObject jsonObject = new JSONObject(workout.JSONString());
+	            		json = jsonObject.toString();
+	            		StringEntity se = new StringEntity(json);
+	            		httpPost.setEntity(se);
+	            		httpPost.setHeader("Accept", "application/json");
+	    	            httpPost.setHeader("Content-type", "application/json");
+	    	            HttpResponse httpResponse = httpclient.execute(httpPost);
+	    	            inputStream = httpResponse.getEntity().getContent();
+	    	            if(inputStream != null) {
+	    	                result = convertInputStreamToString(inputStream);
+	    	                Log.i("Upload", "proslo to");
+	    	                Log.i("Upload", "result:"+result);
+	    	            }
+	    	            else {
+	    	                result = "null";
+	    	                Log.i("Upload", "neproslo to");
+	    	            }
+	    	            jsonObject = new JSONObject(result);
+		            	if(jsonObject!=null) {
+		            		workout.setWebId(jsonObject.getInt("id"));
+		            		workout.setSync(true);
+		            		workout.save();
+		            	}
+					}
+	            	Log.i("Upload result", result);
+	            	
+	            }
+	            
+	            List<ExerciseUnit> exerciseUnits = ExerciseUnit.find(ExerciseUnit.class, "sync =?", "false");
+	            //List<ExerciseUnit> exerciseUnits = ExerciseUnit.listAll(ExerciseUnit.class);
+	            if(!measures.isEmpty()){
+	            	Log.i("Upload", "neni empty");
+	            	HttpPost httpPost = new HttpPost("http://192.168.1.100:1188/api/exerciseunits");
+	            	String json = "";
+	            	for (ExerciseUnit exerciseUnit : exerciseUnits) {
+	            		JSONObject jsonObject = new JSONObject(exerciseUnit.JSONString());
+	            		json = jsonObject.toString();
+	            		Log.i("Upload serie exerciseunit", json);
+	            		StringEntity se = new StringEntity(json);
+	            		httpPost.setEntity(se);
+	            		httpPost.setHeader("Accept", "application/json");
+	    	            httpPost.setHeader("Content-type", "application/json");
+	    	            HttpResponse httpResponse = httpclient.execute(httpPost);
+	    	            inputStream = httpResponse.getEntity().getContent();
+	    	            if(inputStream != null) {
+	    	                result = convertInputStreamToString(inputStream);
+	    	                Log.i("Upload", "proslo to");
+	    	                Log.i("Upload", "result:"+result);
+	    	            }
+	    	            else {
+	    	                result = "null";
+	    	                Log.i("Upload", "neproslo to");
+	    	            }
+	    	            jsonObject = new JSONObject(result);
+		            	if(jsonObject!=null) {
+		            		exerciseUnit.setWebId(jsonObject.getInt("id"));
+		            		exerciseUnit.setSync(true);
+		            		exerciseUnit.save();
+		            	}
+					}
+	            	Log.i("Upload result", result);
+	            	
+	            }
+	            
+	            List<Serie> series = Serie.find(Serie.class, "sync =?", "false");
+	            //List<Serie> series = Serie.listAll(Serie.class);
+	            if(!series.isEmpty()){
+	            	Log.i("Upload", "neni empty");
+	            	HttpPost httpPost = new HttpPost("http://192.168.1.100:1188/api/series");
+	            	String json = "";
+	            	for (Serie serie : series) {
+	            		JSONObject jsonObject = new JSONObject(serie.JSONString());
+	            		json = jsonObject.toString();
+	            		Log.i("Upload serie json", json);
+	            		StringEntity se = new StringEntity(json);
+	            		httpPost.setEntity(se);
+	            		httpPost.setHeader("Accept", "application/json");
+	    	            httpPost.setHeader("Content-type", "application/json");
+	    	            HttpResponse httpResponse = httpclient.execute(httpPost);
+	    	            inputStream = httpResponse.getEntity().getContent();
+	    	            if(inputStream != null) {
+	    	                result = convertInputStreamToString(inputStream);
+	    	                Log.i("Upload", "proslo to");
+	    	                Log.i("Upload", "result:"+result);
+	    	            }
+	    	            else {
+	    	                result = "null";
+	    	                Log.i("Upload", "neproslo to");
+	    	            }
+	    	            jsonObject = new JSONObject(result);
+		            	if(jsonObject!=null) {
+		            		serie.setWebId(jsonObject.getInt("id"));
+		            		serie.setSync(true);
+		            		serie.save();
+		            	}
+					}
+	            	Log.i("Upload result", result);
+	            	
+	            }
 	 
 	        } catch (Exception e) {
 	            Log.d("InputStream", e.getLocalizedMessage());
@@ -154,16 +302,12 @@ public class UploadFragment extends Fragment{
 	        return result;
 	    }	
 	   
-	    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+	    private class dataUL extends AsyncTask<String, Void, String> {
 	        @Override
 	        protected String doInBackground(String... urls) {
 	            return POST();
 	        }
-	        // onPostExecute displays the results of the AsyncTask.
-	        /*@Override
-	        protected void onPostExecute(String result) {
-	            Toast.makeText(getActivity(), "Data Sent!", Toast.LENGTH_LONG).show();
-	       }*/
+
 	    }
 	    
 	    private static String convertInputStreamToString(InputStream inputStream) throws IOException{

@@ -36,11 +36,11 @@ public class LoginActivity extends FragmentActivity {
 						.replace(R.id.container, new LoginFragment(), "Login")
 						.addToBackStack(null).commit();
 			} else {
-				args.clear();
+				/*args.clear();
 				args.putLong("trainee", trainee.get(0).getId());
 				MenuFragment fragment = new MenuFragment();
 				fragment.setArguments(args);
-				getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").addToBackStack(null).commit();
+				getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").addToBackStack(null).commit();*/
 			}
 		}
 

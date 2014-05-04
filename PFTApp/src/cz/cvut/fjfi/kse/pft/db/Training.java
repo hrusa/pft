@@ -115,7 +115,12 @@ public class Training extends SugarRecord<Training> {
 		return getName();
 	}
 	
+	public int getTraineeWeb() {
+		Trainee tre = Trainee.findById(Trainee.class, getTrainee());
+		return tre.getWebId();
+	}
+	
 	public String JSONString() {
-		return "{\"id\":"+this.getWebId()+",\"traineeId\":"+trainee+",\"name\":\""+name+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"traineeId\":"+getTraineeWeb()+",\"name\":\""+name+"\"}";
 	}
 }

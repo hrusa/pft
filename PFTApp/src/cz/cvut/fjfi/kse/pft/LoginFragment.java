@@ -113,14 +113,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		List<Difficulty> diffs = Difficulty.listAll(Difficulty.class);
-		if (diffs.isEmpty()) {
-			new difficultyDL()
-					.execute("http://192.168.1.100:1188/api/difficulties/");
-			Log.i("login", "po startu asyncu");
-		}
-		Log.i("onCreate: ", "started");
-
 		mGoogleApiClient = buildGoogleApiClient();
 		Log.i("onCreate: ", "init");
 	}
@@ -216,7 +208,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
 		mSignInClicked = false;
-		Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG)
+		Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_SHORT)
 				.show();
 		Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
 		mUser.setText(String.format(
@@ -227,8 +219,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		List<Trainee> trainee = Trainee.find(Trainee.class, "email = ?",
 				getAccountNames());
 		if (trainee.isEmpty()) {
-			// args.putString("name", currentUser.getDisplayName());
-			// args.putString("email", getAccountNames().split("@")[0]);
+			args.putString("name", currentUser.getDisplayName());
+			args.putString("email", getAccountNames().split("@")[0]);
 			name = currentUser.getDisplayName();
 			email = getAccountNames().split("@")[0];
 			new traineeDL().execute("http://192.168.1.100:1188/api/trainees/"
@@ -298,6 +290,11 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onClick(View view) {
 		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
+			List<Difficulty> diffs = Difficulty.listAll(Difficulty.class);
+			if (diffs.isEmpty()) {
+				new difficultyDL()
+						.execute("http://192.168.1.100:1188/api/difficulties/");
+			}
 			if (!mGoogleApiClient.isConnecting()) {
 				switch (view.getId()) {
 				case R.id.sign_in_button:
@@ -534,7 +531,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				}
 
 			}
-			new traineeDL().execute("http://192.168.1.100:1188/api/trainees/hruskapetr89");
 		}
 	}
 
@@ -648,7 +644,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
 				if(json==null) {
-					Log.i("Save training result:", result);
+					Log.i("MENU FRAGMENT, Save training result:", result);
 					MenuFragment fragment = new MenuFragment();
 					fragment.setArguments(args);
 					getFragmentManager().beginTransaction()
@@ -702,7 +698,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				Log.e("JSON Parser", "Error parsing data " + e.toString());
 			}
 			if(json==null) {
-				Log.i("Save training result:", result);
+				Log.i("MENU FRAGMENT, Save workout result:", result);
 				MenuFragment fragment = new MenuFragment();
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction()
@@ -758,7 +754,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				Log.e("JSON Parser", "Error parsing data " + e.toString());
 			}
 			if(json==null) {
-				Log.i("Save serie result:", result);
+				Log.i("MENU FRAGMENT, Save exerciseUnite result:", result);
 				MenuFragment fragment = new MenuFragment();
 				fragment.setArguments(args);
 				getFragmentManager().beginTransaction()
@@ -814,14 +810,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				Log.e("JSON Parser", "Error parsing data " + e.toString());
 			}
 			if(json==null) {
-				Log.i("Save training result:", result);
-				/*MenuFragment fragment = new MenuFragment();
-				fragment.setArguments(args);
-				getFragmentManager().beginTransaction()
-						.replace(R.id.container, fragment, "Menu").commit();*/
-				getFragmentManager().beginTransaction()
-				.replace(R.id.container, new UploadFragment(), "Upload")
-				.commit();
+				
 			} else {
 				JSONObject jsonObject = null;
 				for (int i = 0; i < json.length(); i++) {
@@ -848,11 +837,10 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 
 				}
 			}
-			/*MenuFragment fragment = new MenuFragment();
+			MenuFragment fragment = new MenuFragment();
 			fragment.setArguments(args);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.container, fragment, "Menu").commit();*/
-			
+					.replace(R.id.container, fragment, "Menu").commit();			
 		}
 
 	}

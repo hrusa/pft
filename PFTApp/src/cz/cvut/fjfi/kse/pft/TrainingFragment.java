@@ -5,6 +5,9 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -12,9 +15,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
+import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
+import cz.cvut.fjfi.kse.pft.db.Serie;
 import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
@@ -24,6 +31,7 @@ import cz.cvut.fjfi.kse.pft.db.Workout;
 public class TrainingFragment extends ListFragment {
 	// ListView workouts;
 	private ArrayAdapter<Workout> adapter;
+	private Workout workout;
 	Bundle args = new Bundle();
 
 	public TrainingFragment() {
@@ -45,6 +53,57 @@ public class TrainingFragment extends ListFragment {
 		adapter = new ArrayAdapter<Workout>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, workouts);
+
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				workout = adapter.getItem(arg2);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						getActivity());
+				alertDialogBuilder
+						.setTitle("Delete " + workout.getName() + "?")
+						.setMessage(
+								"Do you realy want to delete \""
+										+ workout.getName() + "\" workout?")
+						.setCancelable(false)
+						.setPositiveButton("Yes", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								List<ExerciseUnit> exerciseUnits = ExerciseUnit
+										.find(ExerciseUnit.class,
+												"workout =? and done =?", ""
+														+ workout.getId(),
+												"false");
+								for (ExerciseUnit exerciseUnit : exerciseUnits) {
+									List<Serie> series = Serie.find(
+											Serie.class, "exerciseunit =?", ""
+													+ exerciseUnit.getId());
+									for (Serie serie : series) {
+										serie.delete();
+									}
+									exerciseUnit.delete();
+								}
+								workout.delete();
+							}
+						}).setNegativeButton("No", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								dialog.cancel();
+							}
+						}).create().show();
+				return false;
+			}
+
+		});
 
 		setListAdapter(adapter);
 	}

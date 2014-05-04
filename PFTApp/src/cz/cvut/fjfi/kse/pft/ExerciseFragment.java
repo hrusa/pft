@@ -5,14 +5,19 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import cz.cvut.fjfi.kse.pft.db.Serie;
 
 /**
@@ -22,6 +27,7 @@ import cz.cvut.fjfi.kse.pft.db.Serie;
 public class ExerciseFragment extends ListFragment {
 
 	private ArrayAdapter<Serie> adapter;
+	private Serie ser;
 	Bundle args;
 
 	/**
@@ -42,6 +48,45 @@ public class ExerciseFragment extends ListFragment {
 		adapter = new ArrayAdapter<Serie>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, serie);
+		
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				ser = adapter.getItem(arg2);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						getActivity());
+				alertDialogBuilder
+						.setTitle("Delete " + ExerciseFragment.this.ser.toString() + "?")
+						.setMessage(
+								"Do you realy want to delete \""
+										+ ser.toString()
+										+ "\" exercise unit?")
+						.setCancelable(false)
+						.setPositiveButton("Yes", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+									ser.delete();
+							}
+						}).setNegativeButton("No", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								dialog.cancel();
+							}
+						}).create().show();
+				return false;
+			}
+
+		});
+		
 		setListAdapter(adapter);
 	}
 

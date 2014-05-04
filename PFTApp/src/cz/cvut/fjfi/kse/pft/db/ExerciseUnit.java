@@ -131,7 +131,17 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 		return ex.getName();
 	}
 	
+	public int getExerciseWeb() {
+		Exercise ex = Exercise.findById(Exercise.class, getExercise());
+		return ex.getWebId();
+	}
+	
+	public int getWorkoutWeb() {
+		Workout wrk = Workout.findById(Workout.class, getWorkout());
+		return wrk.getWebId();
+	}
+	
 	public String JSONString() {
-		return "{\"id\":"+this.getWebId()+",\"exerciseId\":"+exercise+",\"workoutId\":"+workout+",\"done\":\""+done+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"exerciseId\":"+getExerciseWeb()+",\"workoutId\":"+getWorkoutWeb()+",\"done\":\""+done+"\"}";
 	}
 }

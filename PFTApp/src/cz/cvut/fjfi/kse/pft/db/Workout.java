@@ -146,7 +146,12 @@ public class Workout extends SugarRecord<Workout> {
 		return getName()+" planed on "+getDate();
 	}
 	
+	public int getTrainingWeb() {
+		Training trg = Training.findById(Training.class, getTraining());
+		return trg.getWebId();
+	}
+	
 	public String JSONString() {
-		return "{\"id\":"+this.getWebId()+",\"trainingId\":"+training+",\"name\":\""+name+"\",\"date\":\""+date+"\",\"done\":\""+done+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"trainingId\":"+getTrainingWeb()+",\"name\":\""+name+"\",\"date\":\""+date+"\",\"done\":\""+done+"\"}";
 	}
 }

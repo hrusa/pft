@@ -17,8 +17,8 @@ public class Serie extends SugarRecord<Serie> {
 	private int weight;
 	private int repetition;
 	private int pause;
-	private String start = null;
-	private String finish = null;
+	private String start = "1970-01-01";
+	private String finish = "1970-01-01";
 	private boolean sync = false;
 
 	/**
@@ -187,7 +187,12 @@ public class Serie extends SugarRecord<Serie> {
 		return "Weight: "+getWeight()+"kg, Repetition: "+getRepetition()+", Rest: "+getPause()+"s";
 	}
 	
+	public int getExerciseUnitWeb() {
+		ExerciseUnit eUnit = ExerciseUnit.findById(ExerciseUnit.class, getExerciseUnit());
+		return eUnit.getWebId();
+	}
+	
 	public String JSONString() {
-		return "{\"id\":"+this.getWebId()+",\"exerciseunitId\":"+exerciseunit+",\"weight\":"+weight+",\"repetition\":"+repetition+",\"pause\":"+pause+",\"start\":\""+start+"\",\"finish\":\""+finish+"\"}";
+		return "{\"id\":"+this.getWebId()+",\"exerciseunitId\":"+getExerciseUnitWeb()+",\"weight\":"+weight+",\"repetition\":"+repetition+",\"pause\":"+pause+",\"start\":\""+start+"\",\"finish\":\""+finish+"\"}";
 	}
 }
