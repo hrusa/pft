@@ -5,6 +5,8 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -44,7 +46,8 @@ public class ExerciseFragment extends ListFragment {
 		// TODO: replace with a real list adapter.
 		args = this.getArguments();
 		setHasOptionsMenu(true);
-		List<Serie> serie = Serie.find(Serie.class, "exerciseunit = ?", ""+args.getLong("exerciseunit"));
+		List<Serie> serie = SugarRecord.find(Serie.class, "exerciseunit = ?", ""+args.getLong("exerciseunit"));
+		getActivity().getActionBar().setTitle("Series");
 		adapter = new ArrayAdapter<Serie>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, serie);

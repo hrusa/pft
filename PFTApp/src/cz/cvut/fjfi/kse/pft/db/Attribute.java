@@ -11,7 +11,7 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class Attribute extends SugarRecord<Attribute>{
+public class Attribute extends SugarRecord<Attribute> implements ReferenceTableInterface{
 	private int idattribute = 0;
 	private String name;
 

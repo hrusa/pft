@@ -50,6 +50,7 @@ import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.People.LoadPeopleResult;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.orm.SugarRecord;
 
 import cz.cvut.fjfi.kse.pft.db.Attribute;
 import cz.cvut.fjfi.kse.pft.db.Difficulty;
@@ -92,7 +93,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 	private PendingIntent mSignInIntent;
 	private TextView mUser;
 	private SignInButton mSignInButton;
-	private Button mSignOutButton;
+	//private Button mSignOutButton;
 	private String email, name = "";
 
 	private AccountManager mAccountManager;
@@ -115,11 +116,11 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		super.onCreate(savedInstanceState);
 		mGoogleApiClient = buildGoogleApiClient();
 		Log.i("onCreate: ", "init");
+		getActivity().getActionBar().setTitle("Login");
 	}
 
 	private GoogleApiClient buildGoogleApiClient() {
 		return new GoogleApiClient.Builder(getActivity())
-				// možná změníme parametr na getActivity().getBaseContext()
 				.addConnectionCallbacks(this)
 				.addOnConnectionFailedListener(this).addApi(Plus.API, null)
 				.addScope(Plus.SCOPE_PLUS_LOGIN).build();
@@ -141,7 +142,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		mUser = (TextView) rootView.findViewById(R.id.sign_in_status);
 		mSignInButton = (SignInButton) rootView
 				.findViewById(R.id.sign_in_button);
-		mSignOutButton = (Button) rootView.findViewById(R.id.sign_out_button);
+		//mSignOutButton = (Button) rootView.findViewById(R.id.sign_out_button);
 		rootView.findViewById(R.id.sign_in_button).setOnClickListener(this);
 		rootView.findViewById(R.id.sign_out_button).setOnClickListener(this);
 		return rootView;
@@ -194,7 +195,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		}
 		mUser.setText(R.string.status_sign_out);
 		mSignInButton.setEnabled(true);
-		mSignOutButton.setEnabled(false);
+		//mSignOutButton.setEnabled(false);
 	}
 
 	/*
@@ -215,14 +216,14 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 				getResources().getString(R.string.status_sign_in),
 				currentUser.getDisplayName()));
 		mSignInButton.setEnabled(false);
-		mSignOutButton.setEnabled(true);
-		List<Trainee> trainee = Trainee.find(Trainee.class, "email = ?",
-				getAccountNames());
+		//mSignOutButton.setEnabled(true);
+		email = getAccountNames().split("@")[0];
+		List<Trainee> trainee = SugarRecord.find(Trainee.class, "email = ?",
+				email);
 		if (trainee.isEmpty()) {
-			args.putString("name", currentUser.getDisplayName());
-			args.putString("email", getAccountNames().split("@")[0]);
 			name = currentUser.getDisplayName();
-			email = getAccountNames().split("@")[0];
+			args.putString("name", name);
+			args.putString("email", email);
 			new traineeDL().execute("http://192.168.1.100:1188/api/trainees/"
 					+ email);
 		} else {
@@ -289,8 +290,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 
 	@Override
 	public void onClick(View view) {
-		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
-			List<Difficulty> diffs = Difficulty.listAll(Difficulty.class);
+		if (((MainActivity) getActivity()).isNetworkAvailable()) {
+			List<Difficulty> diffs = SugarRecord.listAll(Difficulty.class);
 			if (diffs.isEmpty()) {
 				new difficultyDL()
 						.execute("http://192.168.1.100:1188/api/difficulties/");
@@ -306,6 +307,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 					Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
 							.setResultCallback(new ResultCallback<Status>() {
 
+								@Override
 								public void onResult(Status status) {
 									// mGoogleApiClient is now disconnected and
 									// access has been revoked.
@@ -316,7 +318,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 					mGoogleApiClient.connect();
 					mUser.setText(R.string.status_sign_out);
 					mSignInButton.setEnabled(true);
-					mSignOutButton.setEnabled(false);
+					//mSignOutButton.setEnabled(false);
 					break;
 				}
 			}
@@ -328,6 +330,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 							"You have no internet connection, please establish one.")
 					.setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
+								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
 									Intent intent = new Intent(
@@ -573,7 +576,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 							.execute("http://192.168.1.100:1188/api/trainings/"
 									+ trainee.getWebId());
 					Log.i("SAve trainee", trainee.JSONString());
-					List<Attribute> attrs = Attribute.listAll(Attribute.class);
+					List<Attribute> attrs = SugarRecord.listAll(Attribute.class);
 					for (Attribute attribute : attrs) {
 						new measureDL()
 								.execute("http://192.168.1.100:1188/api/measures/"

@@ -3,6 +3,8 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import com.orm.SugarRecord;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +43,8 @@ public class ShowExerciseInfoFragment extends Fragment{
 		// TODO Auto-generated method stub
 		view = inflater.inflate(R.layout.fragment_showexerciseinfo, null);
 		args = getArguments();
-		exercise = Exercise.findById(Exercise.class, args.getLong("exercise"));
+		getActivity().getActionBar().setTitle("Exercise");
+		exercise = SugarRecord.findById(Exercise.class, args.getLong("exercise"));
 		eName = (TextView) view.findViewById(R.id.eName_textView);
 		eDesc = (TextView) view.findViewById(R.id.eDesc_textView);
 		videoBtn = (Button) view.findViewById(R.id.video_button);

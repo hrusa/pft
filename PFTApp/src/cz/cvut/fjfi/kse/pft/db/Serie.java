@@ -188,7 +188,7 @@ public class Serie extends SugarRecord<Serie> {
 	}
 	
 	public int getExerciseUnitWeb() {
-		ExerciseUnit eUnit = ExerciseUnit.findById(ExerciseUnit.class, getExerciseUnit());
+		ExerciseUnit eUnit = SugarRecord.findById(ExerciseUnit.class, getExerciseUnit());
 		return eUnit.getWebId();
 	}
 	

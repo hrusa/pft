@@ -43,7 +43,7 @@ public class StatisticsMenuFragment extends Fragment {
 		measure = (Button) view.findViewById(R.id.measure_button);
 		args = getArguments();
 		args.putBoolean("statistics", false);
-
+		getActivity().getActionBar().setTitle("Statistics");
 		exercise.setOnClickListener(new OnClickListener() {
 
 			@Override

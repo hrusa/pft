@@ -3,5 +3,5 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cz.cvut.fjfi.kse.pft.LoginActivity"
+    tools:context="cz.cvut.fjfi.kse.pft.MainActivity"
     tools:ignore="MergeRootFrame" />

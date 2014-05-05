@@ -127,17 +127,17 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		Exercise ex = Exercise.findById(Exercise.class, getExercise());
+		Exercise ex = SugarRecord.findById(Exercise.class, getExercise());
 		return ex.getName();
 	}
 	
 	public int getExerciseWeb() {
-		Exercise ex = Exercise.findById(Exercise.class, getExercise());
+		Exercise ex = SugarRecord.findById(Exercise.class, getExercise());
 		return ex.getWebId();
 	}
 	
 	public int getWorkoutWeb() {
-		Workout wrk = Workout.findById(Workout.class, getWorkout());
+		Workout wrk = SugarRecord.findById(Workout.class, getWorkout());
 		return wrk.getWebId();
 	}
 	

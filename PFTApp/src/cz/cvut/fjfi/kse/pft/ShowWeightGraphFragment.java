@@ -22,6 +22,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
+import com.orm.SugarRecord;
 
 import cz.cvut.fjfi.kse.pft.db.Exercise;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
@@ -34,7 +35,6 @@ import cz.cvut.fjfi.kse.pft.db.Serie;
 @SuppressLint("SimpleDateFormat")
 public class ShowWeightGraphFragment extends Fragment {
 	View view;
-	Bundle args = new Bundle();
 	List<ExerciseUnit> exerciseU;
 	List<Serie> series;
 	List<Integer> pauses = new ArrayList<Integer>();
@@ -64,8 +64,25 @@ public class ShowWeightGraphFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		view = inflater.inflate(R.layout.fragment_showweightgraph, null);
+		getActivity().getActionBar().setTitle("Statistics");
+		Bundle args = new Bundle();
 		args = getArguments();
-		exerciseU = ExerciseUnit.find(ExerciseUnit.class,
+		paintGraph(args);
+		return view;
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		getActivity().finish();
+	}
+	
+	public void paintGraph(Bundle args) {
+		exerciseU = SugarRecord.find(ExerciseUnit.class,
 				"exercise = ? and done = ?", "" + args.getLong("exercise"),
 				"true");
 
@@ -76,7 +93,7 @@ public class ShowWeightGraphFragment extends Fragment {
 			// exercise = exerciseU.get(i);
 			orm = 0;
 			Log.i("ShowWeightGraph", "začátek for");
-			series = Serie.find(Serie.class, "exerciseunit = ?", ""
+			series = SugarRecord.find(Serie.class, "exerciseunit = ?", ""
 					+ exerciseU.get(i).getId());
 			for (int j = 0; j < series.size(); j++) {
 				Log.i("ShowWeightGraph", "začátek for #2");
@@ -111,7 +128,7 @@ public class ShowWeightGraphFragment extends Fragment {
 			oDate = nDate;
 		}
 		Log.i("ShowWeightGraph", "po všech forech");
-		Exercise ex = Exercise.findById(Exercise.class,
+		Exercise ex = SugarRecord.findById(Exercise.class,
 				args.getLong("exercise"));
 		GraphViewSeries weightSeries = new GraphViewSeries(graphData);
 		GraphView graphView = new LineGraphView(getActivity(), ex.getName()
@@ -122,16 +139,5 @@ public class ShowWeightGraphFragment extends Fragment {
 		LinearLayout layout = (LinearLayout) view
 				.findViewById(R.id.weight_linearLayout);
 		layout.addView(graphView);
-		return view;
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onDestroy()
-	 */
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		getActivity().finish();
 	}
 }

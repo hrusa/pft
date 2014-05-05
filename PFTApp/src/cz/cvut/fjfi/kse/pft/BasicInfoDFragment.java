@@ -6,6 +6,8 @@ package cz.cvut.fjfi.kse.pft;
 import java.util.Calendar;
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -87,20 +89,20 @@ public class BasicInfoDFragment extends DialogFragment{
                 }
                 trainee.save();
                 Log.i("DB insert: ", "Trainee ID " + trainee.getId() + " inserted as " + trainee.getName()+" "+ trainee.getEmail() +" "+trainee.getBirth()+trainee.getExperience()+trainee.getGoal()+trainee.getGender());
-                attrs = Attribute.listAll(Attribute.class);
+                attrs = SugarRecord.listAll(Attribute.class);
 /*                if(attrs.isEmpty()) {
 					height = new Attribute(getActivity(), "Height");
 					height.save();
 					weight = new Attribute(getActivity(), "Weight");
 					weight.save();
                 }*/
-                attrs = Attribute.find(Attribute.class, "name = ?", "Height");
+                attrs = SugarRecord.find(Attribute.class, "name = ?", "Height");
                 //přidat kontrolu zadání hodnot!
                 mHeight = new Measure(getActivity(), trainee.getId(), attrs.get(0).getId(), getTodayDate(), Integer.parseInt(heightText.getText().toString()));
                 mHeight.save();
                 Log.i("DB insert: ", "Trainee "+mHeight.getTrainee()+" with "+mHeight.getAttribute()+mHeight.getValue());
                 attrs.clear();
-                attrs = Attribute.find(Attribute.class, "name = ?", "Weight");
+                attrs = SugarRecord.find(Attribute.class, "name = ?", "Weight");
                 Log.i("Test attributu s názvem Weight", ""+attrs.isEmpty());
                 mWeight = new Measure(getActivity(), trainee.getId(), attrs.get(0).getId(), getTodayDate(), Integer.parseInt(weightText.getText().toString()));
                 mWeight.save();

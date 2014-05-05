@@ -11,7 +11,7 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class Exercise extends SugarRecord<Exercise> {
+public class Exercise extends SugarRecord<Exercise> implements ReferenceTableInterface{
 	private int idexercise;
 	private String name;
 	private long difficulty;

@@ -5,6 +5,8 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -36,7 +38,7 @@ public class MeasuresListFragment extends ListFragment{
 		super.onCreate(savedInstanceState);
 		
 		args = this.getArguments();
-		List<Attribute> attribute = Attribute.listAll(Attribute.class);
+		List<Attribute> attribute = SugarRecord.listAll(Attribute.class);
 		adapter = new ArrayAdapter<Attribute>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, attribute);

@@ -5,6 +5,8 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -39,8 +41,8 @@ public class ShowExerciseFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
-		List<MuscleGroup> groups = MuscleGroup.listAll(MuscleGroup.class);
+		getActivity().getActionBar().setTitle("Exercises");
+		List<MuscleGroup> groups = SugarRecord.listAll(MuscleGroup.class);
 		adapterGroup = new ArrayAdapter<MuscleGroup>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, groups);
@@ -64,13 +66,14 @@ public class ShowExerciseFragment extends ListFragment {
 		if (!groupClicked) {
 			MuscleGroup group = adapterGroup.getItem(position);
 			groupClicked = true;
-			List<Exercise> exercises = Exercise.find(Exercise.class,
+			List<Exercise> exercises = SugarRecord.find(Exercise.class,
 					"musclegroup = ?", group.getId().toString());
 			adapterExercise = new ArrayAdapter<Exercise>(getActivity(),
 					android.R.layout.simple_list_item_activated_1,
 					android.R.id.text1, exercises);
 			setListAdapter(adapterExercise);
 			adapterExercise.notifyDataSetChanged();
+			getActivity().getActionBar().setTitle(group.getName());
 		} else {
 			Exercise exercise = adapterExercise.getItem(position);
 			args.putLong("exercise", exercise.getId());

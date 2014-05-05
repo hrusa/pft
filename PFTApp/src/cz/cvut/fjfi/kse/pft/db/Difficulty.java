@@ -11,8 +11,8 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class Difficulty extends SugarRecord<Difficulty>{
-	int iddifficulty = 0;
+public class Difficulty extends SugarRecord<Difficulty> implements ReferenceTableInterface{
+	private int iddifficulty = 0;
 	private String name;
 	
 	/**

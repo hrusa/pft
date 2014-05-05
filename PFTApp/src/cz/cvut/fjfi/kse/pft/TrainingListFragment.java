@@ -5,6 +5,8 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -53,7 +55,8 @@ public class TrainingListFragment extends ListFragment {
 		if (!args.getBoolean("record")) {
 			setHasOptionsMenu(true);
 		}
-		List<Training> trainings = Training.listAll(Training.class);
+		getActivity().getActionBar().setTitle("Trainings");
+		List<Training> trainings = SugarRecord.listAll(Training.class);
 		adapter = new ArrayAdapter<Training>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, trainings);
@@ -79,18 +82,18 @@ public class TrainingListFragment extends ListFragment {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								// TODO Auto-generated method stub
-								List<Workout> workouts = Workout.find(
+								List<Workout> workouts = SugarRecord.find(
 										Workout.class,
 										"training =? and done =?", ""
 												+ training.getId(), "false");
 								for (Workout workout : workouts) {
-									List<ExerciseUnit> exerciseUnits = ExerciseUnit
+									List<ExerciseUnit> exerciseUnits = SugarRecord
 											.find(ExerciseUnit.class,
 													"workout =? and done =?",
 													"" + workout.getId(),
 													"false");
 									for (ExerciseUnit exerciseUnit : exerciseUnits) {
-										List<Serie> series = Serie.find(
+										List<Serie> series = SugarRecord.find(
 												Serie.class, "exerciseunit =?",
 												"" + exerciseUnit.getId());
 										for (Serie serie : series) {

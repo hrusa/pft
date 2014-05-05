@@ -3,6 +3,8 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import com.orm.SugarRecord;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -59,7 +61,7 @@ public class AddSerieDFragment extends DialogFragment {
 		npPause.setMaxValue(500);
 		Log.i("Je serie inicializována?", "" + args.getBoolean("serie"));
 		if (args.containsKey("serie")) {
-			Serie serie = Serie.findById(Serie.class, args.getLong("serie"));
+			Serie serie = SugarRecord.findById(Serie.class, args.getLong("serie"));
 
 			npWeight.setValue(serie.getWeight());
 			npRepetition.setValue(serie.getRepetition());

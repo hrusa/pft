@@ -147,12 +147,12 @@ public class Measure extends SugarRecord<Measure> {
 	}
 	
 	public int getTraineeWeb() {
-		Trainee tre = Trainee.findById(Trainee.class, getTrainee());
+		Trainee tre = SugarRecord.findById(Trainee.class, getTrainee());
 		return tre.getWebId();
 	}
 	
 	public int getAttributeWeb() {
-		Attribute attr = Attribute.findById(Attribute.class, getAttribute());
+		Attribute attr = SugarRecord.findById(Attribute.class, getAttribute());
 		return attr.getWebId();
 	}
 

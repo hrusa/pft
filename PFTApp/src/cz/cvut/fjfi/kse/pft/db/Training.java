@@ -11,7 +11,7 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class Training extends SugarRecord<Training> {
+public class Training extends SugarRecord<Training> implements ReferenceTableInterface{
 	private int idtraining = 0;
 	private long trainee;
 	private String name;
@@ -116,7 +116,7 @@ public class Training extends SugarRecord<Training> {
 	}
 	
 	public int getTraineeWeb() {
-		Trainee tre = Trainee.findById(Trainee.class, getTrainee());
+		Trainee tre = SugarRecord.findById(Trainee.class, getTrainee());
 		return tre.getWebId();
 	}
 	

@@ -11,7 +11,7 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class MuscleGroup extends SugarRecord<MuscleGroup>{
+public class MuscleGroup extends SugarRecord<MuscleGroup> implements ReferenceTableInterface{
 	private int idmusclegroup = 0;
 	private String name;
 

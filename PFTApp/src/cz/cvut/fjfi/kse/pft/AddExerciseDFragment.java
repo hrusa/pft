@@ -5,6 +5,8 @@ package cz.cvut.fjfi.kse.pft;
 
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -51,7 +53,7 @@ public class AddExerciseDFragment extends DialogFragment{
 		args = this.getArguments();
 		view = inflater.inflate(R.layout.fragmentd_addexercise, null);
 		lv = (ListView) view.findViewById(R.id.exercise_listView);
-		List<MuscleGroup> groups = MuscleGroup.listAll(MuscleGroup.class);
+		List<MuscleGroup> groups = SugarRecord.listAll(MuscleGroup.class);
 		adapterGroup = new ArrayAdapter<MuscleGroup>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, groups);
@@ -70,7 +72,7 @@ public class AddExerciseDFragment extends DialogFragment{
 					MuscleGroup group = adapterGroup.getItem(arg2);
 					//List<Exercise> exercises = Exercise.find(Exercise.class, "muscleGroup = ?", group.getName());
 					//List<Exercise> exercises = Exercise.listAll(Exercise.class);
-					List<Exercise> exercises = Exercise.find(Exercise.class, "musclegroup =?", group.getId().toString());
+					List<Exercise> exercises = SugarRecord.find(Exercise.class, "musclegroup =?", group.getId().toString());
 					adapterExercise = new ArrayAdapter<Exercise>(getActivity(), android.R.layout.simple_list_item_activated_1,
 						android.R.id.text1, exercises);
 					lv.setAdapter(adapterExercise);
@@ -95,7 +97,7 @@ public class AddExerciseDFragment extends DialogFragment{
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							List<ExerciseUnit> exerciseUs = ExerciseUnit.find(ExerciseUnit.class, "workout = ? and exercise = ?", ""+args.getLong("workout"), ""+exercise.getId());
+							List<ExerciseUnit> exerciseUs = SugarRecord.find(ExerciseUnit.class, "workout = ? and exercise = ?", ""+args.getLong("workout"), ""+exercise.getId());
 							if(exerciseUs.isEmpty()) {
 							exerciseU = new ExerciseUnit(getActivity(), exercise.getId(), args.getLong("workout"));
 							exerciseU.save();

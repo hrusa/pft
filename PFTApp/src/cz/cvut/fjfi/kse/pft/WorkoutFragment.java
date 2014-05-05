@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -52,7 +54,8 @@ public class WorkoutFragment extends ListFragment {
 		if (!args.getBoolean("record")) {
 			setHasOptionsMenu(true);
 		}
-		List<ExerciseUnit> exerciseU = ExerciseUnit.find(ExerciseUnit.class,
+		getActivity().getActionBar().setTitle("Exercises");
+		List<ExerciseUnit> exerciseU = SugarRecord.find(ExerciseUnit.class,
 				"workout = ? and done = ?", "" + args.getLong("workout"),
 				"false");
 		adapter = new ArrayAdapter<ExerciseUnit>(getActivity(),
@@ -82,7 +85,7 @@ public class WorkoutFragment extends ListFragment {
 									int which) {
 								// TODO Auto-generated method stub
 
-								List<Serie> series = Serie.find(Serie.class,
+								List<Serie> series = SugarRecord.find(Serie.class,
 										"exerciseunit =?",
 										"" + exerciseUnit.getId());
 								for (Serie serie : series) {
@@ -119,7 +122,7 @@ public class WorkoutFragment extends ListFragment {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									Workout workout = Workout.findById(
+									Workout workout = SugarRecord.findById(
 											Workout.class,
 											args.getLong("workout"));
 									workout.setDone(true);
@@ -140,7 +143,7 @@ public class WorkoutFragment extends ListFragment {
 											workout.getName(), dateFormat
 													.format(calendar.getTime()));
 									newWorkout.save();
-									List<ExerciseUnit> exerciseUs = ExerciseUnit
+									List<ExerciseUnit> exerciseUs = SugarRecord
 											.find(ExerciseUnit.class,
 													"workout = ?",
 													"" + workout.getId());
@@ -152,7 +155,7 @@ public class WorkoutFragment extends ListFragment {
 										newExersiseU.save();
 										Log.i("WorkoutFragment",
 												"přidána exerciseunit #" + i);
-										List<Serie> series = Serie.find(
+										List<Serie> series = SugarRecord.find(
 												Serie.class,
 												"exerciseunit = ?", ""
 														+ exerciseUs.get(i)
@@ -232,7 +235,7 @@ public class WorkoutFragment extends ListFragment {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		ExerciseUnit exerciseU = adapter.getItem(position);
-		List<ExerciseUnit> units = ExerciseUnit.find(ExerciseUnit.class,
+		List<ExerciseUnit> units = SugarRecord.find(ExerciseUnit.class,
 				"exercise = ? and done = ?", "" + exerciseU.getExercise(),
 				"true");
 		if (units.isEmpty()) {

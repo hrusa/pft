@@ -3,6 +3,8 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import com.orm.SugarRecord;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -39,7 +41,7 @@ public class WorkoutDFragment extends DialogFragment{
 		// TODO Auto-generated method stub
 		args = this.getArguments();
 		view = inflater.inflate(R.layout.fragmentd_workout, null);
-		trainee = Trainee.findById(Trainee.class, args.getLong("trainee"));
+		trainee = SugarRecord.findById(Trainee.class, args.getLong("trainee"));
 		Button previous = (Button) view.findViewById(R.id.previous_button);
 		Button next = (Button) view.findViewById(R.id.next_button);
 		experience = (Spinner) view.findViewById(R.id.experience_spinner);

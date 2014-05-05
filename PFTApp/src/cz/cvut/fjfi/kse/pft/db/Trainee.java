@@ -11,14 +11,14 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class Trainee extends SugarRecord<Trainee> {
+public class Trainee extends SugarRecord<Trainee> implements ReferenceTableInterface{
 	private int idtrainee = 0;
 	private String name;
 	private String email;
 	private String birth;	//YYYY-MM-DD
 	private int gender;		//0 = male, 1 = female
 	private int experience = -1;	//0 = beginner, 1 = advanced, 2 = experienced
-	private int goal = -1;		//0 = lose fat, 2 = gain strength, 3 = bulking, 4 = cutting
+	private int goal = -1;		//0 = lose fat, 1 = gain strength, 2 = bulking, 3 = cutting
 	private boolean sync = false;
 	
 	/**

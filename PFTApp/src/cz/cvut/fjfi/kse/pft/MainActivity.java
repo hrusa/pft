@@ -5,21 +5,20 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.orm.SugarRecord;
 
 import cz.cvut.fjfi.kse.pft.db.Trainee;
 
-public class LoginActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity {
 	Bundle args = new Bundle();
 
 	@Override
@@ -29,7 +28,7 @@ public class LoginActivity extends FragmentActivity {
 		
 		// Odkomentovat az budu na linuxu a muzeme spustit login via google acc
 		if (savedInstanceState == null) {
-			List<Trainee> trainee = Trainee.listAll(Trainee.class);
+			List<Trainee> trainee = SugarRecord.listAll(Trainee.class);
 			if (trainee.isEmpty()) {
 				checkGooglePlayServicesAvailable();
 				getSupportFragmentManager().beginTransaction()

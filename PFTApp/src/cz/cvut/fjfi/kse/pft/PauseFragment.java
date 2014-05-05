@@ -59,15 +59,13 @@ public class PauseFragment extends DialogFragment {
 		@Override
 		public void onFinish() {
 			if(!helper) {
-			countdownText.setText("Break is over.\nBack to work!");
+			countdownText.setText("Break is over!");
 			countDownTimer = new MyCountDownTimer(3000, 1000);
 			countDownTimer.start();
 			helper = true;
 			} else {
 				Log.i("PauseFragment", "začlo druhé odpočítávání");
 				dismiss();
-				/*StartRecordFragment fragment = (StartRecordFragment) getFragmentManager().findFragmentByTag("StartRecord");
-				getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();*/
 			}
 		}
 

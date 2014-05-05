@@ -20,6 +20,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
+import com.orm.SugarRecord;
 
 import cz.cvut.fjfi.kse.pft.db.Attribute;
 import cz.cvut.fjfi.kse.pft.db.Measure;
@@ -31,7 +32,6 @@ import cz.cvut.fjfi.kse.pft.db.Measure;
 @SuppressLint("SimpleDateFormat")
 public class ShowMeasureGraphFragment extends Fragment {
 	View view;
-	Bundle args = new Bundle();
 	List<Measure> measures;
 	Measure nMeasure, oMeasure;
 	int size, axisX = 0;
@@ -58,9 +58,26 @@ public class ShowMeasureGraphFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		view = inflater.inflate(R.layout.fragment_showmeasuregraph, null);
+		getActivity().getActionBar().setTitle("Statistics");
+		Bundle args = new Bundle();
 		args = getArguments();
-		Attribute attr = Attribute.findById(Attribute.class, args.getLong("attribute"));
-		measures = Measure.find(Measure.class, "attribute = ?",
+		paintGraph(args);
+		return view;
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		getActivity().finish();
+	}
+	
+	private void paintGraph(Bundle args) {
+		Attribute attr = SugarRecord.findById(Attribute.class, args.getLong("attribute"));
+		measures = SugarRecord.find(Measure.class, "attribute = ?",
 				"" + args.getLong("attribute"));
 		size = measures.size();
 		GraphViewData[] graphData = new GraphViewData[size];
@@ -91,16 +108,5 @@ public class ShowMeasureGraphFragment extends Fragment {
 		LinearLayout layout = (LinearLayout) view
 				.findViewById(R.id.measure_linearLayout);
 		layout.addView(graphView);
-		return view;
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onDestroy()
-	 */
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		getActivity().finish();
 	}
 }

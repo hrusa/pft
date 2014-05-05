@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import com.orm.SugarRecord;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -68,7 +70,7 @@ public class StartRecordFragment extends Fragment {
 		// TODO Auto-generated method stub
 		view = inflater.inflate(R.layout.fragment_startrecord, null);
 		args = this.getArguments();
-
+		getActivity().getActionBar().setTitle("Record");
 		eName = (TextView) view.findViewById(R.id.recordName_textView);
 		eSerie = (TextView) view.findViewById(R.id.recordSerie_textView);
 
@@ -84,9 +86,9 @@ public class StartRecordFragment extends Fragment {
 		lRep = (LinearLayout) view.findViewById(R.id.rep_linearLayout);
 		lPause = (LinearLayout) view.findViewById(R.id.pause_linearLayout);
 
-		exerciseU = ExerciseUnit.findById(ExerciseUnit.class,
+		exerciseU = SugarRecord.findById(ExerciseUnit.class,
 				args.getLong("exerciseu"));
-		series = Serie.find(Serie.class, "exerciseunit = ?", exerciseU.getId()
+		series = SugarRecord.find(Serie.class, "exerciseunit = ?", exerciseU.getId()
 				.toString());
 		size = series.size();
 
@@ -145,7 +147,7 @@ public class StartRecordFragment extends Fragment {
 	public void doOnStopClick() {
 		if (args.getBoolean("1rm") && currentSerie == 0) {
 			Log.i("StartRecord", "Serie ID: " + args.getLong("serie"));
-			serie = Serie.findById(Serie.class, args.getLong("serie"));
+			serie = SugarRecord.findById(Serie.class, args.getLong("serie"));
 			Log.i("StartRecord", "Weight: " + serie.getWeight());
 			Log.i("StartRecord", "Rep: " + serie.getRepetition());
 			orm = serie.getWeight() / (1.0278 - 0.0278 * serie.getRepetition());

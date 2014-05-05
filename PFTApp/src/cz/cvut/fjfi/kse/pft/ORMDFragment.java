@@ -3,6 +3,8 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import com.orm.SugarRecord;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -54,7 +56,7 @@ public class ORMDFragment extends DialogFragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.i("ORMD", "Serie ID: "+args.getLong("serie"));
-				Serie serie = Serie.findById(Serie.class, args.getLong("serie"));
+				Serie serie = SugarRecord.findById(Serie.class, args.getLong("serie"));
 				serie.setRepetition(Integer.parseInt(rep.getText().toString()));
 				serie.setSync(false);
 				serie.save();

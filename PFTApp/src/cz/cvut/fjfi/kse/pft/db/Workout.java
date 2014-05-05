@@ -11,7 +11,7 @@ import android.content.Context;
  * @author Petr Hruška
  *
  */
-public class Workout extends SugarRecord<Workout> {
+public class Workout extends SugarRecord<Workout> implements ReferenceTableInterface{
 	private int idworkout = 0;
 	private long training;
 	private String name;
@@ -147,7 +147,7 @@ public class Workout extends SugarRecord<Workout> {
 	}
 	
 	public int getTrainingWeb() {
-		Training trg = Training.findById(Training.class, getTraining());
+		Training trg = SugarRecord.findById(Training.class, getTraining());
 		return trg.getWebId();
 	}
 	

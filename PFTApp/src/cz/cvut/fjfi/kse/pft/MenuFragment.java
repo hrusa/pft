@@ -16,6 +16,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+import com.orm.SugarRecord;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -65,8 +67,8 @@ public class MenuFragment extends Fragment {
 		view = inflater.inflate(R.layout.fragment_menu, null);
 		args = getArguments();
 		//insertDB();
-
-		trainings = Training.listAll(Training.class);
+		getActivity().getActionBar().setTitle("PFTApp");
+		trainings = SugarRecord.listAll(Training.class);
 
 		startBtn = (Button) view.findViewById(R.id.start_button);
 		createBtn = (Button) view.findViewById(R.id.create_button);
@@ -153,7 +155,7 @@ public class MenuFragment extends Fragment {
 			}
 		});
 		
-		if (((LoginActivity) getActivity()).isNetworkAvailable()) {
+		if (((MainActivity) getActivity()).isNetworkAvailable()) {
 			new dataUL().execute();
 		}
 		return view;
@@ -324,7 +326,7 @@ public class MenuFragment extends Fragment {
             // 1. create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
  
-            List<Trainee> trainees = Trainee.find(Trainee.class, "sync =?", "false");
+            List<Trainee> trainees = SugarRecord.find(Trainee.class, "sync =?", "false");
             //List<Trainee> trainees = Trainee.listAll(Trainee.class);
             // 2. make POST request to the given URL
             if(!trainees.isEmpty()){
@@ -360,7 +362,7 @@ public class MenuFragment extends Fragment {
             	
             }
             
-            List<Measure> measures = Measure.find(Measure.class, "sync =?", "false");
+            List<Measure> measures = SugarRecord.find(Measure.class, "sync =?", "false");
             //List<Measure> measures = Measure.listAll(Measure.class);
             if(!measures.isEmpty()){
             	Log.i("Upload", "neni empty");
@@ -395,7 +397,7 @@ public class MenuFragment extends Fragment {
             	
             }
             
-            List<Training> trainings = Training.find(Training.class, "sync =?", "false");
+            List<Training> trainings = SugarRecord.find(Training.class, "sync =?", "false");
             //List<Training> trainings = Training.listAll(Training.class);
             if(!measures.isEmpty()){
             	Log.i("Upload", "neni empty");
@@ -430,7 +432,7 @@ public class MenuFragment extends Fragment {
             	
             }
             
-            List<Workout> workouts = Workout.find(Workout.class, "sync =?", "false");
+            List<Workout> workouts = SugarRecord.find(Workout.class, "sync =?", "false");
             //List<Workout> workouts = Workout.listAll(Workout.class);
             if(!measures.isEmpty()){
             	Log.i("Upload", "neni empty");
@@ -465,7 +467,7 @@ public class MenuFragment extends Fragment {
             	
             }
             
-            List<ExerciseUnit> exerciseUnits = ExerciseUnit.find(ExerciseUnit.class, "sync =?", "false");
+            List<ExerciseUnit> exerciseUnits = SugarRecord.find(ExerciseUnit.class, "sync =?", "false");
             //List<ExerciseUnit> exerciseUnits = ExerciseUnit.listAll(ExerciseUnit.class);
             if(!measures.isEmpty()){
             	Log.i("Upload", "neni empty");
@@ -501,7 +503,7 @@ public class MenuFragment extends Fragment {
             	
             }
             
-            List<Serie> series = Serie.find(Serie.class, "sync =?", "false");
+            List<Serie> series = SugarRecord.find(Serie.class, "sync =?", "false");
             //List<Serie> series = Serie.listAll(Serie.class);
             if(!series.isEmpty()){
             	Log.i("Upload", "neni empty");

@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import com.orm.SugarRecord;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,7 +52,7 @@ public class GenerateTrainingFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		args = getArguments();
-		trainee = Trainee.findById(Trainee.class, args.getLong("trainee"));
+		trainee = SugarRecord.findById(Trainee.class, args.getLong("trainee"));
 
 		generateTraining(trainee);
 		TrainingListFragment fragment = new TrainingListFragment();
@@ -68,14 +70,14 @@ public class GenerateTrainingFragment extends Fragment {
 		String[] experiences = getResources().getStringArray(
 				R.array.experience_array);
 		String[] goals = getResources().getStringArray(R.array.goal_array);
-		Calendar calendar = Calendar.getInstance();
-		List<Training> trainings = Training.find(
+		
+		List<Training> trainings = SugarRecord.find(
 				Training.class,
 				"name = ?",
 				experiences[trainee.getExperience()] + " "
 						+ goals[trainee.getGoal()] + " routine");
 		if (trainings.isEmpty()) {
-			int rep, pause;
+
 			training = new Training(getActivity(), trainee.getId(),
 					experiences[trainee.getExperience()] + " "
 							+ goals[trainee.getGoal()] + " routine");
@@ -86,245 +88,253 @@ public class GenerateTrainingFragment extends Fragment {
 			case 2:
 
 			default:
-				workout = new Workout(getActivity(), training.getId(), "Day 1",
-						dateFormat.format(calendar.getTime()));
-				workout.save();
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(3)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(12)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(11)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 10, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 12, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 12, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(6)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(13)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-
-				calendar.add(Calendar.DATE, 2);
-				workout = new Workout(getActivity(), training.getId(), "Day 2",
-						dateFormat.format(calendar.getTime()));
-				workout.save();
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(4)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(2)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 25, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(9)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 10, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(7)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 10, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(15)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
-						pause);
-				serie.save();
-
-				calendar.add(Calendar.DATE, 2);
-				workout = new Workout(getActivity(), training.getId(), "Day 3",
-						dateFormat.format(calendar.getTime()));
-				workout.save();
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(8)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 40, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(1)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 25, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(10)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 5, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 5, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 5, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(5)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 40, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
-						pause);
-				serie.save();
-
-				exerciseU = new ExerciseUnit(getActivity(),
-						Long.parseLong(String.valueOf(14)), workout.getId());
-				exerciseU.save();
-				rep = setRepetition(trainee.getGoal());
-				pause = setPause(trainee.getGoal());
-				serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
-						pause);
-				serie.save();
-				serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
-						pause);
-				serie.save();
-				Log.i("Dělení intů", "" + ((int) 1 / 2));
+				beginnersTraining();
+				Log.i("Dělení intů", "" + (1 / 2));
 			}
 		}
 
+	}
+	
+	
+	
+	private void beginnersTraining() {
+		Calendar calendar = Calendar.getInstance();
+		int rep, pause;
+		workout = new Workout(getActivity(), training.getId(), "Day 1",
+				dateFormat.format(calendar.getTime()));
+		workout.save();
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(3)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(12)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(11)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 10, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 12, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 12, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(6)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(13)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+
+		calendar.add(Calendar.DATE, 2);
+		workout = new Workout(getActivity(), training.getId(), "Day 2",
+				dateFormat.format(calendar.getTime()));
+		workout.save();
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(4)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(2)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 20, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 25, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(9)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 10, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(7)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 10, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 15, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(15)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
+				pause);
+		serie.save();
+
+		calendar.add(Calendar.DATE, 2);
+		workout = new Workout(getActivity(), training.getId(), "Day 3",
+				dateFormat.format(calendar.getTime()));
+		workout.save();
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(8)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 40, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(1)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 25, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 30, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 35, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(10)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 5, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 5, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 5, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(5)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 40, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 50, rep,
+				pause);
+		serie.save();
+
+		exerciseU = new ExerciseUnit(getActivity(),
+				Long.parseLong(String.valueOf(14)), workout.getId());
+		exerciseU.save();
+		rep = setRepetition(trainee.getGoal());
+		pause = setPause(trainee.getGoal());
+		serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
+				pause);
+		serie.save();
+		serie = new Serie(getActivity(), exerciseU.getId(), 1, rep,
+				pause);
+		serie.save();
 	}
 
 	private int setRepetition(int goal) {
@@ -346,6 +356,14 @@ public class GenerateTrainingFragment extends Fragment {
 			max = 12;
 		}
 		return generate.nextInt(max - min + 1) + min;
+	}
+	
+	private void advancedTraining() {
+		
+	}
+	
+	private void experiencedTraining() {
+		
 	}
 
 	private int setPause(int goal) {
