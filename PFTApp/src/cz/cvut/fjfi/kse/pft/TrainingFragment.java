@@ -57,6 +57,16 @@ public class TrainingFragment extends ListFragment {
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, workouts);
 
+		
+
+		setListAdapter(adapter);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -93,6 +103,8 @@ public class TrainingFragment extends ListFragment {
 									exerciseUnit.delete();
 								}
 								workout.delete();
+								adapter.remove(workout);
+								adapter.notifyDataSetChanged();
 							}
 						}).setNegativeButton("No", new OnClickListener() {
 
@@ -107,8 +119,6 @@ public class TrainingFragment extends ListFragment {
 			}
 
 		});
-
-		setListAdapter(adapter);
 	}
 
 	@Override

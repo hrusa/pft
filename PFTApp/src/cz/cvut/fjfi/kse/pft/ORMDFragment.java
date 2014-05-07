@@ -3,8 +3,11 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.text.ParseException;
+
 import com.orm.SugarRecord;
 
+import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -60,7 +63,15 @@ public class ORMDFragment extends DialogFragment {
 				serie.setRepetition(Integer.parseInt(rep.getText().toString()));
 				serie.setSync(false);
 				serie.save();
-				((StartRecordFragment) getFragmentManager().findFragmentByTag("StartRecord")).doOnStopClick();
+				try {
+					((StartRecordFragment) getFragmentManager().findFragmentByTag("StartRecord")).doOnStopClick();
+				} catch (NotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				/*orm = serie.getWeight()
 						/ (1.0278 - 0.0278 * serie.getRepetition());
 				Log.i("ORM", orm + "");

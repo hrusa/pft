@@ -117,6 +117,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks,
 		mGoogleApiClient = buildGoogleApiClient();
 		Log.i("onCreate: ", "init");
 		getActivity().getActionBar().setTitle("Login");
+		
+		List<Difficulty> diffs = SugarRecord.listAll(Difficulty.class);
+		if (diffs.isEmpty()) {
+			new difficultyDL()
+					.execute("http://192.168.1.100:1188/api/difficulties/");
+		}
+		
 	}
 
 	private GoogleApiClient buildGoogleApiClient() {

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -104,6 +105,8 @@ public class ShowMeasureGraphFragment extends Fragment {
 		GraphView graphView = new LineGraphView(getActivity(), attr.getName()+" progress");
 		graphView.addSeries(measureSeries);
 		graphView.setHorizontalLabels(labelsH);
+		
+		
 		
 		LinearLayout layout = (LinearLayout) view
 				.findViewById(R.id.measure_linearLayout);

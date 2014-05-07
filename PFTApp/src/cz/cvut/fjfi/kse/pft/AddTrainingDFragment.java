@@ -42,6 +42,7 @@ public class AddTrainingDFragment extends DialogFragment{
 		Button cancel = (Button) view.findViewById(R.id.cancel_button);
 		Button add = (Button) view.findViewById(R.id.add_button);
 		nameT = (EditText) view.findViewById(R.id.name_editText);
+		getDialog().setTitle("Add new training");
 		cancel.setOnClickListener(new OnClickListener() {
 			
 			@Override

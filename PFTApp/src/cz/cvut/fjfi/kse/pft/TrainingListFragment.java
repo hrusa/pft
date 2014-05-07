@@ -12,10 +12,12 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
@@ -61,6 +63,16 @@ public class TrainingListFragment extends ListFragment {
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, trainings);
 
+		
+
+		setListAdapter(adapter);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -104,6 +116,8 @@ public class TrainingListFragment extends ListFragment {
 									workout.delete();
 								}
 								training.delete();
+								adapter.remove(training);
+								adapter.notifyDataSetChanged();
 							}
 						}).setNegativeButton("No", new OnClickListener() {
 
@@ -118,8 +132,14 @@ public class TrainingListFragment extends ListFragment {
 			}
 
 		});
-
-		setListAdapter(adapter);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	/*

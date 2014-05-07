@@ -38,6 +38,7 @@ public class AddWorkoutDFragment extends DialogFragment{
 		Button add = (Button) view.findViewById(R.id.add_button);
 		nameW = (EditText) view.findViewById(R.id.name_editText);
 		dp = (DatePicker) view.findViewById(R.id.workout_datePicker);
+		getDialog().setTitle("Add new workout");
 		cancel.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -58,7 +59,7 @@ public class AddWorkoutDFragment extends DialogFragment{
 				    ((TrainingFragment) getFragmentManager().findFragmentByTag("Training")).updateList(workout);
 					dismiss();
 				} else {
-					Toast.makeText(getActivity(), "Vyplňte název", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "VyplĹ�te nĂˇzev", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

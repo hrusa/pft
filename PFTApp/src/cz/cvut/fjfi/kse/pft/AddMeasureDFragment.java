@@ -56,6 +56,7 @@ public class AddMeasureDFragment extends DialogFragment{
 		ArrayAdapter<CharSequence> adapterM = ArrayAdapter.createFromResource(getActivity(), R.array.measure_array, android.R.layout.simple_spinner_item);
 		adapterM.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		measure.setAdapter(adapterM);
+		getDialog().setTitle("Add new measure");
 		cancel.setOnClickListener(new OnClickListener() {
 			
 			@Override

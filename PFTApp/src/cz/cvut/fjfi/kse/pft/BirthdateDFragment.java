@@ -40,6 +40,7 @@ public class BirthdateDFragment extends DialogFragment {
 		Log.i("onCreate BD", "spuštěno");
 		args = this.getArguments();
 		final Calendar c = Calendar.getInstance();
+		c.add(Calendar.YEAR, -1);
 		mYear = c.get(Calendar.YEAR);
 		mMonth = c.get(Calendar.MONTH);
 		mDay = c.get(Calendar.DAY_OF_MONTH);

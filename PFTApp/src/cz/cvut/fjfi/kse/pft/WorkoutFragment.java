@@ -63,50 +63,7 @@ public class WorkoutFragment extends ListFragment {
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, exerciseU);
 
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				exerciseUnit = adapter.getItem(arg2);
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-						getActivity());
-				alertDialogBuilder
-						.setTitle("Delete " + exerciseUnit.toString() + "?")
-						.setMessage(
-								"Do you realy want to delete \""
-										+ exerciseUnit.toString()
-										+ "\" exercise unit?")
-						.setCancelable(false)
-						.setPositiveButton("Yes", new OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// TODO Auto-generated method stub
-
-								List<Serie> series = SugarRecord.find(Serie.class,
-										"exerciseunit =?",
-										"" + exerciseUnit.getId());
-								for (Serie serie : series) {
-									serie.delete();
-								}
-								exerciseUnit.delete();
-							}
-						}).setNegativeButton("No", new OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// TODO Auto-generated method stub
-								dialog.cancel();
-							}
-						}).create().show();
-				return false;
-			}
-
-		});
+		
 
 		setListAdapter(adapter);
 
@@ -144,6 +101,7 @@ public class WorkoutFragment extends ListFragment {
 										calendar.add(Calendar.DATE, 7);
 									if(checkStagnation(workout.getName())) {
 										//GENEROVAT NOVÝ TRÉNINK
+										((GenerateTrainingFragment) getFragmentManager().findFragmentByTag("GenerateTraining")).generateTraining(trainee);;
 									} else {
 									Workout newWorkout = new Workout(
 											getActivity(), args
@@ -205,6 +163,59 @@ public class WorkoutFragment extends ListFragment {
 			alerDialog.show();
 		}
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				exerciseUnit = adapter.getItem(arg2);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						getActivity());
+				alertDialogBuilder
+						.setTitle("Delete " + exerciseUnit.toString() + "?")
+						.setMessage(
+								"Do you realy want to delete \""
+										+ exerciseUnit.toString()
+										+ "\" exercise unit?")
+						.setCancelable(false)
+						.setPositiveButton("Yes", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+
+								List<Serie> series = SugarRecord.find(Serie.class,
+										"exerciseunit =?",
+										"" + exerciseUnit.getId());
+								for (Serie serie : series) {
+									serie.delete();
+								}
+								exerciseUnit.delete();
+								adapter.remove(exerciseUnit);
+								adapter.notifyDataSetChanged();
+							}
+						}).setNegativeButton("No", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+								dialog.cancel();
+							}
+						}).create().show();
+				return false;
+			}
+
+		});
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -252,7 +263,7 @@ public class WorkoutFragment extends ListFragment {
 		} else {
 			args.putBoolean("1rm", false);
 		}
-		args.putLong("exerciseu", exerciseU.getId());
+		args.putLong("exerciseunit", exerciseU.getId());
 		if (args.getBoolean("record")) {
 			StartRecordFragment fragment = new StartRecordFragment();
 			fragment.setArguments(args);
@@ -304,12 +315,12 @@ public class WorkoutFragment extends ListFragment {
 		}
 		else {
 			for(int i = workouts.size()-4; i<workouts.size()-1; i--){
-				List<ExerciseUnit> exerciseUFirst = SugarRecord.find(ExerciseUnit.class, "workoutid =?", workouts.get(i).getId().toString());
-				List<ExerciseUnit> exerciseUSecond = SugarRecord.find(ExerciseUnit.class, "workoutid =?", workouts.get(i+1).getId().toString());
+				List<ExerciseUnit> exerciseUFirst = SugarRecord.find(ExerciseUnit.class, "workout =?", workouts.get(i).getId().toString());
+				List<ExerciseUnit> exerciseUSecond = SugarRecord.find(ExerciseUnit.class, "workout =?", workouts.get(i+1).getId().toString());
 				if(exerciseUFirst.size() == exerciseUSecond.size()) {
 					for(int j = 0; j<exerciseUFirst.size();j++) {
-						List<Serie> seriesFirst = SugarRecord.find(Serie.class, "exerciseunitid =?", exerciseUFirst.get(j).getId().toString());
-						List<Serie> seriesSecond = SugarRecord.find(Serie.class, "exerciseunitid =?", exerciseUSecond.get(j).getId().toString());
+						List<Serie> seriesFirst = SugarRecord.find(Serie.class, "exerciseunit =?", exerciseUFirst.get(j).getId().toString());
+						List<Serie> seriesSecond = SugarRecord.find(Serie.class, "exerciseunit =?", exerciseUSecond.get(j).getId().toString());
 						if(seriesFirst.size() == seriesSecond.size() && exerciseUFirst.get(j).getExercise() == exerciseUSecond.get(j).getExercise()) {
 							for(int k = 0; k<seriesFirst.size();k++) {
 								if(seriesFirst.get(k).getWeight()==seriesSecond.get(k).getWeight() && seriesFirst.get(k).getRepetition()==seriesSecond.get(k).getRepetition()) {

@@ -142,10 +142,19 @@ public class ShowPauseGraphFragment extends Fragment {
 		GraphView graphView = new BarGraphView(getActivity(), ex.getName()
 				+ " pause progress");
 		graphView.addSeries(pauseSeries);
-		graphView.setManualYAxisBounds(20, 0);
+		//graphView.setManualYAxisBounds(20, 0);
 
 		LinearLayout layout = (LinearLayout) view
 				.findViewById(R.id.pause_linearLayout);
+		
+		graphView.getGraphViewStyle().setVerticalLabelsWidth(50);
+		graphView.getGraphViewStyle().setVerticalLabelsColor(Color.BLACK);
+		graphView.getGraphViewStyle().setHorizontalLabelsColor(Color.BLACK);
+		graphView.setViewPort(1, 10);
+		graphView.setScrollable(true);
+		graphView.setShowLegend(true);
+		
+		
 		layout.addView(graphView);
 	}
 

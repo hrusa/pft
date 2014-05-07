@@ -3,8 +3,11 @@
  */
 package cz.cvut.fjfi.kse.pft;
 
+import java.text.ParseException;
+
 import com.orm.SugarRecord;
 
+import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -67,6 +70,7 @@ public class AddSerieDFragment extends DialogFragment {
 			npRepetition.setValue(serie.getRepetition());
 			npPause.setValue(serie.getPause());
 		}
+		getDialog().setTitle("Setup serie");
 		cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -84,11 +88,19 @@ public class AddSerieDFragment extends DialogFragment {
 				if (npWeight.getValue() > 0 && npRepetition.getValue() > 0
 						&& npPause.getValue() > 0) {
 					Serie serie = new Serie(getActivity(), args
-							.getLong("exerciseu"), npWeight.getValue(),
+							.getLong("exerciseunit"), npWeight.getValue(),
 							npRepetition.getValue(), npPause.getValue());
 					serie.save();
 					if (args.getBoolean("record")) {
-						((StartRecordFragment) getFragmentManager().findFragmentByTag("StartRecord")).addSerie(serie);
+						try {
+							((StartRecordFragment) getFragmentManager().findFragmentByTag("StartRecord")).addSerie(serie);
+						} catch (NotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					} else {
 						((ExerciseFragment) getFragmentManager()
 								.findFragmentByTag("Exercise"))

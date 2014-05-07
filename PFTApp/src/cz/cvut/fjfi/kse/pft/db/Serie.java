@@ -17,8 +17,8 @@ public class Serie extends SugarRecord<Serie> {
 	private int weight;
 	private int repetition;
 	private int pause;
-	private String start = "1970-01-01";
-	private String finish = "1970-01-01";
+	private String start = "1970-01-01 00:00:00";
+	private String finish = "1970-01-01 00:00:00";
 	private boolean sync = false;
 
 	/**

@@ -4,6 +4,7 @@
 package cz.cvut.fjfi.kse.pft;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.orm.SugarRecord;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -87,13 +89,21 @@ public class StartRecordFragment extends Fragment {
 		lPause = (LinearLayout) view.findViewById(R.id.pause_linearLayout);
 
 		exerciseU = SugarRecord.findById(ExerciseUnit.class,
-				args.getLong("exerciseu"));
+				args.getLong("exerciseunit"));
 		series = SugarRecord.find(Serie.class, "exerciseunit = ?", exerciseU.getId()
 				.toString());
 		size = series.size();
 
 		eName.setText(exerciseU.toString());
-		setupRecordSerie();
+		try {
+			setupRecordSerie();
+		} catch (NotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		startBtn.setOnClickListener(new OnClickListener() {
 
@@ -126,7 +136,15 @@ public class StartRecordFragment extends Fragment {
 					dialog.show(getFragmentManager(), "ORMD");
 
 				} else {
-					doOnStopClick();
+					try {
+						doOnStopClick();
+					} catch (NotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -144,7 +162,7 @@ public class StartRecordFragment extends Fragment {
 		return view;
 	}
 
-	public void doOnStopClick() {
+	public void doOnStopClick() throws NotFoundException, ParseException {
 		if (args.getBoolean("1rm") && currentSerie == 0) {
 			Log.i("StartRecord", "Serie ID: " + args.getLong("serie"));
 			serie = SugarRecord.findById(Serie.class, args.getLong("serie"));
@@ -217,9 +235,10 @@ public class StartRecordFragment extends Fragment {
 		dialog.show(getFragmentManager(), "AddSerieD");
 	}
 
-	private void setupRecordSerie() {
+	private void setupRecordSerie() throws NotFoundException, ParseException {
+		Log.i("Start record", "current: "+currentSerie+" and size:"+size);
 		if (currentSerie < size) {
-			if (series.get(currentSerie).getFinish() == "1970-01-01") {
+			if (dateFormat.parse(series.get(currentSerie).getFinish()).compareTo(dateFormat.parse("1970-01-01 00:00:00")) == 0) {
 				if (args.getBoolean("1rm") && currentSerie == 0) {
 					// code for 1RM, to else moĹľnĂˇ smazat
 					// alertdialog, upozorĹ�ujĂ­cĂ­ na 1RM
@@ -308,7 +327,7 @@ public class StartRecordFragment extends Fragment {
 		}
 	}
 
-	public void addSerie(Serie serie) {
+	public void addSerie(Serie serie) throws NotFoundException, ParseException {
 		finishBtn.setVisibility(View.GONE);
 		startBtn.setVisibility(View.VISIBLE);
 		series.add(serie);

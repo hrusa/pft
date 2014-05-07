@@ -53,6 +53,7 @@ public class WorkoutDFragment extends DialogFragment{
 		Gadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		goal.setAdapter(Gadapter);
 		setCancelable(false);
+		getDialog().setTitle(R.string.title_fragmentd_workout);
 		previous.setOnClickListener(new OnClickListener() {
 			
 			@Override

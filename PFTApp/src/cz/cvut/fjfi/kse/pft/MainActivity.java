@@ -24,7 +24,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.activity_main);
 		
 		// Odkomentovat az budu na linuxu a muzeme spustit login via google acc
 		if (savedInstanceState == null) {
@@ -35,11 +35,11 @@ public class MainActivity extends FragmentActivity {
 						.replace(R.id.container, new LoginFragment(), "Login")
 						.addToBackStack(null).commit();
 			} else {
-				/*args.clear();
+				args.clear();
 				args.putLong("trainee", trainee.get(0).getId());
 				MenuFragment fragment = new MenuFragment();
 				fragment.setArguments(args);
-				getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").addToBackStack(null).commit();*/
+				getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, "Menu").addToBackStack(null).commit();
 			}
 		}
 

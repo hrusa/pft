@@ -17,7 +17,6 @@ public class ExerciseUnit extends SugarRecord<ExerciseUnit> {
 	private long workout;
 	private boolean done = false;
 	private boolean sync = false;
-
 	/**
 	 * @param ctx
 	 */
