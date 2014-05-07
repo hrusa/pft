@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import cz.cvut.fjfi.kse.pft.db.ExerciseUnit;
 import cz.cvut.fjfi.kse.pft.db.Serie;
+import cz.cvut.fjfi.kse.pft.db.Trainee;
 import cz.cvut.fjfi.kse.pft.db.Workout;
 
 /**
@@ -136,7 +137,14 @@ public class WorkoutFragment extends ListFragment {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
-									calendar.add(Calendar.DATE, 7);
+									Trainee trainee = SugarRecord.findById(Trainee.class, args.getLong("trainee"));
+									if(trainee.getExperience() == 2)
+										calendar.add(Calendar.DATE, 3);
+									else
+										calendar.add(Calendar.DATE, 7);
+									if(checkStagnation(workout.getName())) {
+										//GENEROVAT NOVÝ TRÉNINK
+									} else {
 									Workout newWorkout = new Workout(
 											getActivity(), args
 													.getLong("training"),
@@ -180,6 +188,7 @@ public class WorkoutFragment extends ListFragment {
 											.replace(R.id.container, fragment,
 													"Training")
 											.addToBackStack(null).commit();
+								}
 								}
 							})
 					.setPositiveButton(R.string.add_button,
@@ -283,5 +292,42 @@ public class WorkoutFragment extends ListFragment {
 	public void updateList(ExerciseUnit exerciseU) {
 		adapter.add(exerciseU);
 		adapter.notifyDataSetChanged();
+	}
+	
+	private boolean checkStagnation(String workoutName) {
+		List<Workout> workouts = SugarRecord.find(Workout.class, "name =?", workoutName);
+		if(workouts.size()<4) {
+			return false;
+		} 
+		if(workouts.size()>8) {
+			return true;
+		}
+		else {
+			for(int i = workouts.size()-4; i<workouts.size()-1; i--){
+				List<ExerciseUnit> exerciseUFirst = SugarRecord.find(ExerciseUnit.class, "workoutid =?", workouts.get(i).getId().toString());
+				List<ExerciseUnit> exerciseUSecond = SugarRecord.find(ExerciseUnit.class, "workoutid =?", workouts.get(i+1).getId().toString());
+				if(exerciseUFirst.size() == exerciseUSecond.size()) {
+					for(int j = 0; j<exerciseUFirst.size();j++) {
+						List<Serie> seriesFirst = SugarRecord.find(Serie.class, "exerciseunitid =?", exerciseUFirst.get(j).getId().toString());
+						List<Serie> seriesSecond = SugarRecord.find(Serie.class, "exerciseunitid =?", exerciseUSecond.get(j).getId().toString());
+						if(seriesFirst.size() == seriesSecond.size() && exerciseUFirst.get(j).getExercise() == exerciseUSecond.get(j).getExercise()) {
+							for(int k = 0; k<seriesFirst.size();k++) {
+								if(seriesFirst.get(k).getWeight()==seriesSecond.get(k).getWeight() && seriesFirst.get(k).getRepetition()==seriesSecond.get(k).getRepetition()) {
+								
+								}
+								else {
+									return false;
+								}
+							}
+						} else {
+							return false;
+						}
+					}
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
